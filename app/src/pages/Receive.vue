@@ -29,9 +29,12 @@
                         <div class="left">
                           <v-ons-icon v-if="tx.type=='SEND'" style="color:#cc6600" icon="ion-arrow-up-a" class="list-item__icon"></v-ons-icon>
                           <v-ons-icon v-if="tx.type=='RECEIVE'" style="color:#669900" icon="ion-arrow-down-a" class="list-item__icon"></v-ons-icon>
+                          <a v-bind:href="'https://www.navexplorer.com/tx/'+tx.transaction">
+                        	  <v-ons-icon style="color:#232323" icon="ion-android-open" class="list-item__icon"></v-ons-icon>
+                      		</a>
                         </div>
                         <div class="center">
-                            <span style="color:#cc6600" v-if="tx.type=='SEND'">-{{formatBalance(tx.sent)}}</span>
+                            <span style="color:#cc6600" v-if="tx.type=='SEND'">-{{formatBalance(tx.sent-tx.received)}}</span>
                             <span style="color:#669900" v-if="tx.type=='RECEIVE'">+{{formatBalance(tx.received)}}</span>
                         </div>
                         <div class="right">{{formatDate(tx.time)}}</div>
@@ -96,7 +99,7 @@ export default {
     },
     formatDate: n =>
     {
-        if (n) return moment(n).format('DD/MM/YYYY HH:MM:ss'); else return "";
+        if (n) return moment(n).format('DD/MM/YYYY HH:mm:ss'); else return "";
     },
     txhistory()
     {

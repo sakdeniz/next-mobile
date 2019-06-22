@@ -21,6 +21,28 @@
                     }
                 }
             ]
+        },
+        {
+            "outputFile": "D:\\next-mobile\\platforms\\android\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-w720dp-v13\\values-w720dp-v13.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\PC\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-23.1.0.aar\\1823055ae4394de9d593773bdfbb73d1\\res\\values-w720dp\\values-w720dp.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "4",
+                        "startOffsets": "289",
+                        "endColumns": "76",
+                        "endOffsets": "361"
+                    },
+                    "to": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "76",
+                        "endOffsets": "127"
+                    }
+                }
+            ]
         }
     ]
 }
