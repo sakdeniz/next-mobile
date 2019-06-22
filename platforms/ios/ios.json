@@ -1,0 +1,109 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {
+      "config.xml": {
+        "parents": {
+          "/*": [
+            {
+              "xml": "<feature name=\"StatusBar\"><param name=\"ios-package\" value=\"CDVStatusBar\" /><param name=\"onload\" value=\"true\" /></feature>",
+              "count": 1
+            },
+            {
+              "xml": "<preference name=\"StatusBarOverlaysWebView\" value=\"true\" />",
+              "count": 1
+            },
+            {
+              "xml": "<preference name=\"StatusBarStyle\" value=\"lightcontent\" />",
+              "count": 1
+            },
+            {
+              "xml": "<feature name=\"SQLitePlugin\"><param name=\"ios-package\" value=\"SQLitePlugin\" /></feature>",
+              "count": 1
+            },
+            {
+              "xml": "<feature name=\"QRScanner\"><param name=\"ios-package\" value=\"QRScanner\" /></feature>",
+              "count": 1
+            }
+          ]
+        }
+      },
+      "*-Info.plist": {
+        "parents": {
+          "NSCameraUsageDescription": [
+            {
+              "xml": "<string>The camera is used to scan QR codes.</string>",
+              "count": 1
+            }
+          ]
+        }
+      }
+    }
+  },
+  "installed_plugins": {
+    "cordova-plugin-navigationbar-color": {
+      "PACKAGE_NAME": "net.navcommunity.next"
+    },
+    "cordova-plugin-statusbar": {
+      "PACKAGE_NAME": "net.navcommunity.next"
+    },
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "net.navcommunity.next"
+    },
+    "cordova-sqlcipher-adapter": {
+      "PACKAGE_NAME": "net.navcommunity.next"
+    },
+    "cordova-plugin-add-swift-support": {
+      "PACKAGE_NAME": "net.navcommunity.next"
+    },
+    "cordova-plugin-qrscanner": {
+      "PACKAGE_NAME": "net.navcommunity.next"
+    }
+  },
+  "dependent_plugins": {},
+  "modules": [
+    {
+      "id": "cordova-plugin-navigationbar-color.navigationbar",
+      "file": "plugins/cordova-plugin-navigationbar-color/www/navigationbar.js",
+      "pluginId": "cordova-plugin-navigationbar-color",
+      "clobbers": [
+        "window.NavigationBar"
+      ]
+    },
+    {
+      "id": "cordova-plugin-statusbar.statusbar",
+      "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
+      "pluginId": "cordova-plugin-statusbar",
+      "clobbers": [
+        "window.StatusBar"
+      ]
+    },
+    {
+      "id": "cordova-sqlcipher-adapter.SQLitePlugin",
+      "file": "plugins/cordova-sqlcipher-adapter/www/SQLitePlugin.js",
+      "pluginId": "cordova-sqlcipher-adapter",
+      "clobbers": [
+        "SQLitePlugin"
+      ]
+    },
+    {
+      "id": "cordova-plugin-qrscanner.QRScanner",
+      "file": "plugins/cordova-plugin-qrscanner/www/www.min.js",
+      "pluginId": "cordova-plugin-qrscanner",
+      "clobbers": [
+        "QRScanner"
+      ]
+    }
+  ],
+  "plugin_metadata": {
+    "cordova-plugin-navigationbar-color": "0.0.8",
+    "cordova-plugin-statusbar": "2.4.2",
+    "cordova-plugin-whitelist": "1.3.3",
+    "cordova-sqlcipher-adapter": "0.4.0",
+    "cordova-plugin-add-swift-support": "2.0.2",
+    "cordova-plugin-qrscanner": "2.6.2"
+  }
+}
