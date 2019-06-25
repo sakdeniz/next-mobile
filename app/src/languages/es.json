@@ -1,9 +1,9 @@
- {
+{
     "message":
     {
-    	"selectLanguage":"Escoje el Idioma",
+    	"selectLanguage":"Escojer el Idioma",
     	"continue":"Continue",
-		"hello": "Bienvenido a la Cartera NEXT",
+		"hello": "Bienvenido al Monedero NEXT",
 		"aboutNext":"Sobre NEXT",
 		"navcoinWebsite":"Página NavCoin",
 		"navcoinReddit":"NavCoin Reddit",
@@ -12,9 +12,9 @@
 		"days":"Dias",
 		"months":"Meses",
 		"years":"Años",
-		"unlock":"Desbloquear tu Cartera",
+		"unlock":"Desbloquear tu Monedero",
 		"btnUnlock":"Desbloquear",
-		"createWallet":"Crear Cartera",
+		"createWallet":"Crear Monedero",
 		"pullToRefresh":"Tirar para refrescar",
 		"release":"Lanzamiento",
 		"send":"Enviar",
