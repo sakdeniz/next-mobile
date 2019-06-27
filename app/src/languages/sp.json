@@ -1,8 +1,8 @@
 {
     "message":
     {
-    	"selectLanguage":"Escojer el Idioma",
-    	"continue":"Continue",
+    	"selectLanguage":"Escoger el Idioma",
+    	"continue":"Continúe",
 		"hello": "Bienvenido al Monedero NEXT",
 		"aboutNext":"Sobre NEXT",
 		"navcoinWebsite":"Página NavCoin",
@@ -27,7 +27,7 @@
 		"clipboardSuccess":"Copiado al portapapeles",
 		"clipboardFaild":"Fallo al copiar al portapapeles",
 		"communityFund":"Fondos Comunitarios",
-		"communityFundSubTitle1":"El Fondo Comunitario Mas Avanzado Del Mundo",
+		"communityFundSubTitle1":"El Fondo Comunitario Más Avanzado Del Mundo",
 		"communityFundSubTitle2":"Los proyectos son financiados y aprobados por la red descentralizada sin autoridad central. Esto garantiza que la dirección de NavCoin permanezca firmemente en el mejor interés de toda la red. Este fondo le paga para tomar su idea, nutrirla y crear un equipo para darle vida",
 		"communityFundDualVoteConsensus":"Consenso de doble voto",
 		"communityFundOpenToAnyone":"Abierto a Cualquiera",
