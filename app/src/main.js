@@ -8,12 +8,13 @@ import CustomToolbar from './partials/CustomToolbar.vue';
 import AppNavigator from './AppNavigator.vue';
 import VueI18n from 'vue-i18n';
 import en from './languages/en.json';
+import es from './languages/es.json';
 import tr from './languages/tr.json';
 Vue.use(VueI18n);
 Vue.use(Vuex);
 Vue.use(VueOnsen);
 var locale;
-const messages={en:en,tr:tr}
+const messages={en:en,es:es,tr:tr}
 const i18n=new VueI18n({locale:locale,messages});
 Vue.component('custom-toolbar',CustomToolbar);
 setTimeout(function()
