@@ -69,7 +69,7 @@ export default {
         book:[],
         languages:[
 			{name:'English',code:'en'},
-			//{name:'Español',code:'es'},
+			{name:'Español',code:'es'},
 			//{name:'Français',code:'fr'},
 			//{name:'Italiano',code:'it'},
 			//{name:'Polski',code:'pl'},
