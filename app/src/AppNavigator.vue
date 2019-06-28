@@ -286,8 +286,8 @@ export default {
 						QRScanner.cancelScan(function(status)
 		    			{
 						});
-		    			$("#page1").show();
-		    			$("#page2").show();
+		    			$("#page-send").show();
+		    			$("#page-add-contact").show();
 				  	}
 					else
 					{

@@ -23,7 +23,10 @@ export default {
       {symbol:'EURO',code:'EUR'},
       {symbol:'GBP',code:'GBP'},
       {symbol:'TRY',code:'TRY'},
-      {symbol:'JPY',code:'JPY'}
+      {symbol:'JPY',code:'JPY'},
+      {symbol:'KRW',code:'KRW'},
+      {symbol:'CNY',code:'CNY'},
+      {symbol:'RUB',code:'RUB'}
       ],
       selectedCurrency: ''
     };
