@@ -111,7 +111,7 @@
 		"confirmBackupWallet":"Ich habe mir die Wortfolge notiert",
 		"passwordInfo1":"Bitte gib ein starkes Passwort mit mindestens 6 Zeichen ein!",
 		"passwordInfo2":"Das Passwort kann weder zurückgesetzt, noch wiederhergestellt werden! Verliere es nicht!",
-		"backupInfo1":"Da nur du dein Geld kontrollierst musst du deine Backupphrase gut aufbewahren. Für den Fall, dass du die App löscht.",
+		"backupInfo1":"Da nur du dein Geld kontrollierst musst du deine Mnemonische Wortfolge gut aufbewahren. Falls du die App löschst, kannst du hiermit deine Wallet wiederherstellen.",
 		"backupInfo2":"Deine Wallet wird niemals in der Cloud oder während Gerätesicherungen gespeichert.",
 		"backupPhrase":"Mnemonische Wortfolge",
 		"segmentCreateWallet":"Wallet anlegen",
