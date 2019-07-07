@@ -113,7 +113,7 @@
 		"passwordInfo2":"Das Passwort kann weder zurückgesetzt, noch wiederhergestellt werden! Verliere es nicht!",
 		"backupInfo1":"Da nur du dein Geld kontrollierst musst du deine Backupphrase gut aufbewahren. Für den Fall, dass du die App löscht.",
 		"backupInfo2":"Deine Wallet wird niemals in der Cloud oder während Gerätesicherungen gespeichert.",
-		"backupPhrase":"Backupphrase
+		"backupPhrase":"Backupphrase",
 		"segmentCreateWallet":"Wallet erstellen",
 		"segmentImportWallet":"Wallet importieren",
 		"importWallet":"Importieren",

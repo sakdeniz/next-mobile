@@ -73,7 +73,7 @@ export default {
 			//{name:'Français',code:'fr'},
 			//{name:'Italiano',code:'it'},
 			//{name:'Polski',code:'pl'},
-			//{name:'Deutsch',code:'de'},
+			{name:'Deutsch',code:'de'},
 			//{name:'Nederlands',code:'ne'},
 			//{name:'Pусский',code:'ru'},
 			//{name:'Português',code:'pr'},
