@@ -115,6 +115,8 @@
 		"backupInfo2":"Deine Wallet wird niemals in der Cloud oder während Gerätesicherungen gespeichert.",
 		"backupPhrase":"Mnemonische Wortfolge",
 		"segmentCreateWallet":"Wallet anlegen",
+		"backupPhrase":"Mnemonische Wortfolge",
+		"segmentCreateWallet":"Wallet erstellen",
 		"segmentImportWallet":"Wallet importieren",
 		"importWallet":"Importieren",
 		"invalidMnemonics":"Ungültige Wortfolge",

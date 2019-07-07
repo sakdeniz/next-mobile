@@ -43,28 +43,31 @@ export default {
   methods: {
   	scan()
 	{
-		let vm=this;
-		$("#page-add-contact").hide();
-		QRScanner.scan(displayContents);
-		function displayContents(err, text)
+		if (typeof(QRScanner) != "undefined")
 		{
-			if(err)
+			let vm=this;
+			$("#page-add-contact").hide();
+			QRScanner.scan(displayContents);
+			function displayContents(err, text)
 			{
-		    	// an error occurred, or the scan was canceled (error code `6`)
-		  	}
-			else
-			{
-		    	if (text.startsWith("navcoin:"))
-		    	{
-		    		vm.contactAddress=text.split(":")[1];
-		    	}
-		    	QRScanner.cancelScan(function(status)
-		    	{
-				});
-		    	$("#page-add-contact").show();
-		  	}
+				if(err)
+				{
+			    	// an error occurred, or the scan was canceled (error code `6`)
+			  	}
+				else
+				{
+			    	if (text.startsWith("navcoin:"))
+			    	{
+			    		vm.contactAddress=text.split(":")[1];
+			    	}
+			    	QRScanner.cancelScan(function(status)
+			    	{
+					});
+			    	$("#page-add-contact").show();
+			  	}
+			}
+			QRScanner.show();
 		}
-		QRScanner.show();
 	},
     addContact()
     {

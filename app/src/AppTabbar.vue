@@ -76,17 +76,20 @@ export default {
   methods: {
     onSwipe(index, animationOptions)
     {
-		QRScanner.getStatus(function(status)
+		if (typeof(QRScanner) != "undefined")
 		{
-			if (status.scanning)
+			QRScanner.getStatus(function(status)
 			{
-				QRScanner.cancelScan(function(status)
+				if (status.scanning)
 				{
-				});
-				$("#page-send").show();
-				$("#page-add-contact").show();
-	  		}
-	  	});
+					QRScanner.cancelScan(function(status)
+					{
+					});
+					$("#page-send").show();
+					$("#page-add-contact").show();
+		  		}
+		  	});
+	  	}
      	// Apply the same transition as ons-tabbar
       	this.animationOptions = animationOptions;
       	// Interpolate colors and top position

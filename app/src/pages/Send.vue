@@ -39,28 +39,31 @@ export default {
   methods: {
   	scan()
 	{
-		let vm=this;
-		$("#page-send").hide();
-		QRScanner.scan(displayContents);
-		function displayContents(err, text)
+		if (typeof(QRScanner) != "undefined")
 		{
-			if(err)
+			let vm=this;
+			$("#page-send").hide();
+			QRScanner.scan(displayContents);
+			function displayContents(err, text)
 			{
-		    	// an error occurred, or the scan was canceled (error code `6`)
-		  	}
-			else
-			{
-		    	if (text.startsWith("navcoin:"))
-		    	{
-		    		vm.address=text.split(":")[1];
-		    	}
-		    	QRScanner.cancelScan(function(status)
-		    	{
-				});
-		    	$("#page-send").show();
-		  	}
+				if(err)
+				{
+			    	// an error occurred, or the scan was canceled (error code `6`)
+			  	}
+				else
+				{
+			    	if (text.startsWith("navcoin:"))
+			    	{
+			    		vm.address=text.split(":")[1];
+			    	}
+			    	QRScanner.cancelScan(function(status)
+			    	{
+					});
+			    	$("#page-send").show();
+			  	}
+			}
+			QRScanner.show();
 		}
-		QRScanner.show();
 	},
     useAllFunds()
     {      

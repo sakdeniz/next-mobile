@@ -276,33 +276,36 @@ export default {
   created: function ()
   {
 		let vm=this;
-		this.$ons.ready(() => {
-			vm.$ons.setDefaultDeviceBackButtonListener(function(event)
-			{
-				QRScanner.getStatus(function(status)
+		if (typeof(QRScanner) != "undefined")
+		{
+			this.$ons.ready(() => {
+				vm.$ons.setDefaultDeviceBackButtonListener(function(event)
 				{
-					if (status.scanning)
+					QRScanner.getStatus(function(status)
 					{
-						QRScanner.cancelScan(function(status)
-		    			{
-						});
-		    			$("#page-send").show();
-		    			$("#page-add-contact").show();
-				  	}
-					else
-					{
-				    	vm.$ons.notification.confirm(vm.$t('message.confirmCloseQuestion'),{title:vm.$t('message.confirmClose'),buttonLabels:[vm.$t('message.confirmCloseNo'), vm.$t('message.confirmCloseYes')]})
-						.then((response) =>
-				    	{
-				    		if (response)
-				    		{
-				    			navigator.app.exitApp();
-				    		}
-				    	});
-				  	}
+						if (status.scanning)
+						{
+							QRScanner.cancelScan(function(status)
+			    			{
+							});
+			    			$("#page-send").show();
+			    			$("#page-add-contact").show();
+					  	}
+						else
+						{
+					    	vm.$ons.notification.confirm(vm.$t('message.confirmCloseQuestion'),{title:vm.$t('message.confirmClose'),buttonLabels:[vm.$t('message.confirmCloseNo'), vm.$t('message.confirmCloseYes')]})
+							.then((response) =>
+					    	{
+					    		if (response)
+					    		{
+					    			navigator.app.exitApp();
+					    		}
+					    	});
+					  	}
+					});
 				});
 			});
-		});
+		}
 
     	if (!localStorage.getItem("config"))
     	{
