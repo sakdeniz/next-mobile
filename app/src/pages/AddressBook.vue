@@ -98,19 +98,8 @@ export default {
   	},
   	send:function(address)
   	{
-  		var page=this.pages[1].component;
-  		this.$store.commit('navigator/push', {
-        extends: page,
-        data() {
-          return {
-            toolbarInfo: {
-              backLabel: 'Home',
-              title: vm.$t('message.send'),
-            },
-            address:address,
-	       }
-        }
-      });
+  		this.$store.commit('config/setAddress', address);
+		this.$store.commit('navigator/pop');
   	},
   	push(page, key) {
       this.$store.commit('navigator/push', {

@@ -1,12 +1,12 @@
 -- Merging decision tree log ---
 manifest
-ADDED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml:20:1-23:12
-INJECTED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml:20:1-23:12
-INJECTED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml:20:1-23:12
-INJECTED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml:20:1-23:12
-INJECTED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml:20:1-23:12
-INJECTED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml:20:1-23:12
-INJECTED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml:20:1-23:12
+ADDED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml:20:1-22:12
+INJECTED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml:20:1-22:12
+INJECTED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml:20:1-22:12
+INJECTED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml:20:1-22:12
+INJECTED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml:20:1-22:12
+INJECTED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml:20:1-22:12
+INJECTED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml:20:1-22:12
 	package
 		ADDED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml:21:7-35
 		INJECTED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml
@@ -22,6 +22,10 @@ INJECTED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml:20
 		INJECTED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml
 		INJECTED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml
 uses-sdk
-ADDED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml:22:5-44
-	android:minSdkVersion
-		ADDED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml:22:15-41
+INJECTED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml
+INJECTED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml
+		ADDED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml
+		INJECTED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml

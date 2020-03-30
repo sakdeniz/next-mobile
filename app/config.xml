@@ -80,6 +80,7 @@
     </config-file>
   </platform>
   <platform name="android">
+  	<preference name="android-minSdkVersion" value="28" />
     <icon src="/res/android/icon/ldpi.png" density="ldpi"/>
     <icon src="/res/android/icon/mdpi.png" density="mdpi"/>
     <icon src="/res/android/icon/hdpi.png" density="hdpi"/>

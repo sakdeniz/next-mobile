@@ -21,22 +21,55 @@ var app = {
     initialize: function() {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
     },
+
+    // deviceready Event Handler
+    //
+    // Bind any cordova events here. Common events are:
+    // 'pause', 'resume', etc.
     onDeviceReady: function() {
         this.receivedEvent('deviceready');
-        document.location = "app/www/index.html";
+        window.QRScanner.prepare(onDone);
+        function onDone(err, status){
+        	console.log("STATUS:"+JSON.stringify(status));
+        	console.log("err:"+err);
+            if (err) {
+                // here we can handle errors and clean up any loose ends.
+                console.error(err);
+            }
+            if (status.authorized) {
+                // W00t, you have camera access and the scanner is initialized.
+                // QRscanner.show() should feel very fast.
+            } else if (status.denied) {
+                // The video preview will remain black, and scanning is disabled. We can
+                // try to ask the user to change their mind, but we'll have to send them
+                // to their device settings with `QRScanner.openSettings()`.
+            } else {
+                // we didn't get permission, but we didn't get permanently denied. (On
+                // Android, a denial isn't permanent unless the user checks the "Don't
+                // ask again" box.) We can ask again at the next relevant opportunity.
+            }
+        }
+
+        function displayContents(err, text){
+            if(err){
+                // an error occurred, or the scan was canceled (error code `6`)
+            } else {
+                // The scan completed, display the contents of the QR code:
+                alert(text);
+            }
+        }
     },
 
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        //var parentElement = document.getElementById(id);
-        //var listeningElement = parentElement.querySelector('.listening');
-        //var receivedElement = parentElement.querySelector('.received');
-
-        //listeningElement.setAttribute('style', 'display:none;');
-        //receivedElement.setAttribute('style', 'display:block;');
-
+        var parentElement = document.getElementById(id);
+        var appElement =  document.querySelector('.container');
+        var listeningElement = parentElement.querySelector('.listening');
+        var receivedElement = parentElement.querySelector('.received');
+        appElement.setAttribute('style', 'display:none;');
+        listeningElement.setAttribute('style', 'display:none;');
+        receivedElement.setAttribute('style', 'display:none;');
         console.log('Received Event: ' + id);
     }
 };
-
-setTimeout(function(){ app.initialize(); }, 5000);
+setTimeout(function(){ app.initialize(); }, 3000);

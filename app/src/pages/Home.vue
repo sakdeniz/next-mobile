@@ -10,7 +10,7 @@
         <v-ons-list>
             <v-ons-list-item>
                 <div class="left">
-                    <img style="width:48px;height:auto;" src="images/nav.svg">
+                    <img style="width:48px;height:auto;" src="images/nav_2.svg">
                 </div>
                 <div class="center">
                     <span class="list-item__title"><span v-if="!hideBalance">{{formatBalance(balanceInfo.balance)}} NAV</span><span v-else>*****</span>
@@ -119,6 +119,7 @@
 </template>
 <script>
 import axios from 'axios';
+import bitcore from 'bitcore-lib';
 import sb from 'satoshi-bitcoin';
 import Vue from 'vue'
 import VueChartkick from 'vue-chartkick'
@@ -140,6 +141,7 @@ export default {
     hideBalance:false,
     proposals:[],
     proposalFilter:'',
+    apiExplorerURL:'https://api.navexplorer.com/api/'
     };
   },
   created: function ()
@@ -326,7 +328,16 @@ export default {
     },
     formatBalance: n => {
         if (n==0) return n;
-        if (n) return sb.toBitcoin(n); else return "";
+        if (n)
+        {
+        	var amount=sb.toBitcoin(n);
+       	    var parts=amount.toString().split(".");
+        	return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts[1] ? "." + parts[1] : "");
+        }
+        else
+        {
+        	return "";
+        }
     },
     formatNumbers: function(n) {
       if (n==undefined) return;
@@ -335,25 +346,126 @@ export default {
     },
     getBalance()
     {
-      let vm=this;
-      axios.get(window.apiURL+'balance', {
-        params: {
-          network: window.network,
-          a: this.publicAddress
-        }
-      })
-      .then(function (response)
-      {
-        vm.balanceInfo=response.data;
-        console.log(response.data);
-      })
-      .catch(function (error)
-      {
-        console.log(error);
-      })
-        .then(function ()
-      {
-      }); 
+		var url;
+		let vm=this;
+		const publicAddress=this.publicAddress;
+		if (window.network!="main")
+		{
+		    axios.get(window.apiURL+'utxo', {
+		        params: {
+		          network: window.network,
+		          a: vm.publicAddress
+		        }
+		      })
+		      .then(function (response)
+		      {
+		        var utxo=response.data;
+		        if(utxo.length>0)
+		        {
+		            try
+		            {
+		                var tx=new bitcore.Transaction()
+		                .from(utxo);
+		                var amount=(tx.inputAmount);
+		                vm.balanceInfo={
+		                	"hash":"",
+							"received":0,
+							"receivedCount":0,
+							"sent":0,
+							"sentCount":0,
+							"staked":0,
+							"stakedCount":0,
+							"stakedSent":0,
+							"stakedReceived":0,
+							"coldStaked":0,
+							"coldStakedCount":0,
+							"coldStakedSent":0,
+							"coldStakedReceived":0,
+							"coldStakedBalance":0,
+							"balance":amount,
+							"blockIndex":0,
+							"richListPosition":0
+						}
+		            }
+		            catch(err)
+		            {
+		                console.log(err);
+		            }
+		        }
+		        else
+		        {
+	                vm.balanceInfo={
+		                	"hash":"",
+							"received":0,
+							"receivedCount":0,
+							"sent":0,
+							"sentCount":0,
+							"staked":0,
+							"stakedCount":0,
+							"stakedSent":0,
+							"stakedReceived":0,
+							"coldStaked":0,
+							"coldStakedCount":0,
+							"coldStakedSent":0,
+							"coldStakedReceived":0,
+							"coldStakedBalance":0,
+							"balance":0,
+							"blockIndex":0,
+							"richListPosition":0
+						}
+		        }
+		    })
+		    .catch(function (error)
+			{
+				console.log(error);
+			})
+			.then(function ()
+			{
+			});
+		}
+	    if (window.network=="main")
+	    {
+	   		url=vm.apiExplorerURL+'address/'+vm.publicAddress;
+			axios.get(url, {
+				params: {
+					network: window.network,
+					a: vm.publicAddress
+				}
+			})
+			.then(function (response)
+			{
+				vm.balanceInfo=response.data;
+			})
+			.catch(function (error)
+			{
+				console.log(error);
+				if(error.response.data.status=="404")
+				{
+	                vm.balanceInfo={
+	                	"hash":"",
+						"received":0,
+						"receivedCount":0,
+						"sent":0,
+						"sentCount":0,
+						"staked":0,
+						"stakedCount":0,
+						"stakedSent":0,
+						"stakedReceived":0,
+						"coldStaked":0,
+						"coldStakedCount":0,
+						"coldStakedSent":0,
+						"coldStakedReceived":0,
+						"coldStakedBalance":0,
+						"balance":0,
+						"blockIndex":0,
+						"richListPosition":0
+					}
+				}
+			})
+		    .then(function ()
+			{
+			}); 
+		}
     },
     push(page, key) {
       this.$store.commit('navigator/push', {

@@ -95,6 +95,20 @@
 				</v-ons-list-item>
 
 				<v-ons-list-header></v-ons-list-header>
+
+			    <v-ons-list-item>
+			    	<div class="left">
+				  		<v-ons-icon icon="ion-unlocked" class="list-item__icon"></v-ons-icon>
+					</div>
+			      <div class="center">
+						Lock wallet if app goes background
+					</div>
+			      <div class="right">
+			        <v-ons-switch v-model="bLockWalletOnDeactivate" v-on:click="$store.commit('config/setLockWalletOnDeactivate',bLockWalletOnDeactivate);"></v-ons-switch>
+			      </div>
+			    </v-ons-list-item>
+
+				<v-ons-list-header></v-ons-list-header>
 				<v-ons-list-item tappable modifier="nodivider" v-on:click="backupWallet()">
 					<div class="left">
 						<v-ons-icon icon="ion-android-done-all" class="list-item__icon"></v-ons-icon>
@@ -130,6 +144,7 @@ import BackupWallet from './BackupWallet.vue';
 export default {
   data () {
     return {
+    	bLockWalletOnDeactivate:false,
         pages: [
         {
           component: AddressBook,
@@ -190,6 +205,10 @@ export default {
   	{
     	return this.$store.state.config;
   	}
+  },
+  created: function ()
+  {
+  	this.bLockWalletOnDeactivate=this.config.lock_wallet_on_deactivate;
   },
   methods: {
 	getSetting: function (key)

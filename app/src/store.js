@@ -64,6 +64,10 @@ export default {
       namespaced: true,
       state:
       {
+      	address:"",
+      	lock_wallet_on_deactivate:false,
+      	cold_staking_active:false,
+      	cold_staking_address:"",
         language:{},
         currency:{},
         book:[],
@@ -82,6 +86,25 @@ export default {
 			]
       },
       mutations: {
+      	setAddress(state,address)
+        {
+			state.address=address;
+        },
+      	setLockWalletOnDeactivate(state,b)
+        {
+			state.lock_wallet_on_deactivate=b;
+			localStorage.setItem("config", JSON.stringify(this.state.config));
+        },
+        setColdStakingActive(state,b)
+        {
+			state.cold_staking_active=b;
+			localStorage.setItem("config", JSON.stringify(this.state.config));
+        },
+        setColdStakingAddress(state,address)
+        {
+			state.cold_staking_address=address;
+			localStorage.setItem("config", JSON.stringify(this.state.config));
+        },
         setLanguage(state,language)
         {
 			state.language=language;
@@ -95,6 +118,7 @@ export default {
         setBook(state,book)
         {
 			state.book=book;
+			localStorage.setItem("config", JSON.stringify(this.state.config));
         },
         addContact(state,contact)
         {

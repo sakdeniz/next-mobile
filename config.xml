@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="net.navcommunity.next" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="net.navcommunity.next" version="1.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>NEXT</name>
     <description>
         NEXT Mobile
     </description>
-    <author email="admin@navcommunity.net" href="http://navcommunity.net">
-        NavCoin Community
+    <author email="contact@nextwallet.org" href="https://www.nextwallet.org">
+        NEXT Developers
     </author>
     <content src="index.html" />
     <preference name="StatusBarOverlaysWebView" value="true" />
@@ -56,6 +56,7 @@
     <platform name="android">
         <preference name="SplashMaintainAspectRatio" value="true" />
         <preference name="SplashShowOnlyFirstTime" value="true" />
+        <preference name="android-minSdkVersion" value="28" />
         <icon density="ldpi" src="res/icon/android/ldpi.png" />
         <icon density="mdpi" src="res/icon/android/mdpi.png" />
         <icon density="hdpi" src="res/icon/android/hdpi.png" />

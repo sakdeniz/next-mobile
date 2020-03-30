@@ -1,17 +1,23 @@
 <template>
 	<v-ons-page id="page-send">
-		<custom-toolbar v-if="toolbarInfo" v-bind="toolbarInfo"></custom-toolbar>
 		<v-ons-card>
 			<div class="title">
 				{{$t('message.send')}}
 				<v-ons-button style="float:right" v-on:click="scan()"><i class="ion-qr-scanner"></i>&nbsp;{{$t('message.scan')}}</v-ons-button>
+				<v-ons-button style="float:right;margin-right:5px;" v-on:click="push(pages['0'].component, $t('message.settingsAddressBook'))"><i class="ion-android-person"></i></v-ons-button>
 			</div>
+			{{getAddress}}
 			<div class="content">
+				<div class="center" style="margin-top:20px">
+					<center>
+	        			<img src="images/transfer.svg" style="width:128px;height:auto;">
+    	    		</center>
+        		</div>
 				<div class="center" style="margin-top:20px">
 					<v-ons-input :placeholder="$t('message.sendAddress')" float type="text" v-model="address" style="width:100%"></v-ons-input>
 				</div>
 				<div class="center" style="margin-top:30px">
-					<v-ons-input :placeholder="$t('message.sendAmount')" float type="number" v-model="amount" style="width:100%"></v-ons-input>
+					<v-ons-input :placeholder="$t('message.sendAmount')" float type="number" v-model="amount" inputmode="numeric" style="width:100%"></v-ons-input>
 				</div>
 				<div class="center" style="margin-top:40px">
 					<v-ons-button :disabled="!address || !amount" v-on:click="send()">{{$t('message.sendSubmit')}}</v-ons-button>
@@ -24,14 +30,28 @@
 <script>
 import axios from 'axios';
 import sb from 'satoshi-bitcoin';
+import AddressBook from './AddressBook.vue';
 export default {
   data () {
     return {
-    publicAddress:'',
-    address:'',
-    amount:'',
-    fee:100000
+	    publicAddress:'',
+	    address:'',
+	    amount:'',
+	    fee:100000,
+	    pages: [
+	    {
+	          component: AddressBook,
+	          label: 'AddressBook',
+	          desc: 'AddressBook'
+	    }]
     };
+  },
+  computed:
+  {
+  	getAddress()
+  	{
+  		this.address=this.$store.state.config.address;
+  	}
   },
   created: function () {
     this.publicAddress=db.get('addr').value()[0].publicAddress;
@@ -77,7 +97,7 @@ export default {
       })
       .then(function (response)
       {
-        var utxo=response.data;   
+        var utxo=response.data;
         console.log(utxo);
         if(utxo.length>0)
         {

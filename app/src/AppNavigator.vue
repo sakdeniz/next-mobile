@@ -255,6 +255,7 @@ export default {
       walletBackedup:false,
       termsAccepted:false,
       mnemonics:'',
+      closeConfirmActive:false,
       addr:{}
     }
   },
@@ -279,8 +280,11 @@ export default {
 		if (typeof(QRScanner) != "undefined")
 		{
 			this.$ons.ready(() => {
+				document.addEventListener('resume', this.onResume, false);
 				vm.$ons.setDefaultDeviceBackButtonListener(function(event)
 				{
+					if (vm.closeConfirmActive) return;
+					vm.closeConfirmActive=true;
 					QRScanner.getStatus(function(status)
 					{
 						if (status.scanning)
@@ -300,6 +304,10 @@ export default {
 					    		{
 					    			navigator.app.exitApp();
 					    		}
+					    		else
+					    		{
+					    			vm.closeConfirmActive=false;
+					    		}
 					    	});
 					  	}
 					});
@@ -312,6 +320,9 @@ export default {
     		localStorage.setItem("config",'{"language":{"name":"English","code":"en"},"currency":{"symbol":"USD","code":"USD"},"book":[]}');
     	}
     	var config=JSON.parse(localStorage.getItem("config"));
+    	this.$store.commit('config/setLockWalletOnDeactivate', config.lock_wallet_on_deactivate);
+    	this.$store.commit('config/setColdStakingActive', config.cold_staking_active);
+    	this.$store.commit('config/setColdStakingAddress', config.cold_staking_address);
     	this.$store.commit('config/setBook', config.book);
     	this.$store.commit('config/setLanguage', {name:config.language.name,code:config.language.code})
     	this.$store.commit('config/setCurrency', {symbol:config.currency.symbol,code:config.currency.code})
@@ -338,6 +349,19 @@ export default {
     },
     methods:
     {
+    	onResume()
+    	{
+    		if (this.$store.state.config.lock_wallet_on_deactivate)
+    		{
+    			console.log("Wallet locked.")
+	    		this.password="";
+	    		this.walletUnlocked=false;
+	    	}
+	    	else
+	    	{
+	    		console.log("Auto locking disabled.")
+	    	}
+		},
     	disableScanner()
     	{
     		console.log("disable");

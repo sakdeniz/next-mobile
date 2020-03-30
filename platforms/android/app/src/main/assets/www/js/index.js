@@ -29,21 +29,6 @@ var app = {
     onDeviceReady: function() {
         this.receivedEvent('deviceready');
         window.QRScanner.prepare(onDone);
-        /*document.querySelector("#prepare").addEventListener("touchend", function() {
-            window.QRScanner.prepare(onDone); // show the prompt
-
-        });
-
-        document.querySelector("#show").addEventListener("touchend", function() {
-            window.QRScanner.show();
-
-        });
-
-        document.querySelector("#scan").addEventListener("touchend", function() {
-            window.QRScanner.scan(displayContents);
-
-        });*/
-
         function onDone(err, status){
         	console.log("STATUS:"+JSON.stringify(status));
         	console.log("err:"+err);

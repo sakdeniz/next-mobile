@@ -84,6 +84,50 @@
         		</div>
       		</div>
     	</v-ons-card>
+
+		<v-ons-card>
+      		<div class="center" v-if="cFundStats.funds">
+				<div class="title">
+					{{$t('message.communityFundStats')}}
+				</div>
+      			<table cellspacing="5">
+      				<tbody>
+	      				<tr>
+	      					<td><small>{{$t('message.communityFundAvailable')}}</small></td>
+	      					<td><small>{{formatBalance(Math.floor(cFundStats.funds.available))}} NAV</small></td>
+	      				</tr>
+	      				<tr>
+	      					<td><small>{{$t('message.communityFundLocked')}}</small></td>
+	      					<td><small>{{formatBalance(Math.floor(cFundStats.funds.locked))}} NAV</small></td>
+	      				</tr>
+	      				<tr>
+	      					<td><small>{{$t('message.communityFundBlocksPerVotingCycle')}}</small></td>
+	      					<td><small>{{formatBalance(cFundStats.consensus.blocksPerVotingCycle)}}</small></td>
+	      				</tr>
+	      				<tr>
+	      					<td><small>{{$t('message.communityFundMinimumSumVotesPerVoting')}}</small></td>
+	      					<td><small>{{formatBalance(cFundStats.consensus.minSumVotesPerVotingCycle)}}</small></td>
+	      				</tr>
+	      				<tr>
+	      					<td><small>{{$t('message.communityFundVotingPeriodStart')}}</small></td>
+	      					<td><small>{{formatBalance(cFundStats.votingPeriod.starting)}}</small></td>
+	      				</tr>
+	      				<tr>
+	      					<td><small>{{$t('message.communityFundVotingPeriodEnd')}}</small></td>
+	      					<td><small>{{formatBalance(cFundStats.votingPeriod.ending)}}</small></td>
+	      				</tr>
+	      				<tr>
+	      					<td><small>{{$t('message.communityFundVotingPeriodCurrent')}}</small></td>
+	      					<td><small>{{formatBalance(cFundStats.votingPeriod.current)}}</small></td>
+	      				</tr>
+	      				<tr>
+	      					<td><small>{{$t('message.communityFundVotingRemainingBlocks')}}</small></td>
+	      					<td><small>{{formatBalance(cFundStats.votingPeriod.ending-cFundStats.votingPeriod.current)}} (%{{(((cFundStats.votingPeriod.ending-cFundStats.votingPeriod.current)*100)/cFundStats.consensus.blocksPerVotingCycle).toFixed(2)}})</small></td>
+	      				</tr>
+      				</tbody>
+      			</table>
+      		</div>
+      	</v-ons-card>
 		
 		<v-ons-card>
       		<div class="center">
@@ -237,6 +281,7 @@ import CreateProposal from './CreateProposal.vue';
 export default {
   data () {
     return {
+    cFundStats:{},
     publicAddress:'',
     paymentRequestProposal:{},
     paymentRequestId:'',
@@ -267,8 +312,22 @@ export default {
 	this.publicAddress=db.get('addr').value()[0].publicAddress;
     this.getProposals();
     this.getPaymentRequests();
+    this.getcFundStats();
   },
   methods: {
+	formatBalance: n =>
+    {
+        if (n==0) return n;
+        if (n)
+        {
+       	    var parts=n.toString().split(".");
+        	return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".") + (parts[1] ? "," + parts[1] : "");
+        }
+        else
+        {
+        	return "";
+        }
+    },
     loadItem(done)
     {
         this.getProposals();
@@ -462,7 +521,7 @@ export default {
 	{
 		try
 		{
-			var requiredVotesProportion=(((proposal.votesYes+proposal.votesNo)*100)/this.cfundStats.consensus.minSumVotesPerVotingCycle).toFixed(2);
+			var requiredVotesProportion=(((proposal.votesYes+proposal.votesNo)*100)/this.cFundStats.consensus.minSumVotesPerVotingCycle).toFixed(2);
 	   		if (requiredVotesProportion>100) return 100; else return requiredVotesProportion;
         }
         catch(err){}
@@ -478,6 +537,27 @@ export default {
         .then(function (response)
         {
             vm.proposals=response.data;
+            //console.log(JSON.stringify(response.data));
+        })
+        .catch(function (error)
+        {
+            console.log(error);
+        })
+        .then(function ()
+        {
+        });
+    },
+    getcFundStats()
+    {
+        let vm=this;
+        axios.get(window.apiURL+'cfundstats', {
+            params: {
+                network: window.network
+            }
+        })
+        .then(function (response)
+        {
+            vm.cFundStats=response.data;
             //console.log(JSON.stringify(response.data));
         })
         .catch(function (error)

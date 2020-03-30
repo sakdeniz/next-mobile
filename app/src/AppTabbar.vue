@@ -21,6 +21,7 @@
 import Home from './pages/Home.vue';
 import Receive from './pages/Receive.vue';
 import Send from './pages/Send.vue';
+import Staking from './pages/Staking.vue';
 import CommunityFund from './pages/CommunityFund.vue';
 import Settings from './pages/Settings.vue';
 
@@ -55,6 +56,12 @@ export default {
           label: '',
           icon: this.md ? 'ion-paper-airplane' : 'ion-paper-airplane',
           page: Send,
+          theme: purple
+        },
+        {
+          label: '',
+          icon: this.md ? 'ion-social-buffer' : 'ion-social-buffer',
+          page: Staking,
           theme: purple
         },
         {
