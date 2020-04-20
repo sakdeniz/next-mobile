@@ -225,7 +225,7 @@ var ENCRYPTION_KEY;
 window.config={ headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, responseType: 'text' }
 window.apiURL='https://navcommunity.net/api/lw/';
 window.apiExplorerURL='https://api.navexplorer.com/api/';
-window.network='dev';
+window.network='main';
 function encrypt (text)
 {
     let iv = crypto.randomBytes(IV_LENGTH);
