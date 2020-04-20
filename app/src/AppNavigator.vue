@@ -1,6 +1,23 @@
 <template>
    <v-ons-page v-if="!walletExist || !walletUnlocked || !walletBackedup">
-		<div class="main" v-show="!walletExist && !languageSelected">
+		<v-ons-carousel fullscreen swipeable auto-scroll overscrollable :index.sync="carouselIndex" v-show="bCarousel">
+  			<v-ons-carousel-item v-for="(itm) in carouselItems" class="carousel-item">
+    			<div class="title-1"><span v-html="itm.title_1"></span></div>
+    			<div class="title-2"><center><span v-html="itm.title_2"></span></center></div>
+				<div>
+					<v-ons-button v-show="carouselIndex<Object.keys(carouselItems).length-1" v-on:click="skip()">Skip</v-ons-button>
+					<v-ons-button v-show="carouselIndex==Object.keys(carouselItems).length-1" v-on:click="skip()">Let's Start</v-ons-button>
+				</div>
+ 	 		</v-ons-carousel-item>
+		</v-ons-carousel>
+
+    	<div class="dots" v-show="bCarousel">
+    		<span v-for="dotIndex in Object.keys(carouselItems).length" :key="dotIndex" @click="carouselIndex = dotIndex - 1">
+        		{{ carouselIndex === dotIndex - 1 ? '\u25CF' : '\u25CB' }}
+     		</span>
+    	</div>
+
+		<div class="main" v-show="!walletExist && !languageSelected && !bCarousel">
 			<div class="wrapper">
 				<center>
 					<div class="welcome_logo">
@@ -208,7 +225,7 @@ var ENCRYPTION_KEY;
 window.config={ headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, responseType: 'text' }
 window.apiURL='https://navcommunity.net/api/lw/';
 window.apiExplorerURL='https://api.navexplorer.com/api/';
-window.network='main';
+window.network='dev';
 function encrypt (text)
 {
     let iv = crypto.randomBytes(IV_LENGTH);
@@ -254,10 +271,19 @@ export default {
       walletUnlocked:false,
       walletBackedup:false,
       termsAccepted:false,
+      bCarousel:false,
       mnemonics:'',
       closeConfirmActive:false,
-      addr:{}
-    }
+      addr:{},
+      carouselIndex: 0,
+      carouselItems: [
+      	{"title_1":"Welcome to NavCoin NEXT","title_2":"<p>NavCoin is an open-source, blockchain based Proof of Stake cryptocurrency.</p><p>Its design is public, nobody owns or controls NavCoin, and everyone can take part.</p><p>It’s a platform that’s run by its users, for its users - with an incentivised network of nodes verifying payments all around the world.</p>","bgcolor":"red"},
+      	{"title_1":"Spend Easily","title_2":"<p>Designed for fast, cheap, and secure peer-to-peer payments.</p><p>A network that's driven to lowering the cost of doing business.</p>","bgcolor":"blue"},
+      	{"title_1":"Take Control","title_2":"Take full control and customize your wallet to your needs.","bgcolor":"orange"},
+      	{"title_1":"Community Fund","title_2":"<p>Projects are funded and approved by the decentralized network with no central authority.</p><p>This ensures NavCoin’s direction remains firmly in the best interest of the entire network.</p><p>This fund pays you to take your idea, nurture it, and build a team to bring it to life.</p>","bgcolor":"orange"},
+      	{"title_1":"Cold Staking","title_2":"<p>Cold-staking means that your wallet is not online staking and subject to attacks.</p><p>Instead, a staking wallet which contains no NAV will be staking on behalf of your spending wallet which holds your NAV.</p><p>Bear in mind that you still need a node actively staking ideally 24⁄7 to get your staking rewards.</p>","bgcolor":"orange"},
+      ]
+	}
   },
   computed: {
   	config()
@@ -344,11 +370,16 @@ export default {
 		}
 		else
 		{
+			this.bCarousel=true;
 			console.log("Wallet not exist.");
 		}
     },
     methods:
     {
+    	skip()
+    	{
+    		this.bCarousel=false;
+    	},
     	onResume()
     	{
     		if (this.$store.state.config.lock_wallet_on_deactivate)
@@ -665,5 +696,42 @@ p {
 .terms
 {
 	padding:10px;
+}
+
+.carousel-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+ons-carousel
+{
+background-color : #9921e8;
+background-image : linear-gradient(315deg, #9921e8 0%, #5f72be 74%);
+}
+.title-1 {
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: bold;
+  text-shadow: 1px 1px #232323;
+
+}
+.title-2{
+  color: #ffffff;
+  font-size: 20px;
+  text-shadow: 1px 1px #232323;
+  padding:30px;
+}
+.dots {
+  text-align: center;
+  font-size: 30px;
+  color: #fff;
+  position: absolute;
+  bottom: 40px;
+  left: 0;
+  right: 0;
+}
+.dots > span {
+  cursor: pointer;
 }
 </style>

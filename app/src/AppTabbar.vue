@@ -9,7 +9,7 @@
 
     <v-ons-tabbar position="bottom"
       :modifier="md ? 'autogrow white-content' : ''"
-      :on-swipe="md ? onSwipe : null"
+      :on-swipe="md ? onSwipe : onSwipe"
       :tabbar-style="swipeTheme"
       :tabs="tabs"
       :index.sync="index"
@@ -92,11 +92,11 @@ export default {
 					QRScanner.cancelScan(function(status)
 					{
 					});
-					$("#page-send").show();
-					$("#page-add-contact").show();
 		  		}
 		  	});
 	  	}
+	  	$("#page-send").show();
+		$("#page-add-contact").show();
      	// Apply the same transition as ons-tabbar
       	this.animationOptions = animationOptions;
       	// Interpolate colors and top position
