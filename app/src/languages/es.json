@@ -149,7 +149,7 @@
 		"confirmCloseNo":"No",
 		"communityFundStats":"Estadísticas del fondo comunitario",
 		"staking":"Cold Staking",
-		"stakingIntroduction":"<p>Con NEXT Mobile, puede realizar fácilmente el Cold Staking con un solo toque.</p><i class='ion-checkmark-round'></i>&nbsp;Sin custodia<br/><i class='ion-checkmark-round'></i>&nbsp;Solo el propietario de la billetera tiene permiso para gastar<br/><i class='ion-checkmark-round'></i>&nbsp;10% de tasa de participación de tasa fija<br/><i class='ion-checkmark-round'></i>&nbsp;Rastrea tus recompensas de apuesta en tu billetera",
+		"stakingIntroduction":"<p>Con NEXT Mobile, puede realizar fácilmente el Cold Staking con un solo toque.</p><i class='ion-checkmark-round'></i>&nbsp;Sin custodia<br/><i class='ion-checkmark-round'></i>&nbsp;Solo el propietario de la billetera tiene permiso para gastar<br/><i class='ion-checkmark-round'></i>&nbsp;Rastrea tus recompensas de apuesta en tu billetera",
 		"startStaking":"Comience a estacar en frío",
 		"stakingSuccessfullyStarted":"Comience a estacar en frío",
 		"stakingNoBalance":"No tienes NAV en tu billetera. Deposite un poco de NAV en su billetera para comenzar el proceso de replanteo.",

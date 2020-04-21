@@ -149,7 +149,7 @@
 		"confirmCloseNo":"No",
 		"communityFundStats":"Community Fund Stats",
 		"staking":"Cold Staking",
-		"stakingIntroduction":"<p>With NEXT Mobile, you can easily do Cold Staking with one touch.</p><i class='ion-checkmark-round'></i>&nbsp;Non-custodial<br/><i class='ion-checkmark-round'></i>&nbsp;Only wallet owner have spending permission<br/><i class='ion-checkmark-round'></i>&nbsp;10% Fixed rate staking fee<br/><i class='ion-checkmark-round'></i>&nbsp;Track your staking rewards in your wallet",
+		"stakingIntroduction":"<p>With NEXT Mobile, you can easily do Cold Staking with one touch.</p><i class='ion-checkmark-round'></i>&nbsp;Non-custodial<br/><i class='ion-checkmark-round'></i>&nbsp;Only wallet owner have spending permission<br/><i class='ion-checkmark-round'></i>&nbsp;Track your staking rewards in your wallet",
 		"startStaking":"Start Cold Staking",
 		"stakingSuccessfullyStarted":"Staking successfully started.",
 		"stakingNoBalance":"You have no NAV in your wallet. Deposit some NAV into your wallet to start the staking process.",

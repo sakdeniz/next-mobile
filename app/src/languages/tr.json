@@ -149,7 +149,7 @@
 		"confirmCloseNo":"Hayır",
 		"communityFundStats":"Topluluk Fonu Detayları",
 		"staking":"Soğuk İstifleme",
-		"stakingIntroduction":"<p>NEXT Mobile ile tek dokunuşla soğuk istifleme yapabilirsiniz.</p><i class='ion-checkmark-round'></i>&nbsp;Emanetçi değildir<br/><i class='ion-checkmark-round'></i>&nbsp;Sadece cüzdan sahibi harcama yetkisine sahiptir<br/><i class='ion-checkmark-round'></i>&nbsp;10% Sabit istifleme komisyonu<br/><i class='ion-checkmark-round'></i>&nbsp;İstifleme ödüllerinizi cüzdanınızdan takip edin",
+		"stakingIntroduction":"<p>NEXT Mobile ile tek dokunuşla soğuk istifleme yapabilirsiniz.</p><i class='ion-checkmark-round'></i>&nbsp;Emanetçi değildir<br/><i class='ion-checkmark-round'></i>&nbsp;Sadece cüzdan sahibi harcama yetkisine sahiptir<br/><i class='ion-checkmark-round'></i>&nbsp;İstifleme ödüllerinizi cüzdanınızdan takip edin",
 		"startStaking":"Soğuk İstiflemeyi Başlat",
 		"stakingSuccessfullyStarted":"Soğuk istifleme başarıyla başlatıldı",
 		"stakingNoBalance":"Cüzdanınıza hiç NAV bulunmuyor. Soğuk istifleme için cüzdanınıza biraz NAV yatırın.",
