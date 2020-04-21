@@ -49,30 +49,6 @@
 				    </tr>
 				    <tr>
 				      <td nowrap>
-				        <i class="ion-ios-snowy"></i> {{$t('message.balanceSummaryColdStaked')}}
-				      </td>
-				      <td>{{balanceInfo.coldStaked?formatBalance(balanceInfo.coldStaked):0}} <span class="notification">{{balanceInfo.coldStakedCount?balanceInfo.coldStakedCount:0}}</span></td>
-				    </tr>
-				    <tr>
-				      <td nowrap>
-				        <i class="ion-ios-snowy"></i> {{$t('message.balanceSummaryColdStakedBalance')}}
-				      </td>
-				      <td>{{formatBalance(balanceInfo.coldStakedBalance)}}</td>
-				    </tr>
-				   	<tr>
-				      <td nowrap>
-				        <i class="ion-ios-snowy"></i> {{$t('message.balanceSummaryStakedSent')}}
-				      </td>
-				      <td>{{formatBalance(balanceInfo.stakedSent)}}</td>
-				    </tr>
-				   	<tr>
-				      <td nowrap>
-				        <i class="ion-ios-snowy"></i> {{$t('message.balanceSummaryStakedReceived')}}
-				      </td>
-				      <td>{{formatBalance(balanceInfo.stakedReceived)}}</td>
-				    </tr>
-				    <tr>
-				      <td nowrap>
 				        <i class="ion-connection-bars"></i> {{$t('message.balanceSummaryRichListPosition')}}
 				      </td>
 				      <td>{{balanceInfo.richListPosition}}</td>
