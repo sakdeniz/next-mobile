@@ -48,6 +48,11 @@ export default {
           url: 'https://www.navcoin.org'
         },
         {
+          title: vm.$t('message.nextWalletWebsite'),
+          icon: 'ion-document-text',
+          url: 'https://www.nextwallet.org'
+        },
+        {
           title: 'Github',
           icon: 'ion-social-github',
           url: 'https://github.com/sakdeniz/next'
@@ -66,6 +71,10 @@ export default {
         {
           title: vm.$t('message.send'),
           icon: 'ion-paper-airplane,ion-paper-airplane'
+        },
+        {
+          title: vm.$t('message.staking'),
+          icon: 'ion-social-buffer, ion-social-buffer'
         },
         {
           title: vm.$t('message.communityFund'),

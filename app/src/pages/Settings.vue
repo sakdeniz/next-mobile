@@ -109,6 +109,15 @@
 			    </v-ons-list-item>
 
 				<v-ons-list-header></v-ons-list-header>
+				<v-ons-list-item tappable modifier="nodivider" v-on:click="push(pages['10'].component, $t('message.settingsSweepPrivateKey'))">
+					<div class="left">
+						<v-ons-icon icon="ion-arrow-return-left" class="list-item__icon"></v-ons-icon>
+					</div>
+					<div class="center">
+						{{$t('message.settingsSweepPrivateKey')}}
+					</div>
+				</v-ons-list-item>
+
 				<v-ons-list-item tappable modifier="nodivider" v-on:click="backupWallet()">
 					<div class="left">
 						<v-ons-icon icon="ion-android-done-all" class="list-item__icon"></v-ons-icon>
@@ -138,6 +147,7 @@ import AlternativeCurrency from './AlternativeCurrency.vue';
 import Sign from './Sign.vue';
 import Verify from './Verify.vue';
 import About from './About.vue';
+import SweepPrivateKey from './SweepPrivateKey.vue';
 import TermsOfUse from './TermsOfUse.vue';
 import Share from './Share.vue';
 import BackupWallet from './BackupWallet.vue';
@@ -148,8 +158,8 @@ export default {
         pages: [
         {
           component: AddressBook,
-          label: 'AddressBook',
-          desc: 'AddressBook'
+          label: 'Address Book',
+          desc: 'Address Book'
         },
         {
           component: Help,
@@ -163,8 +173,8 @@ export default {
         },
         {
           component: AlternativeCurrency,
-          label: 'AlternativeCurrency',
-          desc: 'AlternativeCurrency'
+          label: 'Alternative Currency',
+          desc: 'Alternative Currency'
         },
         {
           component: Sign,
@@ -183,8 +193,8 @@ export default {
         },
         {
           component: TermsOfUse,
-          label: 'TermsOfUse',
-          desc: 'TermsOfUse'
+          label: 'Terms Of Use',
+          desc: 'Terms Of Use'
         },
         {
           component: Share,
@@ -195,6 +205,11 @@ export default {
           component: BackupWallet,
           label: 'Backup Wallet',
           desc: 'Backup Wallet'
+        },
+        {
+          component: SweepPrivateKey,
+          label: 'Sweep Private Key',
+          desc: 'Sweep Private Key'
         },
         ]
     };

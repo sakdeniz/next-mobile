@@ -140,8 +140,7 @@ export default {
     graphLimit:90,
     hideBalance:false,
     proposals:[],
-    proposalFilter:'',
-    apiExplorerURL:'https://api.navexplorer.com/api/'
+    proposalFilter:''
     };
   },
   created: function ()
@@ -425,7 +424,7 @@ export default {
 		}
 	    if (window.network=="main")
 	    {
-	   		url=vm.apiExplorerURL+'address/'+vm.publicAddress;
+	   		url=window.apiExplorerURL+'address/'+vm.publicAddress;
 			axios.get(url, {
 				params: {
 					network: window.network,

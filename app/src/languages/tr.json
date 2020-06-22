@@ -6,6 +6,7 @@
 		"hello": "NEXT Cüzdana hoş geldiniz.",
 		"aboutNext":"NEXT Hakkında",
 		"navcoinWebsite":"NavCoin Website",
+		"nextWalletWebsite":"NEXT Website",
 		"navcoinReddit":"NavCoin Reddit",
 		"githubRepo":"Github Repo",
 		"error":"Hata",
@@ -81,6 +82,7 @@
 		"settingsShare":"NEXT'i Paylaş",
 		"settingsBackupWallet":"Cüzdanı Yedekle",
 		"settingsRemoveWallet":"Cüzdanı Kaldır",
+		"settingsSweepPrivateKey":"Özel Anahtarı Süpür",
 		"addressBook":"Adres Defteri",
 		"help":"Yardım",
 		"helpDiscord":"Discord Sunucusuna Katıl",
@@ -173,6 +175,17 @@
 		"confirmColdStakingQuestion":"Cüzdanınız için bir cold staking adresi oluşturacağız ve tüm NAV'larınızı cold staking adresinize göndereceğiz. İşlem tamamlandıktan sonra staking ödülleri kazanmaya başlayabilirsiniz. İşlemi onaylıyor musunuz?",
 		"confirmColdStakingTitle":"Soğuk İstifleme Onayı",
 		"confirmColdStakingYes":"Evet",
-		"confirmColdStakingNo":"Hayır"
+		"confirmColdStakingNo":"Hayır",
+		"sweepPrivateKey":"Özel Anahtarı Süpür",
+		"sweepAddress":"Adresi Süpür",
+		"sweepPrivateKeyDescription":"Eğer başka bir cüzdandaki özel anahtara sahipseniz, cüzdanınızdaki tüm NAV'ları adresinize aktarmak için aşağıdaki alana özel anahtarınızı giriniz.",
+		"enterPrivateKey":"Geçerli bir özel anahtar girin",
+		"invalidPrivateKey":"Hatalı özel anahtar",
+		"noUTXO":"Bu adreste NAV bulunamadı. UTXO kaydı yok.",
+		"sweepSuccess":"Özel Anahtar Süpürme Başarılı",
+		"sweepAddress":"Adresi Süpür",
+		"sweepAmount":"Miktar",
+		"coldStakingFAQTitle":"Cold Staking Sık Sorulan Sorular",
+		"coldStakingFAQ":"<ul><li>Kazanacağınız ödüller cüzdanınızda bulunan NAV miktarına ve ağda staking yapılan NAV miktarına göre değişkenlik gösterebilir.</li><li>Eğer mümkünse kendi NavCoin düğümünüzü kurun, böylece merkeziyetsizliği desteklemiş olursunuz.</li><li>İsterseniz NavPool,NavCash ile de cold staking yapabilirsiniz.</li></ul>"
     }
 }

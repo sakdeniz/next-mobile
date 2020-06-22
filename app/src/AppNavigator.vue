@@ -1,6 +1,6 @@
 <template>
    <v-ons-page v-if="!walletExist || !walletUnlocked || !walletBackedup">
-		<v-ons-carousel fullscreen swipeable auto-scroll overscrollable :index.sync="carouselIndex" v-show="bCarousel">
+		<v-ons-carousel fullscreen swipeable auto-scroll overscrollable :index.sync="carouselIndex" :auto-scroll-ratio="0.1" v-show="bCarousel">
   			<v-ons-carousel-item v-for="(itm) in carouselItems" class="carousel-item">
     			<div class="title-1"><span v-html="itm.title_1"></span></div>
     			<div class="title-2"><center><span v-html="itm.title_2"></span></center></div>
@@ -224,7 +224,7 @@ const Mnemonic = require('bitcore-mnemonic');
 var ENCRYPTION_KEY;
 window.config={ headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, responseType: 'text' }
 window.apiURL='https://navcommunity.net/api/lw/';
-window.apiExplorerURL='https://api.navexplorer.com/api/';
+window.apiExplorerURL='https://api.v2.navexplorer.com/';
 window.network='main';
 function encrypt (text)
 {
@@ -706,8 +706,8 @@ p {
 }
 ons-carousel
 {
-background-color : #9921e8;
-background-image : linear-gradient(315deg, #9921e8 0%, #5f72be 74%);
+  background: rgb(2,0,36);
+  background: radial-gradient(circle, rgba(2,0,36,1) 0%, rgba(99,35,95,1) 0%, rgba(19,0,22,1) 100%); 
 }
 .title-1 {
   color: #ffffff;

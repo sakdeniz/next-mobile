@@ -6,6 +6,7 @@
 		"hello": "Welcome to the NEXT Wallet",
 		"aboutNext":"About NEXT",
 		"navcoinWebsite":"NavCoin Website",
+		"nextWalletWebsite":"NEXT Website",
 		"navcoinReddit":"NavCoin Reddit",
 		"githubRepo":"Github Repo",
 		"error":"Error",
@@ -81,6 +82,7 @@
 		"settingsShare":"Share NEXT",
 		"settingsBackupWallet":"Backup Wallet",
 		"settingsRemoveWallet":"Remove Wallet",
+		"settingsSweepPrivateKey":"Sweep Private Key",
 		"addressBook":"Address Book",
 		"help":"Help",
 		"helpDiscord":"Join Discord Server",
@@ -173,6 +175,17 @@
 		"confirmColdStakingQuestion":"We will create a cold staking address for your public address and send all your NAV's to your cold staking address. Once the process is complete, you can start earning rewards with cold staking. Do you approve the cold staking startup process?",
 		"confirmColdStakingTitle":"Confirm Cold Staking",
 		"confirmColdStakingYes":"Yes",
-		"confirmColdStakingNo":"No"
+		"confirmColdStakingNo":"No",
+		"sweepPrivateKey":"Sweep Private Key",
+		"sweepAddress":"Sweep Address",
+		"sweepPrivateKeyDescription":"If you have a private key for your NavCoins in another wallet, paste this key in the field below. If the private key you provided is correct and there is NAV at the specified address, all NAVs will be transferred to your wallet.",
+		"enterPrivateKey":"Please enter a valid private key",
+		"invalidPrivateKey":"Invalid private key",
+		"noUTXO":"No NAV was found in this address. No UTXO record found.",
+		"sweepSuccess":"Sweep Private Key Success",
+		"sweepAddress":"Sweep Address",
+		"sweepAmount":"Amount",
+		"coldStakingFAQTitle":"Cold Staking FAQ",
+		"coldStakingFAQ":"<ul><li>The staking rewards you earn can vary depending on the amount of NAV you have and the amount of active NAV stake in the network.</li><li>If possible, install and run your own NavCoin node. When you set up your own node, you support the decentralization of the network.</li><li>If you wish, you can also do Cold Staking with NavPool, NavCash.</li></ul>"
     }
 }

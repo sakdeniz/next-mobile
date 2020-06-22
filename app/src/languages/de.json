@@ -6,6 +6,7 @@
 		"hello": "Willkommen in der NEXT Wallet",
 		"aboutNext":"Über NEXT",
 		"navcoinWebsite":"NavCoin Website",
+		"nextWalletWebsite":"NEXT Website",
 		"navcoinReddit":"NavCoin Reddit",
 		"githubRepo":"Github Repo",
 		"error":"Error",
@@ -81,6 +82,7 @@
 		"settingsShare":"Teile NEXT",
 		"settingsBackupWallet":"Wallet Backup",
 		"settingsRemoveWallet":"Wallet entfernen",
+		"settingsSweepPrivateKey":"Sweep Private Key",
 		"addressBook":"Adressbuch",
 		"help":"Hilfe",
 		"helpDiscord":"Tritt unserem Discord Server bei",
@@ -175,6 +177,17 @@
 		"confirmColdStakingQuestion":"Wir erstellen eine Cold-Staking-Adresse für Ihre öffentliche Adresse und senden alle Ihre NAVs an Ihre Cold-Staking-Adresse. Sobald der Vorgang abgeschlossen ist, können Sie mit kaltem Einsatz Belohnungen verdienen. Genehmigen Sie den Startvorgang für das Cold Staking?",
 		"confirmColdStakingTitle":"Kaltabstecken bestätigen",
 		"confirmColdStakingYes":"Ja",
-		"confirmColdStakingNo":"Nein"
+		"confirmColdStakingNo":"Nein",
+		"sweepPrivateKey":"Sweep Private Key",
+		"sweepAddress":"Sweep Address",
+		"sweepPrivateKeyDescription":"If you have a private key for your NavCoins in another wallet, paste this key in the field below. If the private key you provided is correct and there is NAV at the specified address, all NAVs will be transferred to your wallet.",
+		"enterPrivateKey":"Please enter a valid private key",
+		"invalidPrivateKey":"Invalid private key",
+		"noUTXO":"No NAV was found in this address. No UTXO record found.",
+		"sweepSuccess":"Sweep Private Key Success",
+		"sweepAddress":"Sweep Address",
+		"sweepAmount":"Amount",
+		"coldStakingFAQTitle":"Cold Staking FAQ",
+		"coldStakingFAQ":"<ul><li>The staking rewards you earn can vary depending on the amount of NAV you have and the amount of active NAV stake in the network.</li><li>If possible, install and run your own NavCoin node. When you set up your own node, you support the decentralization of the network.</li><li>If you wish, you can also do cold staking with NavPool, NavCash.</li></ul>"
     }
 }

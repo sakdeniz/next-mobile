@@ -68,14 +68,16 @@
                         	<a v-bind:href="'https://www.navexplorer.com/tx/'+tx.transaction">
                         	  <v-ons-icon style="color:#232323" icon="ion-android-open" class="list-item__icon"></v-ons-icon>
                       	   	</a>
-                          <v-ons-icon v-if="tx.type=='SEND'" style="color:#cc6600" icon="ion-arrow-up-a" class="list-item__icon"></v-ons-icon>
-                          <v-ons-icon v-if="tx.type=='RECEIVE'" style="color:#669900" icon="ion-arrow-down-a" class="list-item__icon"></v-ons-icon>
-                          <v-ons-icon v-if="tx.type=='COLD_STAKING'" style="color:#673ab7" icon="ion-ios-snowy" class="list-item__icon"></v-ons-icon>
+                          <v-ons-icon v-if="tx.type=='send'" style="color:#cc6600" icon="ion-arrow-up-a" class="list-item__icon"></v-ons-icon>
+                          <v-ons-icon v-if="tx.type=='receive'" style="color:#669900" icon="ion-arrow-down-a" class="list-item__icon"></v-ons-icon>
+                          <v-ons-icon v-if="tx.type=='community_fund_payout'" style="color:#669900" icon="ion-arrow-down-a" class="list-item__icon"></v-ons-icon>
+                          <v-ons-icon v-if="tx.type=='cold_stake'" style="color:#673ab7" icon="ion-ios-snowy" class="list-item__icon"></v-ons-icon>
                         </div>
                         <div class="center">
-                            <span style="color:#cc6600" v-if="tx.type=='SEND'">-{{formatBalance(tx.sent-tx.received)}}</span>
-                            <span style="color:#669900" v-if="tx.type=='RECEIVE'">+{{formatBalance(tx.received)}}</span>
-                            <span style="color:#673ab7" v-if="tx.type=='COLD_STAKING'">+{{getStakingReward(tx)}}</span>
+                            <span style="color:#cc6600" v-if="tx.type=='send'">-{{formatBalance(tx.input-tx.output)}}</span>
+                            <span style="color:#669900" v-if="tx.type=='receive'">+{{formatBalance(tx.output-tx.input)}}</span>
+                            <span style="color:#669900" v-if="tx.type=='community_fund_payout'">+{{formatBalance(tx.output)}}</span>
+                            <span style="color:#673ab7" v-if="tx.type=='cold_stake'">+{{getStakingReward(tx)}}</span>
                         </div>
                         <div class="right">{{formatDate(tx.time)}}</div>
                     </v-ons-list-item>
@@ -102,8 +104,7 @@ export default {
     balanceInfo:'',
     qrcode:'',
     prefix:"navcoin:",
-    txs:[],
-    apiExplorerURL:'https://api.navexplorer.com/api/'
+    txs:[]
     };
   },
   created: function ()
@@ -196,7 +197,7 @@ export default {
 		}
 	    if (window.network=="main")
 	    {
-	   		url=vm.apiExplorerURL+'address/'+vm.publicAddress;
+	   		url=window.apiExplorerURL+'address/'+vm.publicAddress;
 			axios.get(url, {
 				params: {
 					network: window.network,
@@ -240,7 +241,7 @@ export default {
     },
  	getStakingReward: function (tx)
 	{
-		return(sb.toBitcoin(parseFloat(tx.received)-parseFloat(tx.sent)));
+		return(sb.toBitcoin(parseFloat(tx.output)-parseFloat(tx.input)));
 	},
     doCopy: function ()
     {
