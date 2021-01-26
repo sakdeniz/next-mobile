@@ -45,6 +45,14 @@
     			<area-chart style="margin:0px;margin-bottom:30px;" :data="cData" height="100px" :curve="true" :legend="false" :colors="['#ceb8ef']" :dataset="{pointRadius: 0,borderColor:'#7d5ab5',backgroundColor:'#fafafa',fill: true}" :library="{scales: {xAxes: [{display: false}],yAxes: [{display: false}],},responsive:true}" label="NAV Chart"></area-chart>
     		</div>
 		</v-ons-card>
+		<v-ons-card v-show="status.maintenance_mode==1" style="margin:0px;margin-top:20px;background: #ffffff">
+			<h3><i class="ion-speakerphone"></i>&nbsp;Maintenance Mode</h3>
+			<p>{{status.maintenance_message}}</p>
+			<p>Current Block : {{status.blocks}}/{{status.headers}}</p>
+			<p>Sync Progress : {{status.sync}}%</p>
+			<p>Wallet node is {{status.days_behind}} behind the last block.</p>
+		</v-ons-card>
+
 		<v-ons-card style="margin:0px;margin-top:20px;background: #ffffff">
 			<div class="title">
 				<i class="ion-android-star"></i>&nbsp;{{$t('message.featuredProposals')}}
@@ -133,6 +141,7 @@ export default {
     publicAddress:'',
     balanceInfo:'',
     price:{},
+    status:{},
     graphData:[],
     cData:[],
     priceMulti:'',
@@ -147,6 +156,7 @@ export default {
   {
     this.publicAddress=window.db.get('addr').value()[0].publicAddress;
     this.getPrice();
+    this.getStatus();
     this.getBalance();
     this.getGraph();
     this.getProposals();
@@ -231,6 +241,7 @@ export default {
       this.graphData=[];
       this.cData=[];
       this.price={};
+      this.getStatus();
       this.getPrice();
       this.getBalance();
       this.getGraph();
@@ -343,6 +354,24 @@ export default {
       var parts = n.toString().split(".");
       return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts[1] ? "." + parts[1] : "");
     },
+    getStatus()
+    {
+    	let vm=this;
+		axios.get(window.apiURL+'status', {
+		      })
+		      .then(function (response)
+		      {
+		      	console.log(response.data);
+		        vm.status=response.data;
+		    })
+		    .catch(function (error)
+			{
+				console.log(error);
+			})
+			.then(function ()
+			{
+			});
+	},
     getBalance()
     {
 		var url;
@@ -366,25 +395,7 @@ export default {
 		                var tx=new bitcore.Transaction()
 		                .from(utxo);
 		                var amount=(tx.inputAmount);
-		                vm.balanceInfo={
-		                	"hash":"",
-							"received":0,
-							"receivedCount":0,
-							"sent":0,
-							"sentCount":0,
-							"staked":0,
-							"stakedCount":0,
-							"stakedSent":0,
-							"stakedReceived":0,
-							"coldStaked":0,
-							"coldStakedCount":0,
-							"coldStakedSent":0,
-							"coldStakedReceived":0,
-							"coldStakedBalance":0,
-							"balance":amount,
-							"blockIndex":0,
-							"richListPosition":0
-						}
+						vm.balanceInfo={"balance":"0","received":"0"}
 		            }
 		            catch(err)
 		            {
@@ -393,25 +404,7 @@ export default {
 		        }
 		        else
 		        {
-	                vm.balanceInfo={
-		                	"hash":"",
-							"received":0,
-							"receivedCount":0,
-							"sent":0,
-							"sentCount":0,
-							"staked":0,
-							"stakedCount":0,
-							"stakedSent":0,
-							"stakedReceived":0,
-							"coldStaked":0,
-							"coldStakedCount":0,
-							"coldStakedSent":0,
-							"coldStakedReceived":0,
-							"coldStakedBalance":0,
-							"balance":0,
-							"blockIndex":0,
-							"richListPosition":0
-						}
+					vm.balanceInfo={"balance":"0","received":"0"}
 		        }
 		    })
 		    .catch(function (error)
@@ -424,7 +417,7 @@ export default {
 		}
 	    if (window.network=="main")
 	    {
-	   		url=window.apiExplorerURL+'address/'+vm.publicAddress;
+	   		url=window.apiURL+'balance';
 			axios.get(url, {
 				params: {
 					network: window.network,
@@ -440,25 +433,7 @@ export default {
 				console.log(error);
 				if(error.response.data.status=="404")
 				{
-	                vm.balanceInfo={
-	                	"hash":"",
-						"received":0,
-						"receivedCount":0,
-						"sent":0,
-						"sentCount":0,
-						"staked":0,
-						"stakedCount":0,
-						"stakedSent":0,
-						"stakedReceived":0,
-						"coldStaked":0,
-						"coldStakedCount":0,
-						"coldStakedSent":0,
-						"coldStakedReceived":0,
-						"coldStakedBalance":0,
-						"balance":0,
-						"blockIndex":0,
-						"richListPosition":0
-					}
+					vm.balanceInfo={"balance":"0","received":"0"}
 				}
 			})
 		    .then(function ()

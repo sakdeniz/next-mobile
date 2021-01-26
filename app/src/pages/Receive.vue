@@ -33,25 +33,7 @@
 				      <td class="collapsing">
 				        <i class="ion-android-arrow-down"></i> {{$t('message.balanceSummaryReceived')}}
 				      </td>
-				      <td>{{balanceInfo.received?formatBalance(balanceInfo.received):0}} <span class="notification">{{balanceInfo.receivedCount?balanceInfo.receivedCount:0}}</span></td>
-				    </tr>
-				    <tr>
-				      <td>
-				        <i class="ion-android-arrow-up"></i> {{$t('message.balanceSummarySent')}}
-				      </td>
-				      <td>{{balanceInfo.sent?formatBalance(balanceInfo.sent):0}} <span class="notification">{{balanceInfo.sentCount?balanceInfo.sentCount:0}}</span></td>
-				    </tr>
-				    <tr>
-				      <td>
-				        <i class="ion-android-add"></i> {{$t('message.balanceSummaryStaked')}}
-				      </td>
-				      <td>{{balanceInfo.staked?formatBalance(balanceInfo.staked):0}} <span class="notification">{{balanceInfo.stakedCount?balanceInfo.stakedCount:0}}</span></td>
-				    </tr>
-				    <tr>
-				      <td nowrap>
-				        <i class="ion-connection-bars"></i> {{$t('message.balanceSummaryRichListPosition')}}
-				      </td>
-				      <td>{{balanceInfo.richListPosition}}</td>
+				      <td>{{balanceInfo.received?formatBalance(balanceInfo.received):0}}</td>
 				    </tr>
 				  </tbody>
 				</table>
@@ -65,7 +47,7 @@
                 <v-ons-list>
                     <v-ons-list-item v-for="tx in txs">
                         <div class="left">
-                        	<a v-bind:href="'https://www.navexplorer.com/tx/'+tx.transaction">
+                        	<a v-bind:href="'https://www.navexplorer.com/tx/'+tx.txid">
                         	  <v-ons-icon style="color:#232323" icon="ion-android-open" class="list-item__icon"></v-ons-icon>
                       	   	</a>
                           <v-ons-icon v-if="tx.type=='send'" style="color:#cc6600" icon="ion-arrow-up-a" class="list-item__icon"></v-ons-icon>
@@ -74,10 +56,8 @@
                           <v-ons-icon v-if="tx.type=='cold_stake'" style="color:#673ab7" icon="ion-ios-snowy" class="list-item__icon"></v-ons-icon>
                         </div>
                         <div class="center">
-                            <span style="color:#cc6600" v-if="tx.type=='send'">-{{formatBalance(tx.input-tx.output)}}</span>
-                            <span style="color:#669900" v-if="tx.type=='receive'">+{{formatBalance(tx.output-tx.input)}}</span>
-                            <span style="color:#669900" v-if="tx.type=='community_fund_payout'">+{{formatBalance(tx.output)}}</span>
-                            <span style="color:#673ab7" v-if="tx.type=='cold_stake'">+{{getStakingReward(tx)}}</span>
+                            <span style="color:#cc6600" v-if="tx.changes.balance<0">{{formatBalance(tx.changes.balance)}}</span>
+                            <span style="color:#669900" v-if="tx.changes.balance>0">+{{formatBalance(tx.changes.balance)}}</span>
                         </div>
                         <div class="right">{{formatDate(tx.time)}}</div>
                     </v-ons-list-item>
@@ -139,25 +119,7 @@ export default {
 		                var tx=new bitcore.Transaction()
 		                .from(utxo);
 		                var amount=(tx.inputAmount);
-		                vm.balanceInfo={
-		                	"hash":"",
-							"received":0,
-							"receivedCount":0,
-							"sent":0,
-							"sentCount":0,
-							"staked":0,
-							"stakedCount":0,
-							"stakedSent":0,
-							"stakedReceived":0,
-							"coldStaked":0,
-							"coldStakedCount":0,
-							"coldStakedSent":0,
-							"coldStakedReceived":0,
-							"coldStakedBalance":0,
-							"balance":amount,
-							"blockIndex":0,
-							"richListPosition":0
-						}
+		                vm.balanceInfo={"balance":"0","received":"0"}
 		            }
 		            catch(err)
 		            {
@@ -166,25 +128,7 @@ export default {
 		        }
 		        else
 		        {
-	                vm.balanceInfo={
-		                	"hash":"",
-							"received":0,
-							"receivedCount":0,
-							"sent":0,
-							"sentCount":0,
-							"staked":0,
-							"stakedCount":0,
-							"stakedSent":0,
-							"stakedReceived":0,
-							"coldStaked":0,
-							"coldStakedCount":0,
-							"coldStakedSent":0,
-							"coldStakedReceived":0,
-							"coldStakedBalance":0,
-							"balance":0,
-							"blockIndex":0,
-							"richListPosition":0
-						}
+	                vm.balanceInfo={"balance":"0","received":"0"}
 		        }
 		    })
 		    .catch(function (error)
@@ -197,7 +141,7 @@ export default {
 		}
 	    if (window.network=="main")
 	    {
-	   		url=window.apiExplorerURL+'address/'+vm.publicAddress;
+	   		url=window.apiURL+'balance';
 			axios.get(url, {
 				params: {
 					network: window.network,
@@ -213,25 +157,7 @@ export default {
 				console.log(error);
 				if(error.response.data.status=="404")
 				{
-	                vm.balanceInfo={
-	                	"hash":"",
-						"received":0,
-						"receivedCount":0,
-						"sent":0,
-						"sentCount":0,
-						"staked":0,
-						"stakedCount":0,
-						"stakedSent":0,
-						"stakedReceived":0,
-						"coldStaked":0,
-						"coldStakedCount":0,
-						"coldStakedSent":0,
-						"coldStakedReceived":0,
-						"coldStakedBalance":0,
-						"balance":0,
-						"blockIndex":0,
-						"richListPosition":0
-					}
+					vm.balanceInfo={"balance":"0","received":"0"}
 				}
 			})
 		    .then(function ()
@@ -280,17 +206,17 @@ export default {
     },
     formatDate: n =>
     {
-        if (n) return moment(n).format('DD/MM/YYYY HH:mm:ss'); else return "";
+        if (n) return moment.unix(n).format('DD/MM/YYYY HH:mm:ss'); else return "";
     },
     txhistory()
     {
         let vm=this;
-        axios.get(window.apiExplorerURL+'address/'+this.publicAddress+'/tx?size=50&page=1', {
+        axios.get(window.apiURL+'history?a='+this.publicAddress, {
             params: {}
         })
         .then(function (response)
         {
-            vm.txs=response.data;
+            vm.txs=response.data.reverse();
             //console.log(JSON.stringify(response.data));
         })
         .catch(function (error)

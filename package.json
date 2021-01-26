@@ -1,7 +1,7 @@
 {
     "name": "nextmobile",
     "displayName": "NEXT",
-    "version": "1.0.3",
+    "version": "1.0.5",
     "description": "NavCoin NEXT Mobile",
     "main": "index.js",
     "scripts": {
@@ -10,7 +10,6 @@
     "author": "NavCoin Community",
     "license": "Apache-2.0",
     "dependencies": {
-        "cordova-android": "^7.1.4",
         "cordova-ios": "^4.5.5",
         "cordova-plugin-add-swift-support": "^2.0.2",
         "cordova-plugin-compat": "^1.2.0",
@@ -30,8 +29,11 @@
             "cordova-plugin-qrscanner": {}
         },
         "platforms": [
-            "android",
-            "ios"
+            "ios",
+            "android"
         ]
+    },
+    "devDependencies": {
+        "cordova-android": "^9.0.0"
     }
 }

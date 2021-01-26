@@ -1,7 +1,7 @@
 {
   "name": "NEXT",
   "description": "NavCoin NEXT Mobile App",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "author": "NavCoin Developers <info@nextwallet.org>",
   "license": "MIT",
   "scripts": {

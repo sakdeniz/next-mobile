@@ -25,7 +25,7 @@ uses-sdk
 INJECTED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml
 INJECTED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml
-	android:targetSdkVersion
+	android:minSdkVersion
 		INJECTED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml
 		ADDED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml
 		INJECTED from D:\next-mobile\platforms\android\CordovaLib\AndroidManifest.xml
