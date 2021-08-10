@@ -45,6 +45,62 @@
     			<area-chart style="margin:0px;margin-bottom:30px;" :data="cData" height="100px" :curve="true" :legend="false" :colors="['#ceb8ef']" :dataset="{pointRadius: 0,borderColor:'#7d5ab5',backgroundColor:'#fafafa',fill: true}" :library="{scales: {xAxes: [{display: false}],yAxes: [{display: false}],},responsive:true}" label="NAV Chart"></area-chart>
     		</div>
 		</v-ons-card>
+		
+		<v-ons-card v-show="status" style="margin:0px;margin-top:20px;background: #ffffff">
+			<div class="title">
+				<i class="ion-help-circled"></i>&nbsp;Total Supply
+			</div>
+
+			<v-ons-list>
+                <v-ons-list-item v-if="status.publicmoneysupply">
+                    <i class="ion-eye"></i>&nbsp;Public
+                    <div class="right">
+                    	{{formatNumber(parseInt(status.publicmoneysupply))}} NAV
+                    </div>
+                </v-ons-list-item>
+                <v-ons-list-item v-if="status.privatemoneysupply">
+                    <i class="ion-eye-disabled"></i>&nbsp;Private
+                    <div class="right">
+                    	{{formatNumber(parseInt(status.privatemoneysupply))}} xNAV
+                    </div>
+                </v-ons-list-item>
+            </v-ons-list>
+		</v-ons-card>
+		
+		<v-ons-card v-show="status" style="margin:0px;margin-top:20px;background: #ffffff">
+			<div class="title">
+				<i class="ion-social-buffer"></i>&nbsp;General Staking Status
+			</div>
+
+            <v-ons-list>
+                <v-ons-list-item v-if="status.hotstakingcoins">
+                    	<i class="ion-ios-sunny-outline"></i>&nbsp;Hot Staking
+                    <div class="right">
+                    	{{formatNumber(parseInt(status.hotstakingcoins))}}
+                    </div>
+                </v-ons-list-item>
+                <v-ons-list-item v-if="status.coldstakingcoins">
+                   	<i class="ion-ios-snowy"></i>&nbsp;Cold Staking
+                    <div class="right">
+                    	{{formatNumber(parseInt(status.coldstakingcoins))}}
+                    </div>
+                </v-ons-list-item>
+                <v-ons-list-item v-if="status.coldv2stakingcoins">
+                   	<i class="ion-ios-snowy"></i>&nbsp;Cold Staking (v2)
+                    <div class="right">
+                    	{{formatNumber(parseInt(status.coldv2stakingcoins))}}
+                    </div>
+                </v-ons-list-item>                                
+                <v-ons-list-item v-if="status.hotstakingcoins">
+                   	Total
+                    <div class="right">
+                    	{{formatNumber(parseInt(status.hotstakingcoins)+parseInt(status.coldstakingcoins)+parseInt(status.coldv2stakingcoins))}}
+                    </div>
+                </v-ons-list-item>                                
+            </v-ons-list>
+
+		</v-ons-card>
+
 		<v-ons-card v-show="status.maintenance_mode==1" style="margin:0px;margin-top:20px;background: #ffffff">
 			<h3><i class="ion-speakerphone"></i>&nbsp;Maintenance Mode</h3>
 			<p>{{status.maintenance_message}}</p>
@@ -154,6 +210,8 @@ export default {
   },
   created: function ()
   {
+  	console.log(window.ethereum);
+  	console.log(window.BinanceChain);
     this.publicAddress=window.db.get('addr').value()[0].publicAddress;
     this.getPrice();
     this.getStatus();
@@ -195,6 +253,20 @@ export default {
     formatNumber: n => {
         if (!n) return "0";
         return n.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+    },
+    formatBalance: n =>
+    {
+        if (n==0) return n;
+        if (n)
+        {
+        	var amount=sb.toBitcoin(n);
+       	    var parts=amount.toString().split(".");
+        	return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts[1] ? "." + parts[1] : "");
+        }
+        else
+        {
+        	return "";
+        }
     },
     getYesVotesProportion: function (proposal)
 	{

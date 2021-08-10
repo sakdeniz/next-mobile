@@ -1,7 +1,7 @@
 {
   "name": "NEXT",
   "description": "NavCoin NEXT Mobile App",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "author": "NavCoin Developers <info@nextwallet.org>",
   "license": "MIT",
   "scripts": {
@@ -15,6 +15,7 @@
     "release": "cordova build --release"
   },
   "dependencies": {
+    "@uniswap/sdk": "^3.0.3",
     "axios": "^0.18.0",
     "bitcoin-core": "^2.0.0",
     "bitcoinjs-lib": "^3.3.2",
@@ -23,8 +24,10 @@
     "bitcore-mnemonic": "^1.7.0",
     "chart.js": "^2.8.0",
     "cordova-plugin-qrscanner": "^3.0.1",
+    "ethers": "^5.0.32",
     "gh-pages": "^1.2.0",
     "lowdb": "^1.0.0",
+    "metamask-onboarding": "^0.1.1",
     "onsenui": "^2.10.2",
     "satoshi-bitcoin": "^1.0.4",
     "vue": "^2.5.3",

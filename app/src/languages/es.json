@@ -92,6 +92,8 @@
 		"backupWallet":"Copia Seguridad Monedero",
 		"removeWallet":"Eliminar Monedero",
 		"privateKey":"Clave Privada",
+		"hdPrivateKey":"HD Private Key",
+		"hdPublicKey":"HD Public Key",
 		"mnemonics":"Mnemónica",
 		"walletRemoved":"El Monedero ha sido eliminado",
 		"invalidPassword":"Contraseña Inválida",

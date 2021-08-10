@@ -92,6 +92,8 @@
 		"backupWallet":"Wallet Backup",
 		"removeWallet":"Wallet entfernen",
 		"privateKey":"Privater Schlüssel",
+		"hdPrivateKey":"HD Private Key",
+		"hdPublicKey":"HD Public Key",
 		"mnemonics":"Mnemonisch",
 		"walletRemoved":"Wallet wurde entfernt",
 		"invalidPassword":"Ungültiges Passwort",

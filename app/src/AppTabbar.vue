@@ -24,6 +24,7 @@ import Send from './pages/Send.vue';
 import Staking from './pages/Staking.vue';
 import CommunityFund from './pages/CommunityFund.vue';
 import Settings from './pages/Settings.vue';
+import Dex from './pages/Dex.vue';
 
 // Just a linear interpolation formula
 const lerp = (x0, x1, t) => parseInt((1 - t) * x0 + t * x1, 10);
@@ -68,6 +69,12 @@ export default {
           label: '',
           icon: this.md ? 'ion-chatbubbles' : 'ion-chatbubbles',
           page: CommunityFund,
+          theme: purple
+        },
+        {
+          label: '',
+          icon: this.md ? 'ion-code' : 'ion-code',
+          page: Dex,
           theme: purple
         },
         {

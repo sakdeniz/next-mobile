@@ -35,7 +35,6 @@
 			<v-ons-action-sheet-button v-on:click="setProposalFilter('expired pending voting of payment requests')">{{$t('message.filterProposalExpiredPendingVotingOfPaymentRequests')}}</v-ons-action-sheet-button>
 		</v-ons-action-sheet>
 
-
 		<v-ons-action-sheet :visible.sync="actionSheet2Visible" cancelable :title="$t('message.paymentRequestFilter')">
 			<v-ons-action-sheet-button v-on:click="setPaymentRequestFilter('all payment requests')">{{$t('message.filterPaymentRequestAll')}}</v-ons-action-sheet-button>
 			<v-ons-action-sheet-button v-on:click="setPaymentRequestFilter('my payment requests')">{{$t('message.filterPaymentRequestMy')}}</v-ons-action-sheet-button>
@@ -481,6 +480,7 @@ export default {
 			{
 				jQuery.each(value, function(k, v)
 				{
+					console.log(v);
 					if (vm.paymentRequestFilter=="all payment requests")
 					{
 						pR.push(v);
@@ -579,7 +579,7 @@ export default {
         .then(function (response)
         {
             vm.paymentRequests=response.data;
-            //console.log(JSON.stringify(response.data));
+            console.log(JSON.stringify(response.data));
         })
         .catch(function (error)
         {
