@@ -3,8 +3,8 @@
 		<v-ons-card>
 			<div class="title">
 				{{$t('message.send')}}
-				<v-ons-button style="float:right" v-on:click="scan()"><i class="ion-qr-scanner"></i>&nbsp;{{$t('message.scan')}}</v-ons-button>
-				<v-ons-button style="float:right;margin-right:5px;" v-on:click="push(pages['0'].component, $t('message.settingsAddressBook'))"><i class="ion-android-person"></i></v-ons-button>
+				<v-ons-button style="float:right" v-on:click="scan()"><i class="ion-md-qr-scanner"></i>&nbsp;{{$t('message.scan')}}</v-ons-button>
+				<v-ons-button style="float:right;margin-right:5px;" v-on:click="push(pages['0'].component, $t('message.settingsAddressBook'))"><i class="ion-md-person"></i></v-ons-button>
 			</div>
 			{{getAddress}}
 			<div class="content">

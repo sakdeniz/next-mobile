@@ -6,7 +6,7 @@
     	<v-ons-list>
 			<v-ons-list-item tappable modifier="nodivider" v-on:click="push(pages['0'].component, $t('message.settingsAddressBook'))">
 				<div class="left">
-					<v-ons-icon icon="ion-at" class="list-item__icon"></v-ons-icon>
+					<v-ons-icon icon="ion-ios-contacts" class="list-item__icon"></v-ons-icon>
 				</div>
 				<div class="center">
 					{{$t('message.settingsAddressBook')}}
@@ -15,7 +15,7 @@
 
 			<v-ons-list-item tappable modifier="nodivider" v-on:click="push(pages['1'].component, $t('message.settingsHelp'))">
 				<div class="left">
-			  		<v-ons-icon icon="ion-help-circled" class="list-item__icon"></v-ons-icon>
+			  		<v-ons-icon icon="ion-ios-help-buoy" class="list-item__icon"></v-ons-icon>
 				</div>
 				<div class="center">
 			  		{{$t('message.settingsHelp')}}
@@ -25,7 +25,7 @@
 			<v-ons-list-header>{{$t('message.settingsPreferences')}}</v-ons-list-header>
 			<v-ons-list-item tappable modifier="nodivider" v-on:click="push(pages['2'].component, $t('message.settingsLanguage'))">
 				<div class="left">
-			  		<v-ons-icon icon="ion-chatbubble-working" class="list-item__icon"></v-ons-icon>
+			  		<v-ons-icon icon="ion-ios-globe" class="list-item__icon"></v-ons-icon>
 				</div>
 				<div class="center">
 			  		<span class="list-item__title">{{$t('message.settingsLanguage')}}</span>
@@ -37,7 +37,7 @@
 
 			<v-ons-list-item tappable modifier="nodivider" v-on:click="push(pages['3'].component, $t('message.settingsAlternativeCurrency'))">
 				<div class="left">
-					<v-ons-icon icon="ion-cash" class="list-item__icon"></v-ons-icon>
+					<v-ons-icon icon="ion-ios-cash" class="list-item__icon"></v-ons-icon>
 				</div>
 				<div class="center">
 					{{$t('message.settingsAlternativeCurrency')}}
@@ -50,7 +50,7 @@
 			<v-ons-list-header>{{$t('message.settingsMessage')}}</v-ons-list-header>
 				<v-ons-list-item tappable modifier="nodivider" v-on:click="push(pages['4'].component, $t('message.settingsSign'))">
 					<div class="left">
-						<v-ons-icon icon="ion-edit" class="list-item__icon"></v-ons-icon>
+						<v-ons-icon icon="ion-ios-create" class="list-item__icon"></v-ons-icon>
 					</div>
 					<div class="center">
 						{{$t('message.settingsSign')}}
@@ -59,7 +59,7 @@
 
 				<v-ons-list-item tappable modifier="nodivider" v-on:click="push(pages['5'].component, $t('message.settingsVerify'))">
 					<div class="left">
-				  		<v-ons-icon icon="ion-checkmark" class="list-item__icon"></v-ons-icon>
+				  		<v-ons-icon icon="ion-ios-checkmark-circle-outline" class="list-item__icon"></v-ons-icon>
 					</div>
 					<div class="center">
 				  		{{$t('message.settingsVerify')}}
@@ -69,7 +69,7 @@
 				<v-ons-list-header>{{$t('message.settingsOther')}}</v-ons-list-header>
 				<v-ons-list-item tappable modifier="nodivider" v-on:click="push(pages['6'].component, $t('message.settingsAbout'))">
 					<div class="left">
-						<v-ons-icon icon="ion-information-circled" class="list-item__icon"></v-ons-icon>
+						<v-ons-icon icon="ion-ios-help-circle-outline" class="list-item__icon"></v-ons-icon>
 					</div>
 					<div class="center">
 						{{$t('message.settingsAbout')}}
@@ -78,7 +78,7 @@
 
 				<v-ons-list-item tappable modifier="nodivider" v-on:click="push(pages['7'].component, $t('message.settingsTermsOfUse'))">
 					<div class="left">
-						<v-ons-icon icon="ion-android-checkmark-circle" class="list-item__icon"></v-ons-icon>
+						<v-ons-icon icon="ion-ios-information-circle-outline" class="list-item__icon"></v-ons-icon>
 					</div>
 					<div class="center">
 						{{$t('message.settingsTermsOfUse')}}
@@ -87,7 +87,7 @@
 
 				<v-ons-list-item tappable modifier="nodivider" v-on:click="push(pages['8'].component, $t('message.settingsShare'))">
 					<div class="left">
-				  		<v-ons-icon icon="ion-android-share-alt" class="list-item__icon"></v-ons-icon>
+				  		<v-ons-icon icon="ion-md-share" class="list-item__icon"></v-ons-icon>
 					</div>
 					<div class="center">
 				  		{{$t('message.settingsShare')}}
@@ -98,7 +98,7 @@
 
 			    <v-ons-list-item>
 			    	<div class="left">
-				  		<v-ons-icon icon="ion-unlocked" class="list-item__icon"></v-ons-icon>
+				  		<v-ons-icon icon="ion-ios-unlock" class="list-item__icon"></v-ons-icon>
 					</div>
 			      <div class="center">
 						Lock wallet if app goes background
@@ -111,7 +111,7 @@
 				<v-ons-list-header></v-ons-list-header>
 				<v-ons-list-item tappable modifier="nodivider" v-on:click="push(pages['10'].component, $t('message.settingsSweepPrivateKey'))">
 					<div class="left">
-						<v-ons-icon icon="ion-arrow-return-left" class="list-item__icon"></v-ons-icon>
+						<v-ons-icon icon="ion-md-flash" class="list-item__icon"></v-ons-icon>
 					</div>
 					<div class="center">
 						{{$t('message.settingsSweepPrivateKey')}}
@@ -120,7 +120,7 @@
 
 				<v-ons-list-item tappable modifier="nodivider" v-on:click="backupWallet()">
 					<div class="left">
-						<v-ons-icon icon="ion-android-done-all" class="list-item__icon"></v-ons-icon>
+						<v-ons-icon icon="ion-ios-key" class="list-item__icon"></v-ons-icon>
 					</div>
 					<div class="center">
 				  		{{$t('message.settingsBackupWallet')}}
@@ -128,7 +128,7 @@
 				</v-ons-list-item>
 				<v-ons-list-item tappable modifier="nodivider" v-on:click="deleteWallet()">
 					<div class="left">
-						<v-ons-icon icon="ion-trash-b" class="list-item__icon"></v-ons-icon>
+						<v-ons-icon icon="ion-md-trash" class="list-item__icon"></v-ons-icon>
 					</div>
 					<div class="center">
 				  		{{$t('message.settingsRemoveWallet')}}

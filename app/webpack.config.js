@@ -1,8 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 var browserTargets = [
@@ -15,11 +14,6 @@ var browserTargets = [
   'Opera 12.1'
 ];
 
-var babelOptions = {
-  babelrc: false,
-  presets: [ ['env', { browsers: browserTargets }] ]
-};
-
 module.exports = {
   watch: process.env.WEBPACK_WATCH === 'true',
   entry: './src/main.js',
@@ -31,23 +25,18 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.vue$/,
-        loader: 'vue-loader',
-        options: {
-          loaders: {
-            js: {
-              loader: 'babel-loader',
-              options: babelOptions
-            }
-          }
-          // other vue-loader options go here
-        }
+          test: /\.vue$/,
+          loader: 'vue-loader'
       },
       {
-        test: /\.js$/,
-        loader: 'babel-loader',
-        exclude: /node_modules/,
-        options: babelOptions
+        test: /\.m?js$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env']
+          }
+        }
       },
       {
         test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
@@ -57,39 +46,26 @@ module.exports = {
         }
       },
       {
-        test: /\.css$/,
-        loader: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            {
-              loader: 'css-loader',
-              options: { importLoaders: 1 }
-            },
-            {
-              loader: 'postcss-loader',
-              options: {
-                plugins: [
-                  require('postcss-smart-import')(),
-                  require('postcss-url')(),
-                  require('postcss-base64')({ extensions: ['.svg'], root: 'src' }),
-                  require('postcss-cssnext')({ browsers: browserTargets })
-                ]
-              }
-            }
-          ]
-        })
+          test: /\.css$/i,
+          use: ["style-loader", "css-loader"],
       }
     ]
   },
   plugins: [
-    new ExtractTextPlugin('[name].css'),
     new HtmlWebpackPlugin({
       template: 'src/index.html'
     }),
-    new CopyWebpackPlugin([{
-      from: 'static/'
-    }])
+    new CopyPlugin({
+            patterns: [
+                {
+                    from: 'static/'
+                }
+            ],
+        }),
   ],
+  "node": {
+    "fs": "empty"
+  },
   resolve: {
     alias: {
       'vue$': 'vue/dist/vue.esm.js',

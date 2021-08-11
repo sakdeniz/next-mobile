@@ -31,7 +31,7 @@
 				  <tbody>
 				    <tr>
 				      <td class="collapsing">
-				        <i class="ion-android-arrow-down"></i> {{$t('message.balanceSummaryReceived')}}
+				        <i class="ion-md-arrow-round-down"></i> {{$t('message.balanceSummaryReceived')}}
 				      </td>
 				      <td>{{balanceInfo.received?formatBalance(balanceInfo.received):0}}</td>
 				    </tr>
@@ -48,12 +48,10 @@
                     <v-ons-list-item v-for="tx in txs">
                         <div class="left">
                         	<a v-bind:href="'https://www.navexplorer.com/tx/'+tx.txid">
-                        	  <v-ons-icon style="color:#232323" icon="ion-android-open" class="list-item__icon"></v-ons-icon>
+                        	  <v-ons-icon style="color:#232323" icon="ion-md-open" class="list-item__icon"></v-ons-icon>
                       	   	</a>
-                          <v-ons-icon v-if="tx.type=='send'" style="color:#cc6600" icon="ion-arrow-up-a" class="list-item__icon"></v-ons-icon>
-                          <v-ons-icon v-if="tx.type=='receive'" style="color:#669900" icon="ion-arrow-down-a" class="list-item__icon"></v-ons-icon>
-                          <v-ons-icon v-if="tx.type=='community_fund_payout'" style="color:#669900" icon="ion-arrow-down-a" class="list-item__icon"></v-ons-icon>
-                          <v-ons-icon v-if="tx.type=='cold_stake'" style="color:#673ab7" icon="ion-ios-snowy" class="list-item__icon"></v-ons-icon>
+                          <v-ons-icon v-if="tx.changes.balance<0" style="color:#cc6600" icon="ion-md-arrow-round-down" class="list-item__icon"></v-ons-icon>
+                          <v-ons-icon v-if="tx.changes.balance>0" style="color:#669900" icon="ion-md-arrow-round-up" class="list-item__icon"></v-ons-icon>
                         </div>
                         <div class="center">
                             <span style="color:#cc6600" v-if="tx.changes.balance<0">{{formatBalance(tx.changes.balance)}}</span>

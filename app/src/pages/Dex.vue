@@ -233,6 +233,7 @@ export default {
   },
   created: function ()
   {
+  	return;
   	console.log(`The chainId of mainnet is ${ChainId.MAINNET}.`)
   	let vm=this;
   	if (window.ethereum && window.ethereum.isMetaMask)

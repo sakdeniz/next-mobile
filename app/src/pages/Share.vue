@@ -23,12 +23,12 @@ export default {
     	links: [
         {
           title: "Facebook",
-          icon: 'ion-social-facebook',
+          icon: 'ion-logo-facebook',
           url: 'https://www.facebook.com/sharer/sharer.php?u=https://www.nextwallet.org'
         },
         {
           title: 'Twitter',
-          icon: 'ion-social-twitter',
+          icon: 'ion-logo-twitter',
           url: 'http://www.twitter.com/share?url=https://www.nextwallet.org'
         }
       ],

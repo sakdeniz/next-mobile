@@ -33,6 +33,8 @@ const red = [244, 67, 54];
 const blue = [30, 136, 229];
 const purple = [103, 58, 183];
 
+// ionicons v4 https://ionic.io/ionicons/v4
+
 export default {
   data () {
     return {
@@ -43,43 +45,43 @@ export default {
       tabs: [
         {
           label: '',
-          icon: this.md ? 'ion-home' : 'ion-home',
+          icon: this.md ? 'ion-md-home' : 'ion-md-home',
           page: Home,
           theme: purple
         },
         {
           label: '',
-          icon: this.md ? 'ion-archive' : 'ion-archive',
+          icon: this.md ? 'ion-md-wallet' : 'ion-md-wallet',
           page: Receive,
           theme: purple
         },
         {
           label: '',
-          icon: this.md ? 'ion-paper-airplane' : 'ion-paper-airplane',
+          icon: this.md ? 'ion-md-paper-plane' : 'ion-md-paper-plane',
           page: Send,
           theme: purple
         },
         {
           label: '',
-          icon: this.md ? 'ion-social-buffer' : 'ion-social-buffer',
+          icon: this.md ? 'ion-logo-buffer' : 'ion-logo-buffer',
           page: Staking,
           theme: purple
         },
         {
           label: '',
-          icon: this.md ? 'ion-chatbubbles' : 'ion-chatbubbles',
+          icon: this.md ? 'ion-md-chatboxes' : 'ion-md-chatboxes',
           page: CommunityFund,
           theme: purple
         },
         {
           label: '',
-          icon: this.md ? 'ion-code' : 'ion-code',
+          icon: this.md ? 'ion-md-code' : 'ion-md-code',
           page: Dex,
           theme: purple
         },
         {
           label: '',
-          icon: this.md ? 'ion-gear-a' : 'ion-gear-a',
+          icon: this.md ? 'ion-ios-cog' : 'ion-ios-cog',
           page: Settings,
           theme: purple
         }
