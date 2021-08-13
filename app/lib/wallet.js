@@ -1,6 +1,7 @@
 const Db = require('nedb-async').AsyncNedb;
 const crypto = require('crypto');
 const Mnemonic = require('bitcore-mnemonic');
+const electrumMnemonic = require('electrum-mnemonic');
 const bitcore = require('bitcore-lib');
 const blsct = bitcore.Transaction.Blsct;
 const algorithm = 'aes-256-cbc';
@@ -9,6 +10,8 @@ const ripemd160 = bitcore.crypto.Hash.ripemd160;
 const sha256 = bitcore.crypto.Hash.sha256;
 const electrum = require('electrum-client-js')
 const assert = require('assert');
+const _ = require("lodash");
+const Message = require("bitcore-message")
 
 function msleep(n) {
     Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, n);
@@ -64,6 +67,23 @@ class WalletFile extends EventEmitter {
         this.db = new Db(dbOptions);
     }
 
+    static async ListWallets() {
+        var localforage = require('localforage')
+
+        localforage.config({
+            name: 'NeDB'
+            , storeName: 'nedbdata'
+        });
+
+        return await localforage.keys();
+    }
+
+    static async RemoveWallet(filename) {
+        var localforage = require('localforage')
+
+        await localforage.removeItem(filename);
+    }
+
     async xNavGetPoolSize() {
         return await this.db.asyncCount({xnavAddress: true, used: false})
     }
@@ -80,7 +100,7 @@ class WalletFile extends EventEmitter {
     async Load() {
         if (!((await this.db.asyncFind({key: 'masterPubKey'})).length))
         {
-            await this.db.asyncInsert({walletType: this.type})
+            await this.db.asyncUpdate({walletType: {$exists: true}}, {walletType: this.type}, {upsert: true})
             let mnemonic = this.mnemonic;
 
             if (!this.mnemonic)
@@ -104,9 +124,15 @@ class WalletFile extends EventEmitter {
             }
             else if (this.type == 'navcoin-core')
             {
-                let keyMaterial = bitcore.HDPrivateKey.fromSeed(Mnemonic.mnemonicToData(mnemonic))
+                let keyMaterial = Mnemonic.mnemonicToData(mnemonic)
 
                 await this.SetMasterKey(keyMaterial, this.spendingPassword)
+            }
+            else if (this.type == 'navcash')
+            {
+                let masterKey = bitcore.HDPrivateKey.fromSeed(await electrumMnemonic.mnemonicToSeed(mnemonic, {prefix: electrumMnemonic.PREFIXES.standard}))
+
+                await this.SetMasterKey(masterKey, this.spendingPassword)
             }
             else
             {
@@ -142,16 +168,26 @@ class WalletFile extends EventEmitter {
     }
 
     async xNavFillKeyPool (spendingPassword) {
+        let mk = await this.GetMasterKey(spendingPassword);
+
+        if (!mk)
+            return;
+
         while (await this.xNavGetPoolSize() < 100)
-            await this.xNavCreateSubaddress(this.spendingPassword);
+            await this.xNavCreateSubaddress(spendingPassword);
     }
 
     async NavFillKeyPool (spendingPassword) {
         if (this.type == 'next')
             return;
 
+        let mk = await this.GetMasterKey(spendingPassword);
+
+        if (!mk)
+            return;
+
         while (await this.NavGetPoolSize() < 100)
-            await this.NavCreateAddress(this.spendingPassword);
+            await this.NavCreateAddress(spendingPassword);
     }
 
     async xNavReceivingAddresses (all=true) {
@@ -162,6 +198,17 @@ class WalletFile extends EventEmitter {
 
     async NavReceivingAddresses (all=true) {
         let list = all ? await this.db.asyncFind({navAddress: true}) : await this.db.asyncFind({navAddress: true, used: false});
+
+        return list;
+    }
+
+    async NavGetPrivateKeys (spendingPassword, address) {
+        let list = address ? await this.db.asyncFind({navAddress: true, address: address}) : await this.db.asyncFind({navAddress: true});
+
+        for (var i in list) {
+            list[i].privateKey = bitcore.PrivateKey((await this.GetPrivateKey(list[i].key, spendingPassword))).toWIF()
+            delete list[i].value
+        }
 
         return list;
     }
@@ -306,8 +353,18 @@ class WalletFile extends EventEmitter {
             path = 'm/'+(change?1:0)+'/'+index;
             privK = bitcore.HDPrivateKey(mk).deriveChild(path)
         }
+        else if (this.type == 'navcash')
+        {
+            path = 'm/'+(change?1:0)+'/'+index;
+            privK = bitcore.HDPrivateKey(mk).deriveChild(path)
+        }
         else if (this.type == 'navcoin-js-v1')
         {
+            privK = bitcore.HDPrivateKey(mk).deriveChild(path)
+        }
+        else if (this.type == 'navpay')
+        {
+            path = 'm/44\'/0\'/0\'/'+(change?'1':'0')+'/'+index;
             privK = bitcore.HDPrivateKey(mk).deriveChild(path)
         }
         else if (this.type == 'navcoin-core')
@@ -326,6 +383,11 @@ class WalletFile extends EventEmitter {
 
     async ImportPrivateKey(privK, key)
     {
+        if (_.isString(privK))
+        {
+            return this.ImportPrivateKey(bitcore.PrivateKey.fromWIF(privK), key);
+        }
+
         key = key || 'masterkey navcoinjs';
         key = crypto.createHash('sha256').update(String(key)).digest('base64').substr(0, 32)
 
@@ -335,6 +397,11 @@ class WalletFile extends EventEmitter {
         let pkStr = this.Encrypt(privK.toString(), key);
 
         await this.db.asyncUpdate({key: hashId}, {key: hashId, value: pkStr, navAddress: true, path: path, address: bitcore.Address(pk).toString(), used: false, change: false}, {upsert: true});
+
+        if (this.connected)
+        {
+            await this.Sync()
+        }
     }
 
     async SetTip(height) {
@@ -386,10 +453,10 @@ class WalletFile extends EventEmitter {
         if (await this.GetMasterKey(key))
             return false;
 
-        let masterKey = masterkey.toString();
+        let masterKey = ((this.type == 'navcoin-core') ? bitcore.HDPrivateKey.fromSeed(masterkey) : masterkey).toString();
         let masterPubKey = bitcore.HDPrivateKey(masterKey).hdPublicKey.toString();
 
-        let {masterViewKey, masterSpendKey} = blsct.DeriveMasterKeys(bitcore.HDPrivateKey(masterKey).privateKey);
+        let {masterViewKey, masterSpendKey} = blsct.DeriveMasterKeys(this.type == 'navcoin-core' ? bitcore.PrivateKey(masterkey) : bitcore.HDPrivateKey(masterKey));
         let masterSpendPubKey = blsct.mcl.mul(blsct.G(), masterSpendKey);
         let masterViewPubKey = blsct.mcl.mul(blsct.G(), masterViewKey);
 
@@ -422,11 +489,17 @@ class WalletFile extends EventEmitter {
         this.host = options.host
         this.port = options.port
         this.proto = options.proto
+        this.connected = true;
 
         this.client = new electrum(this.host, this.port, this.proto)
 
         try {
             await this.client.connect('navcoin-js', '1.5');
+            await this.SetTip(await this.client.blockchain_headers_subscribe().height);
+
+            this.client.subscribe.on('blockchain.headers.subscribe', async (event) => {
+                await self.SetTip(event[0].height)
+            });
         }
         catch(e)
         {
@@ -439,16 +512,12 @@ class WalletFile extends EventEmitter {
 
         let self = this
 
+        await this.Sync();
+
         try {
             this.client.subscribe.on('blockchain.scripthash.subscribe', async (event) => {
                 await self.ReceivedScriptHashStatus(event[0], event[1])
             });
-
-            this.client.subscribe.on('blockchain.headers.subscribe', async (event) => {
-                await self.SetTip(event[0].height)
-            });
-
-            await this.SetTip(await this.client.blockchain_headers_subscribe().height);
         }
         catch(e)
         {
@@ -456,7 +525,10 @@ class WalletFile extends EventEmitter {
             await this.ManageElectrumError(e)
             return false
         }
+    }
 
+    async Sync()
+    {
         let scriptHashes = await this.GetScriptHashes()
 
         for (var i in scriptHashes) {
@@ -469,7 +541,7 @@ class WalletFile extends EventEmitter {
             }
             catch(e) {
                 await this.ManageElectrumError(e)
-                return
+                return await this.Sync()
             }
         }
     }
@@ -484,13 +556,21 @@ class WalletFile extends EventEmitter {
         }
     }
 
+    Disconnect()
+    {
+        this.client.close()
+        this.connected = false;
+
+        delete this.client;
+    }
+
     async ReceivedScriptHashStatus(s, status)
     {
         let prevStatus = this.GetStatusHashForScriptHash(s);
 
         if (status && status != prevStatus)
         {
-            await this.db.asyncInsert({scripthash: s, statushash: status})
+            await this.db.asyncUpdate({scripthash: s}, {scripthash: s, statushash: status}, {upsert: true})
             await this.SyncScriptHash(s)
         }
     }
@@ -501,6 +581,9 @@ class WalletFile extends EventEmitter {
         let lb = this.lastBlock + 0;
 
         let historyRange = {}
+        let xnav = scripthash == "6032c38c0bc0e91e726f1e55e1832e434509001a7aed5cfd881b6ef07215e84a"
+
+        this.emit('sync_started', scripthash)
 
         while (true) {
             try {
@@ -645,6 +728,10 @@ class WalletFile extends EventEmitter {
                     }
                 }
 
+                try {
+                    this.db.asyncUpdate({scriptHashHistory: scripthash, tx_hash: newHistory.history[j].tx_hash}, {scriptHashHistory: scripthash, tx_hash: newHistory.history[j].tx_hash, height: newHistory.history[j].height}, {upsert: true});
+                } catch(e) { }
+
                 if (inputsMine || outputsMine)
                 {
                     if (historyRange[newHistory.history[j].tx_hash]) {
@@ -735,10 +822,6 @@ class WalletFile extends EventEmitter {
                     }
                 }
 
-                try {
-                    this.db.asyncInsert({scriptHashHistory: scripthash, tx_hash: newHistory.history[j].tx_hash, height: newHistory.history[j].height});
-                } catch(e) { }
-
                 if (mustNotify && mine)
                 {
                     if (deltaXNav != 0) {
@@ -804,6 +887,8 @@ class WalletFile extends EventEmitter {
             {
                 let input = tx.tx.inputs[i].toObject();
 
+                await this.Spend(`${input.prevTxId}:${input.outputIndex}`, '')
+
                 await this.db.asyncRemove({outPoint: `${input.prevTxId}:${input.outputIndex}`}, { multi: true })
             }
 
@@ -811,6 +896,19 @@ class WalletFile extends EventEmitter {
         }
 
         this.emit('sync_status', 100, scripthash)
+        this.emit('sync_finished', scripthash)
+    }
+
+    Sign(key, msg) {
+        if (_.isString(key))
+        {
+            return this.Sign(bitcore.PrivateKey.fromWIF(key), msg);
+        }
+       return Message(msg).sign(key);
+    }
+
+    VerifySignature(address, msg, sig) {
+        return Message(msg).verify(address, sig);
     }
 
     async GetHistory()
@@ -923,7 +1021,7 @@ class WalletFile extends EventEmitter {
         let amount = out.isCt() ? out.amount : out.satoshis;
         let label = out.isCt() ? out.memo : out.script.toAddress(this.network);
 
-        await this.db.asyncInsert({outPoint: outpoint, out: out.toObject(), spentIn: '', amount: amount, label: label, xnav: out.isCt()})
+        await this.db.asyncUpdate({outPoint: outpoint}, {outPoint: outpoint, out: out.toObject(), spentIn: '', amount: amount, label: label, xnav: out.isCt()}, {upsert: true})
     }
 
     async Spend(outpoint, spentin)
@@ -1068,7 +1166,7 @@ class WalletFile extends EventEmitter {
                 ripemd160(sha256(out.output.script.getPublicKey())) :
                 out.output.script.getPublicKeyHash()).toString('hex')
 
-            let privK = await this.GetPrivateKey(hashId)
+            let privK = await this.GetPrivateKey(hashId, spendingPassword)
 
             if (privK)
             {
@@ -1134,7 +1232,7 @@ class WalletFile extends EventEmitter {
             ret = plaintextBytes.toString()
         }
 
-        return bitcore.HDPrivateKey(ret).privateKey;
+        return bitcore.PrivateKey(Buffer.from(ret, "hex")).privateKey;
     }
 };
 

@@ -65,6 +65,7 @@ export default {
       state:
       {
       	address:"",
+      	private_address:"",
       	lock_wallet_on_deactivate:false,
       	cold_staking_active:false,
       	cold_staking_address:"",
@@ -89,6 +90,10 @@ export default {
       	setAddress(state,address)
         {
 			state.address=address;
+        },
+      	setPrivateAddress(state,address)
+        {
+			state.private_address=address;
         },
       	setLockWalletOnDeactivate(state,b)
         {

@@ -228,65 +228,6 @@ const log = true; // Log to console
 
 let alreadySent = false;
 
-njs.wallet.Init().then(async () => {
-    const wallet = new njs.wallet.WalletFile({file: walletFile, mnemonic: "text brush cost token inquiry iron guard use frequent bullet earth annual", type: "next", password: password, spendingPassword: spendingPassword, zapwallettxes: zapwallettxes, log: log})
-
-    wallet.on('new_mnemonic', (mnemonic) => console.log(`wallet created with mnemonic ${mnemonic} - please back it up!`));
-
-    wallet.on('loaded', async () => {
-        console.log('wallet loaded')
-
-        console.log('xNAV receiving address: '+ (await wallet.xNavReceivingAddresses(false))[0].address);
-        console.log('NAV receiving address: '+ (await wallet.NavReceivingAddresses(false))[0].address);
-
-        await wallet.Connect();
-    });
-
-    wallet.on('connected', () => console.log('connected. waiting for sync'));
-
-    wallet.on('sync_status', async (progress, scripthash) => {
-        //console.log(`Sync ${progress}%`)
-        if (progress == 100 && scripthash == "6032c38c0bc0e91e726f1e55e1832e434509001a7aed5cfd881b6ef07215e84a") {
-            if (!alreadySent)
-            {
-                /*let txHash = await wallet.xNavSend((await wallet.xNavReceivingAddresses(false))[0].address, 1e6, 'memo for xnav payment', spendingPassword);
-                console.log(`Transaction sent to ${(await wallet.xNavReceivingAddresses(false))[0].address}.... with hash ${txHash}`);
-                alreadySent = true;*/
-            }
-            //console.log(await wallet.GetHistory())
-        }
-    });
-
-    wallet.on('new_tx', async (list) => {
-        console.log(`Received transaction ${JSON.stringify(list)}`)
-        console.log(`Balance ${JSON.stringify(await wallet.GetBalance())}`)
-    });
-
-    wallet.on('remove_tx', async (txid) => {
-        console.log(`Removed tx transaction ${txid}`)
-    });
-
-    await wallet.Load();
-     //console.log(await wallet.GetHistory());
-     //console.log(await wallet.GetUtxos());
-     console.log(`Last block: ${await wallet.GetTip()}`);
-     console.log(`Balance ${JSON.stringify(await wallet.GetBalance())}`)
-
-    // let txHash = await wallet.xNavSend('xN123124fa123123123212131231', 10*1e8, 'memo for xnav payment', spendingPassword);
-    // console.log(`Transaction sent to xN1231.... with hash ${txHash}`);
-
-    // txHash = await wallet.xNavSend('N123124fa123121', 10*1e8, '', spendingPassword);
-    // console.log(`Transaction sent to N1231.... with hash ${txHash}`);
-
-});
-
-
-
-
-
-
-
-
 const IV_LENGTH = 16; // For AES, this is always 16
 const buffer=require('buffer');
 const crypto=require('crypto');
@@ -534,6 +475,73 @@ export default {
 				this.createDatabase(false);
         	}
         },
+    	initNavcoinJS: function (mnemonic)
+       	{
+       		/*njs.wallet.WalletFile.ListWallets().then((value) => {
+			  console.log(value);
+			});
+
+			njs.wallet.WalletFile.RemoveWallet("wallet.db").then((value) => {
+			  console.log(value);
+			});*/
+
+			njs.wallet.Init().then(async () => {
+			    const wallet = new njs.wallet.WalletFile({file: walletFile, mnemonic: mnemonic, type: "next", password: password, spendingPassword: spendingPassword, zapwallettxes: zapwallettxes, log: log})
+
+			    wallet.on('new_mnemonic', (mnemonic) => console.log(`wallet created with mnemonic ${mnemonic} - please back it up!`));
+
+			    wallet.on('loaded', async () => {
+			        console.log('wallet loaded');
+			        wallet.xNavReceivingAddresses(false).then((value) => {
+			  			console.log("XNAV receiving address : " + value[0].address);
+		            	this.$store.commit('config/setPrivateAddress', value[0].address);
+					});
+			        console.log('NAV receiving address: '+ (await wallet.NavReceivingAddresses(false))[0].address);
+			        await wallet.Connect();
+			    });
+
+			    wallet.on('sync_started', () => console.log('sync started.'));
+
+			    wallet.on('sync_finished', () => console.log('sync finished.'));
+
+			    wallet.on('connected', () => console.log('connected. waiting for sync.'));
+
+			    wallet.on('sync_status', async (progress, scripthash) => {
+			        //console.log(`Sync ${progress}%`)
+			        if (progress == 100 && scripthash == "6032c38c0bc0e91e726f1e55e1832e434509001a7aed5cfd881b6ef07215e84a") {
+			            if (!alreadySent)
+			            {
+			                /*let txHash = await wallet.xNavSend((await wallet.xNavReceivingAddresses(false))[0].address, 1e6, 'memo for xnav payment', spendingPassword);
+			                console.log(`Transaction sent to ${(await wallet.xNavReceivingAddresses(false))[0].address}.... with hash ${txHash}`);
+			                alreadySent = true;*/
+			            }
+			            //console.log(await wallet.GetHistory())
+			        }
+			    });
+
+			    wallet.on('new_tx', async (list) => {
+			        console.log(`Received transaction ${JSON.stringify(list)}`)
+			        console.log(`Balance ${JSON.stringify(await wallet.GetBalance())}`)
+			    });
+
+			    wallet.on('remove_tx', async (txid) => {
+			        console.log(`Removed tx transaction ${txid}`)
+			    });
+
+			    await wallet.Load();
+			     //console.log(await wallet.GetHistory());
+			     //console.log(await wallet.GetUtxos());
+			     console.log(`Last block: ${await wallet.GetTip()}`);
+			     console.log(`Balance ${JSON.stringify(await wallet.GetBalance())}`)
+
+			    // let txHash = await wallet.xNavSend('xN123124fa123123123212131231', 10*1e8, 'memo for xnav payment', spendingPassword);
+			    // console.log(`Transaction sent to xN1231.... with hash ${txHash}`);
+
+			    // txHash = await wallet.xNavSend('N123124fa123121', 10*1e8, '', spendingPassword);
+			    // console.log(`Transaction sent to N1231.... with hash ${txHash}`);
+
+			});
+       	},
        	createDatabase: function (bImport)
        	{
 			var code;
@@ -580,6 +588,7 @@ export default {
 	            {
 	                this.walletUnlocked=true;
 	                this.addr=JSON.stringify(window.db.get('addr'));
+	                this.initNavcoinJS(window.db.get('mnemonics').value())
 	            }
 	            else
 	            {

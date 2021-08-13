@@ -15,7 +15,10 @@
 	        	<center>
 	    			<img src="images/wallet.svg" style="width:128px;height:auto;">
 	    		</center>
+                <h3>Public Address</h3>
                 <center>{{publicAddress}}</center>
+                <h3>Private Address</h3>
+                <center>{{config.private_address}}</center>
             </div>
 
             <center>
@@ -79,6 +82,7 @@ export default {
     state: 'initial',
     items: [1, 2, 3],
     publicAddress:'',
+    privateAddress:'',
     balanceInfo:'',
     qrcode:'',
     prefix:"navcoin:",
@@ -92,6 +96,13 @@ export default {
     var qrcode=new QRCode(this.prefix+this.publicAddress);
     this.qrcode=qrcode.svg();
     this.txhistory();
+  },
+  computed:
+  {
+  	config()
+  	{
+    	return this.$store.state.config;
+  	}
   },
   methods: {
   	getBalance()
