@@ -7,9 +7,12 @@
   "scripts": {
     "lint": "eslint . --ext js,json",
     "lint:fix": "eslint . --fix --ext js,json",
-    "start": "webpack-dev-server",
-    "build": "webpack --mode production",
-    "test": "yarn lint"
+    "start": "webpack-dev-server --open --hot --host 127.0.0.1 --port 7000",
+    "build": "webpack --mode production --progress && cordova build",
+    "test": "yarn lint",
+    "deploy": "npm run build && npm run demo:index && gh-pages -d www",
+    "emulate": "cordova run android && C:/Users/PC/AppData/Local/Android/sdk/platform-tools/adb logcat chromium:D SystemWebViewClient:D *:S",
+    "device": "cordova run android --device && C:/Users/PC/AppData/Local/Android/sdk/platform-tools/adb logcat chromium:D SystemWebViewClient:D *:S"
   },
   "dependencies": {
     "@liutianv1/bls-signatures": "^0.0.1",

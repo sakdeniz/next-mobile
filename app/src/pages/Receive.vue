@@ -8,16 +8,17 @@
         <v-ons-card>
             <div class="title">
                 {{$t('message.receive')}}
-                <v-ons-button style="float:right" modifier="quiet" v-on:click="doCopy()"><i class="fa fa-clipboard"></i></v-ons-button>
             </div>
            
             <div class="content" style="clear:both;">
 	        	<center>
 	    			<img src="images/wallet.svg" style="width:128px;height:auto;">
 	    		</center>
-                <h3>Public Address</h3>
+                <h3>Public Address </h3>
+                <v-ons-button style="float:right" modifier="quiet" v-on:click="doCopy()"><i class="fa fa-clipboard"></i></v-ons-button>
                 <center>{{publicAddress}}</center>
                 <h3>Private Address</h3>
+                <v-ons-button style="float:right" modifier="quiet" v-on:click="doCopy2()"><i class="fa fa-clipboard"></i></v-ons-button>
                 <center>{{config.private_address}}</center>
             </div>
 
@@ -181,6 +182,17 @@ export default {
     doCopy: function ()
     {
         this.$copyText(this.publicAddress).then(function (e)
+        {
+            vm.$ons.notification.toast(vm.$t('message.clipboardSuccess'), { timeout: 1000, animation: 'fall' });
+        },
+        function (e)
+        {
+            vm.$ons.notification.toast(vm.$t('message.clipboardFailed'), { timeout: 1000, animation: 'fall' });
+        })
+    },
+    doCopy2: function ()
+    {
+        this.$copyText(config.private_address).then(function (e)
         {
             vm.$ons.notification.toast(vm.$t('message.clipboardSuccess'), { timeout: 1000, animation: 'fall' });
         },

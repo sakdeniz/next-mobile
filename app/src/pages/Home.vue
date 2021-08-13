@@ -13,12 +13,23 @@
                     <img style="width:48px;height:auto;" src="images/nav_2.svg">
                 </div>
                 <div class="center">
-                    <span class="list-item__title"><span v-if="!hideBalance">{{formatBalance(balanceInfo.balance)}} NAV</span><span v-else>*****</span>
-                    	<i v-bind:class="{ 'fa fa-eye': !hideBalance, 'fa fa-eye-slash': hideBalance }" aria-hidden="true" v-on:click="showHideBalance()"></i></span>
+                    <span class="list-item__title">
+
+                    	<span v-if="!hideBalance">{{formatBalance(balanceInfo.balance)}} NAV</span>
+                    	<span v-else>*****</span>
+
+                    	&nbsp;<span v-if="!hideBalance&&config.xNAVBalance">{{formatBalance(config.xNAVBalance.xnav.confirmed)}} xNAV</span>
+                    	<span v-else>*****</span>
+
+                    	<i v-bind:class="{ 'fa fa-eye': !hideBalance, 'fa fa-eye-slash': hideBalance }" aria-hidden="true" v-on:click="showHideBalance()"></i>
+                    </span>
                     <span class="list-item__subtitle">
                     	<span v-if="!hideBalance">{{getFiatValue()}} {{config.currency.symbol}}</span>
                     	<span v-else>*****</span>
                     </span>
+                    <span class="list-item__subtitle">
+						Sync : {{config.sync_progress}}
+					</span>
                 </div>
             </v-ons-list-item>
         </v-ons-list>

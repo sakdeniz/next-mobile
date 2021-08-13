@@ -490,11 +490,13 @@ export default {
 
 			    wallet.on('new_mnemonic', (mnemonic) => console.log(`wallet created with mnemonic ${mnemonic} - please back it up!`));
 
-			    wallet.on('loaded', async () => {
-			        console.log('wallet loaded');
-			        wallet.xNavReceivingAddresses(false).then((value) => {
-			  			console.log("XNAV receiving address : " + value[0].address);
-		            	this.$store.commit('config/setPrivateAddress', value[0].address);
+			    wallet.on('loaded', async () =>
+			    {
+		        	console.log('wallet loaded');
+		        	wallet.xNavReceivingAddresses(false).then((value) =>
+		        	{
+		  				console.log("XNAV receiving address : " + value[0].address);
+	            		this.$store.commit('config/setPrivateAddress', value[0].address);
 					});
 			        console.log('NAV receiving address: '+ (await wallet.NavReceivingAddresses(false))[0].address);
 			        await wallet.Connect();
@@ -502,12 +504,25 @@ export default {
 
 			    wallet.on('sync_started', () => console.log('sync started.'));
 
-			    wallet.on('sync_finished', () => console.log('sync finished.'));
+			    wallet.on('sync_finished', () =>
+			    {
+			    	console.log('sync finished.');
+			    	wallet.GetBalance().then((value) =>
+		        	{
+	            		this.$store.commit('config/setxNAVBalance', value);
+					});
+			    });
+
+	    		wallet.GetBalance().then((value) =>
+		        {
+	            	this.$store.commit('config/setxNAVBalance', value);
+				});
 
 			    wallet.on('connected', () => console.log('connected. waiting for sync.'));
 
 			    wallet.on('sync_status', async (progress, scripthash) => {
 			        //console.log(`Sync ${progress}%`)
+    		        this.$store.commit('config/setSyncProgress', progress);
 			        if (progress == 100 && scripthash == "6032c38c0bc0e91e726f1e55e1832e434509001a7aed5cfd881b6ef07215e84a") {
 			            if (!alreadySent)
 			            {
@@ -522,6 +537,10 @@ export default {
 			    wallet.on('new_tx', async (list) => {
 			        console.log(`Received transaction ${JSON.stringify(list)}`)
 			        console.log(`Balance ${JSON.stringify(await wallet.GetBalance())}`)
+		    		wallet.GetBalance().then((value) =>
+			        {
+		            	this.$store.commit('config/setxNAVBalance', value);
+					});
 			    });
 
 			    wallet.on('remove_tx', async (txid) => {
@@ -563,6 +582,7 @@ export default {
             window.db.get('addr').push({publicAddress: address.toString(),privateKey: privateKey.toWIF(),xpriv: xpriv.toString()}).write();
             this.walletExist=true;
             this.walletUnlocked=true;
+            this.initNavcoinJS(this.mnemonics);
             /*console.log("*** Create wallet");
             console.log("*** Password:"+this.password);
             console.log("*** Password Again:"+this.password_again);
