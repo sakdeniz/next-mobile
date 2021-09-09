@@ -28,6 +28,8 @@ var app = {
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
         this.receivedEvent('deviceready');
+        //StatusBar.hide();
+        //NavigationBar.hide();
         window.QRScanner.prepare(onDone);
         function onDone(err, status){
         	console.log("STATUS:"+JSON.stringify(status));

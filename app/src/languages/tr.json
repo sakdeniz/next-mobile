@@ -5,9 +5,9 @@
 		"continue":"Devam Et",
 		"hello": "NEXT Cüzdana hoş geldiniz.",
 		"aboutNext":"NEXT Hakkında",
-		"navcoinWebsite":"NavCoin Website",
+		"navcoinWebsite":"Navcoin Website",
 		"nextWalletWebsite":"NEXT Website",
-		"navcoinReddit":"NavCoin Reddit",
+		"navcoinReddit":"Navcoin Reddit",
 		"githubRepo":"Github Repo",
 		"error":"Hata",
 		"days":"Gün",
@@ -109,7 +109,7 @@
 		"deleteContact":"Sil",
 		"contactName":"Adı",
 		"contactEmail":"E-Posta Adresi",
-		"contactAddress":"NavCoin Adresi",
+		"contactAddress":"Navcoin Adresi",
 		"terms":"Kullanım Sözleşmesi",
 		"acceptTerms":"Kullanım Şartlarını Kabul Ediyorum",
 		"confirmBackupWallet":"Yedek kelimelerini Yazdım",
@@ -153,7 +153,7 @@
 		"confirmCloseNo":"Hayır",
 		"communityFundStats":"Topluluk Fonu Detayları",
 		"staking":"Soğuk İstifleme",
-		"stakingIntroduction":"<p>NEXT Mobile ile tek dokunuşla soğuk istifleme yapabilirsiniz.</p><i class='ion-checkmark-round'></i>&nbsp;Emanetçi değildir<br/><i class='ion-checkmark-round'></i>&nbsp;Sadece cüzdan sahibi harcama yetkisine sahiptir<br/><i class='ion-checkmark-round'></i>&nbsp;İstifleme ödüllerinizi cüzdanınızdan takip edin",
+		"stakingIntroduction":"<p>NEXT Mobile ile tek dokunuşla soğuk istifleme yapabilirsiniz.</p><i class='ion-ios-checkmark'></i>&nbsp;Emanetçi değildir<br/><i class='ion-ios-checkmark'></i>&nbsp;Sadece cüzdan sahibi harcama yetkisine sahiptir<br/><i class='ion-ios-checkmark'></i>&nbsp;İstifleme ödüllerinizi cüzdanınızdan takip edin",
 		"startStaking":"Soğuk İstiflemeyi Başlat",
 		"stakingSuccessfullyStarted":"Soğuk istifleme başarıyla başlatıldı",
 		"stakingNoBalance":"Cüzdanınıza hiç NAV bulunmuyor. Soğuk istifleme için cüzdanınıza biraz NAV yatırın.",
@@ -188,6 +188,6 @@
 		"sweepAddress":"Adresi Süpür",
 		"sweepAmount":"Miktar",
 		"coldStakingFAQTitle":"Cold Staking Sık Sorulan Sorular",
-		"coldStakingFAQ":"<ul><li>Kazanacağınız ödüller cüzdanınızda bulunan NAV miktarına ve ağda staking yapılan NAV miktarına göre değişkenlik gösterebilir.</li><li>Eğer mümkünse kendi NavCoin düğümünüzü kurun, böylece merkeziyetsizliği desteklemiş olursunuz.</li><li>İsterseniz NavPool,NavCash ile de cold staking yapabilirsiniz.</li></ul>"
+		"coldStakingFAQ":"<ul><li>Kazanacağınız ödüller cüzdanınızda bulunan NAV miktarına ve ağda staking yapılan NAV miktarına göre değişkenlik gösterebilir.</li><li>Eğer mümkünse kendi Navcoin düğümünüzü kurun, böylece merkeziyetsizliği desteklemiş olursunuz.</li><li>İsterseniz NavPool,NavCash ile de cold staking yapabilirsiniz.</li></ul>"
     }
 }

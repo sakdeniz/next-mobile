@@ -1,8 +1,8 @@
 {
     "name": "nextmobile",
-    "displayName": "NEXT",
+    "displayName": "Navcoin Wallet",
     "version": "1.0.6",
-    "description": "NavCoin NEXT Mobile",
+    "description": "Navcoin Wallet",
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"

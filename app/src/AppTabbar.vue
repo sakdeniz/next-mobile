@@ -45,13 +45,13 @@ export default {
       tabs: [
         {
           label: '',
-          icon: this.md ? 'ion-md-home' : 'ion-md-home',
+          icon: this.md ? 'ion-md-wallet' : 'ion-md-wallet',
           page: Home,
           theme: purple
         },
         {
           label: '',
-          icon: this.md ? 'ion-md-wallet' : 'ion-md-wallet',
+          icon: this.md ? 'ion-md-swap' : 'ion-md-swap',
           page: Receive,
           theme: purple
         },

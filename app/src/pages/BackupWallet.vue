@@ -5,6 +5,7 @@
 		<v-ons-card>
 			<h3>
 				{{$t('message.privateKey')}}
+				<v-ons-button style="float:right;margin-bottom:15px;" v-on:click="doCopy(privateKeyWif)"><i class="fa fa-clipboard"></i></v-ons-button>			
 			</h3>
 			<code>
 				{{privateKeyWif}}
@@ -14,6 +15,7 @@
 		<v-ons-card>
 			<h3>
 				{{$t('message.hdPrivateKey')}}
+				<v-ons-button style="float:right;margin-bottom:15px;" v-on:click="doCopy(xpriv)"><i class="fa fa-clipboard"></i></v-ons-button>			
 			</h3>
 			<code>
 				{{xpriv}}
@@ -23,6 +25,7 @@
 		<v-ons-card>
 			<h3>
 				{{$t('message.hdPublicKey')}}
+				<v-ons-button style="float:right;margin-bottom:15px;" v-on:click="doCopy(hdPublicKey)"><i class="fa fa-clipboard"></i></v-ons-button>			
 			</h3>
 			<code>
 				{{hdPublicKey}}
@@ -32,6 +35,7 @@
 		<v-ons-card>
 			<h3>
 				{{$t('message.mnemonics')}}
+				<v-ons-button style="float:right;margin-bottom:15px;" v-on:click="doCopy(mnemonics)"><i class="fa fa-clipboard"></i></v-ons-button>			
 			</h3>
 			<code>
 				{{mnemonics}}
@@ -71,5 +75,18 @@ export default {
     	hdPublicKey:''
     };
   },
+  methods: {
+    doCopy: function (value)
+    {
+        this.$copyText(value).then(function (e)
+        {
+            vm.$ons.notification.toast(vm.$t('message.clipboardSuccess'), { timeout: 1000, animation: 'fall' });
+        },
+        function (e)
+        {
+            vm.$ons.notification.toast(vm.$t('message.clipboardFailed'), { timeout: 1000, animation: 'fall' });
+        })
+    },
+  }
 };
 </script>

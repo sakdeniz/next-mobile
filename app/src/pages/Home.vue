@@ -7,31 +7,50 @@
 	      		<v-ons-progress-circular indeterminate></v-ons-progress-circular>
 	     	</span>
 	    </v-ons-pull-hook>
-        <v-ons-list>
-            <v-ons-list-item>
-                <div class="left">
-                    <img style="width:48px;height:auto;" src="images/nav_2.svg">
-                </div>
+        <v-ons-list modifier="noborder">
+            <v-ons-list-item modifier="nodivider">
                 <div class="center">
-                    <span class="list-item__title">
-
-                    	<span v-if="!hideBalance">{{formatBalance(balanceInfo.balance)}} NAV</span>
-                    	<span v-else>*****</span>
-
-                    	&nbsp;<span v-if="!hideBalance&&config.xNAVBalance">{{formatBalance(config.xNAVBalance.xnav.confirmed)}} xNAV</span>
-                    	<span v-else>*****</span>
-
-                    	<i v-bind:class="{ 'fa fa-eye': !hideBalance, 'fa fa-eye-slash': hideBalance }" aria-hidden="true" v-on:click="showHideBalance()"></i>
-                    </span>
-                    <span class="list-item__subtitle">
-                    	<span v-if="!hideBalance">{{getFiatValue()}} {{config.currency.symbol}}</span>
-                    	<span v-else>*****</span>
-                    </span>
-                    <span class="list-item__subtitle">
-						Sync : {{config.sync_progress}}
-					</span>
+                    <!--<img style="width:32px;height:auto;" src="images/nav-logo-border.svg">
+                   	<span style="margin-left: 5px;" v-if="!hideBalance">{{formatBalance(balanceInfo.balance)}} NAV</span>
+                   	<span style="margin-left: 5px;" v-else>*****</span>!-->
+                	<!-- !-->
+                    <img style="width:32px;height:auto;" src="images/nav-logo-border.svg">
+                	<span style="margin-left: 5px;" v-if="!hideBalance&&config.Balance">
+                		{{formatBalance(config.Balance.nav.confirmed)}} NAV
+                		<span v-if="config.Balance.nav.pending!=0">
+                			(Pending : {{formatBalance(config.Balance.nav.pending)}})
+                		</span>
+                	</span>
+                	<span style="margin-left: 5px;" v-if="hideBalance">*****</span>
+                	<span style="margin-left: 5px;" v-if="!hideBalance&&!config.Balance">{{$t('message.loading')}}</span>
+                	<!-- !-->
+                    <img style="margin-left: 32px;width:32px;height:auto;" src="images/xnav-logo-border.svg">
+                	<span style="margin-left: 5px;" v-if="!hideBalance&&config.Balance">
+                		{{formatBalance(config.Balance.xnav.confirmed)}} xNAV
+                		<span v-if="config.Balance.xnav.pending!=0">
+                			(Pending : {{formatBalance(config.Balance.xnav.pending)}})
+                		</span>
+                	</span>
+                	<span style="margin-left: 5px;" v-if="hideBalance">*****</span>
+                	<span style="margin-left: 5px;" v-if="!hideBalance&&!config.Balance">{{$t('message.loading')}}</span>
                 </div>
             </v-ons-list-item>
+
+            <v-ons-list-item modifier="nodivider">
+                <div class="center">
+                	<span v-if="!hideBalance">{{getFiatValue()}} {{config.currency.symbol}}</span>
+                	<span v-else>*****</span>&nbsp;
+         			<i v-bind:class="{ 'ion-ios-eye': !hideBalance, 'ion-ios-eye-off': hideBalance }" aria-hidden="true" v-on:click="showHideBalance()"></i>
+                </div>
+            </v-ons-list-item>
+
+            <v-ons-list-item modifier="nodivider" v-if="config.sync_progress!=100">
+                <div class="left">
+                    <span class="list-item__subtitle">
+						{{config.sync_status}}
+					</span>
+                </div>
+            </v-ons-list-item>            
         </v-ons-list>
     	<v-ons-card style="margin:0px;margin-top:1px;padding-top:0px;padding-left:0px;padding-right:0px;background: #ffffff">
 			<div style="clear:both">
@@ -45,7 +64,7 @@
 
     		<div style="margin:0px;padding:0px;">
     			<div style="display:inline-block;float:left;margin-top:10px;margin-left:10px;">
-    				NavCoin
+    				Navcoin
     			</div>
     			<div style="display:inline-block;float:right;margin-top:10px;margin-right:10px;">
     				{{getUnitFiatValue()}} {{config.currency.symbol}}
@@ -57,7 +76,7 @@
     		</div>
 		</v-ons-card>
 		
-		<v-ons-card v-show="status" style="margin:0px;margin-top:20px;background: #ffffff">
+		<!--<v-ons-card v-show="status" style="margin:0px;margin-top:20px;background: #ffffff">
 			<div class="title">
 				<i class="ion-help-circled"></i>&nbsp;Total Supply
 			</div>
@@ -76,9 +95,9 @@
                     </div>
                 </v-ons-list-item>
             </v-ons-list>
-		</v-ons-card>
+		</v-ons-card>!-->
 		
-		<v-ons-card v-show="status" style="margin:0px;margin-top:20px;background: #ffffff">
+		<!--<v-ons-card v-show="status" style="margin:0px;margin-top:20px;background: #ffffff">
 			<div class="title">
 				<i class="ion-social-buffer"></i>&nbsp;General Staking Status
 			</div>
@@ -110,21 +129,21 @@
                 </v-ons-list-item>                                
             </v-ons-list>
 
-		</v-ons-card>
+		</v-ons-card>!-->
 
 		<v-ons-card v-show="status.maintenance_mode==1" style="margin:0px;margin-top:20px;background: #ffffff">
-			<h3><i class="ion-speakerphone"></i>&nbsp;Maintenance Mode</h3>
+			<h3><i class="ion-ios-build"></i>&nbsp;{{$t('maintenanceMode')}}</h3>
 			<p>{{status.maintenance_message}}</p>
-			<p>Current Block : {{status.blocks}}/{{status.headers}}</p>
-			<p>Sync Progress : {{status.sync}}%</p>
-			<p>Wallet node is {{status.days_behind}} behind the last block.</p>
+			<p>{{$t('currentBlock')}} : {{status.blocks}}/{{status.headers}}</p>
+			<p>{{$t('syncProgress')}} : {{status.sync}}%</p>
+			<p>{{$t('daysBehind')}} : {{status.days_behind}}</p>
 		</v-ons-card>
 
 		<v-ons-card style="margin:0px;margin-top:20px;background: #ffffff">
 			<div class="title">
-				<i class="ion-android-star"></i>&nbsp;{{$t('message.featuredProposals')}}
+				<i class="ion-ios-star"></i>&nbsp;{{$t('message.featuredProposals')}}
 			</div>
-			<v-ons-list>
+			<v-ons-list v-if="filter(proposals).length>0">
 			 	<v-ons-list-item v-for="proposal in filter(proposals)" :key="proposal.hash">
 	            	<ons-row>
 	              		<ons-col width="30%">
@@ -189,6 +208,9 @@
 	        		</ons-row>
 	      		</v-ons-list-item>
 	    	</v-ons-list>
+	    	<div v-else>
+	    		{{$t('message.noFeaturedProposal')}}
+	    	</div>
 	    </v-ons-card>
     </v-ons-page>
 </template>
@@ -372,7 +394,7 @@ export default {
         var a=0;
         try
         {
-            var t=sb.toBitcoin(this.balanceInfo.balance)*this.price[this.config.currency.code];
+            var t=sb.toBitcoin((this.balanceInfo.balance+(this.$store.state.config.Balance?this.$store.state.config.Balance.xnav.confirmed:0)))*this.price[this.config.currency.code];
             a=this.formatNumbers(t.toFixed(2));
         }
         catch (e)
@@ -439,90 +461,47 @@ export default {
     },
     getStatus()
     {
+    	console.log("Getting status...");
     	let vm=this;
-		axios.get(window.apiURL+'status', {
-		      })
-		      .then(function (response)
-		      {
-		      	console.log(response.data);
-		        vm.status=response.data;
-		    })
-		    .catch(function (error)
-			{
-				console.log(error);
-			})
-			.then(function ()
-			{
-			});
+		axios.get(window.apiURL+'status', {})
+		.then(function (response)
+		{
+    		console.log("Status retrieved.");
+			console.log(response.data);
+			vm.status=response.data;
+		})
+		.catch(function (error)
+		{
+			console.log(error);
+		});
 	},
     getBalance()
     {
 		var url;
 		let vm=this;
 		const publicAddress=this.publicAddress;
-		if (window.network!="main")
+   		url=window.apiURL+'balance';
+		axios.get(url, {
+			params: {
+				network: window.network,
+				a: vm.publicAddress
+			}
+		})
+		.then(function (response)
 		{
-		    axios.get(window.apiURL+'utxo', {
-		        params: {
-		          network: window.network,
-		          a: vm.publicAddress
-		        }
-		      })
-		      .then(function (response)
-		      {
-		        var utxo=response.data;
-		        if(utxo.length>0)
-		        {
-		            try
-		            {
-		                var tx=new bitcore.Transaction()
-		                .from(utxo);
-		                var amount=(tx.inputAmount);
-						vm.balanceInfo={"balance":"0","received":"0"}
-		            }
-		            catch(err)
-		            {
-		                console.log(err);
-		            }
-		        }
-		        else
-		        {
-					vm.balanceInfo={"balance":"0","received":"0"}
-		        }
-		    })
-		    .catch(function (error)
+			vm.balanceInfo=response.data;
+		})
+		.catch(function (error)
+		{
+			console.log(error);
+			if(error.response.data.status=="404")
 			{
-				console.log(error);
-			})
-			.then(function ()
-			{
-			});
-		}
-	    if (window.network=="main")
-	    {
-	   		url=window.apiURL+'balance';
-			axios.get(url, {
-				params: {
-					network: window.network,
-					a: vm.publicAddress
-				}
-			})
-			.then(function (response)
-			{
-				vm.balanceInfo=response.data;
-			})
-			.catch(function (error)
-			{
-				console.log(error);
-				if(error.response.data.status=="404")
-				{
-					vm.balanceInfo={"balance":"0","received":"0"}
-				}
-			})
-		    .then(function ()
-			{
-			}); 
-		}
+				vm.balanceInfo={"balance":"0","received":"0"}
+			}
+		})
+	    .then(function ()
+		{
+		}); 
     },
     push(page, key) {
       this.$store.commit('navigator/push', {

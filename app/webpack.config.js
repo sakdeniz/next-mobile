@@ -64,7 +64,8 @@ module.exports = {
         }),
   ],
   "node": {
-    "fs": "empty"
+    "fs": "empty",
+    "process": "mock"
   },
   resolve: {
     alias: {

@@ -14,58 +14,93 @@
 	        	<center>
 	    			<img src="images/wallet.svg" style="width:128px;height:auto;">
 	    		</center>
-                <h3>Public Address </h3>
-                <v-ons-button style="float:right" modifier="quiet" v-on:click="doCopy()"><i class="fa fa-clipboard"></i></v-ons-button>
-                <center>{{publicAddress}}</center>
-                <h3>Private Address</h3>
-                <v-ons-button style="float:right" modifier="quiet" v-on:click="doCopy2()"><i class="fa fa-clipboard"></i></v-ons-button>
-                <center>{{config.private_address}}</center>
+		
+	      		<div class="center" style="margin-bottom:15px;">
+	        		<v-ons-segment :index.sync="segmentIndex" style="width:100%">
+	          			<button><ons-icon icon="ion-ios-unlock"></ons-icon>&nbsp;{{$t('message.public')}}</button>
+	          			<button @click="getxNAVQRCode()"><ons-icon icon="ion-ios-lock"></ons-icon>&nbsp;{{$t('message.private')}}</button>
+	        		</v-ons-segment>
+	      		</div>
+		
+				<div v-show="segmentIndex==0">
+	                <v-ons-button style="float:right;margin-bottom:15px;" v-on:click="doCopy(publicAddress)"><i class="fa fa-clipboard"></i>&nbsp;{{$t('message.copy')}}</v-ons-button>
+	                <div style="clear: both">
+	                	<center>
+	                		{{publicAddress}}
+	                	</center>
+	                </div>
+		            <center>
+		            	<div v-html="qrcode_nav"></div>
+		            </center>
+		            <div class="content">
+			            <div class="title">
+			                {{$t('message.balanceSummary')}}
+			            </div>
+			            <div class="content">
+				            <table class="ui table">
+							  <tbody>
+							    <tr>
+							      <td class="collapsing">
+							        <i class="ion-md-arrow-round-down"></i> {{$t('message.balanceSummaryReceived')}}
+							      </td>
+							      <td>{{balanceInfo.received?formatBalance(balanceInfo.received):0}}</td>
+							    </tr>
+							  </tbody>
+							</table>
+						</div>
+    					<div class="title" style="margin-top:30px;">
+		                	{{$t('message.transactionHistory')}}
+		            	</div>
+		                <v-ons-list>
+		                    <v-ons-list-item v-for="tx in txs">
+		                        <div class="left">
+		                        	<a v-bind:href="'https://www.navexplorer.com/tx/'+tx.txid">
+		                        	  <v-ons-icon style="color:#232323" icon="ion-md-open" class="list-item__icon"></v-ons-icon>
+		                      	   	</a>
+		                          <v-ons-icon v-if="tx.changes.balance>0" style="color:#669900" icon="ion-md-arrow-round-down" class="list-item__icon"></v-ons-icon>
+		                          <v-ons-icon v-if="tx.changes.balance<0" style="color:#cc6600" icon="ion-md-arrow-round-up" class="list-item__icon"></v-ons-icon>
+		                        </div>
+		                        <div class="center">
+		                            <span style="color:#669900" v-if="tx.changes.balance>0">+{{formatBalance(tx.changes.balance)}}</span>
+		                            <span style="color:#cc6600" v-if="tx.changes.balance<0">{{formatBalance(tx.changes.balance)}}</span>
+		                        </div>
+		                        <div class="right">{{formatDate(tx.time)}}</div>
+		                    </v-ons-list-item>
+		                </v-ons-list>
+		            </div>		            
+				</div>
+
+				<div v-show="segmentIndex==1">
+	                <v-ons-button style="float:right;margin-bottom:15px;" v-on:click="doCopy(config.private_address)"><i class="fa fa-clipboard"></i>&nbsp;{{$t('message.copy')}}</v-ons-button>
+	                <div style="clear: both">
+	                	<center>
+	                		{{config.private_address}}
+	                	</center>
+	                </div>
+		            <center>
+		            	<div v-html="qrcode_xnav"></div>
+		            </center>
+					<div class="title" style="margin-top:30px;">
+	                	{{$t('message.transactionHistory')}}
+	            	</div>
+	                <v-ons-list>
+	                    <v-ons-list-item v-for="tx in private_txs" v-if="tx.type=='xnav'">
+	                        <div class="left">
+	                          <v-ons-icon v-if="tx.amount>0" style="color:#669900" icon="ion-md-arrow-round-down" class="list-item__icon"></v-ons-icon>
+	                          <v-ons-icon v-if="tx.amount<0" style="color:#cc6600" icon="ion-md-arrow-round-up" class="list-item__icon"></v-ons-icon>
+	                        </div>
+	                        <div class="center">
+	                            <span style="color:#cc6600" v-if="tx.amount<0">{{formatBalance(tx.amount)}}</span>
+	                            <span style="color:#669900" v-if="tx.amount>0">+{{formatBalance(tx.amount)}}</span>
+	                        </div>
+	                        <div class="right">{{formatDate(tx.timestamp)}}</div>
+	                    </v-ons-list-item>
+	                </v-ons-list>
+				</div>
             </div>
 
-            <center>
-            	<div v-html="qrcode"></div>
-            </center>
         </v-ons-card>
-        <v-ons-card>
-            <div class="title">
-                {{$t('message.balanceSummary')}}
-            </div>
-            <div class="content">
-	            <table class="ui table">
-				  <tbody>
-				    <tr>
-				      <td class="collapsing">
-				        <i class="ion-md-arrow-round-down"></i> {{$t('message.balanceSummaryReceived')}}
-				      </td>
-				      <td>{{balanceInfo.received?formatBalance(balanceInfo.received):0}}</td>
-				    </tr>
-				  </tbody>
-				</table>
-			</div>
-		</v-ons-card>
-		<v-ons-card>
-			<div class="title">
-                {{$t('message.transactionHistory')}}
-            </div>
-            <div class="content">
-                <v-ons-list>
-                    <v-ons-list-item v-for="tx in txs">
-                        <div class="left">
-                        	<a v-bind:href="'https://www.navexplorer.com/tx/'+tx.txid">
-                        	  <v-ons-icon style="color:#232323" icon="ion-md-open" class="list-item__icon"></v-ons-icon>
-                      	   	</a>
-                          <v-ons-icon v-if="tx.changes.balance<0" style="color:#cc6600" icon="ion-md-arrow-round-down" class="list-item__icon"></v-ons-icon>
-                          <v-ons-icon v-if="tx.changes.balance>0" style="color:#669900" icon="ion-md-arrow-round-up" class="list-item__icon"></v-ons-icon>
-                        </div>
-                        <div class="center">
-                            <span style="color:#cc6600" v-if="tx.changes.balance<0">{{formatBalance(tx.changes.balance)}}</span>
-                            <span style="color:#669900" v-if="tx.changes.balance>0">+{{formatBalance(tx.changes.balance)}}</span>
-                        </div>
-                        <div class="right">{{formatDate(tx.time)}}</div>
-                    </v-ons-list-item>
-                </v-ons-list>
-            </div>
-        </v-ons-card>
+
     </v-ons-page>
 </template>
 
@@ -82,20 +117,25 @@ export default {
     return {
     state: 'initial',
     items: [1, 2, 3],
+    segmentIndex: 0,
     publicAddress:'',
     privateAddress:'',
     balanceInfo:'',
-    qrcode:'',
+    qrcode_nav:'',
+    qrcode_xnav:'',
     prefix:"navcoin:",
-    txs:[]
+    txs:[],
+    private_txs:[]
     };
   },
   created: function ()
   {
     this.publicAddress=db.get('addr').value()[0].publicAddress;
     this.getBalance();
+
     var qrcode=new QRCode(this.prefix+this.publicAddress);
-    this.qrcode=qrcode.svg();
+    this.qrcode_nav=qrcode.svg();
+
     this.txhistory();
   },
   computed:
@@ -106,6 +146,16 @@ export default {
   	}
   },
   methods: {
+  	getxNAVQRCode()
+  	{
+	    var qrcode=new QRCode(this.prefix+this.$store.state.config.private_address);
+	    this.qrcode_xnav=qrcode.svg();
+		window.wallet.GetHistory().then((value) =>
+		{
+			console.log(value);
+			this.private_txs=value;
+		});
+  	},
   	getBalance()
     {
 		var url;
@@ -149,50 +199,36 @@ export default {
 			{
 			});
 		}
-	    if (window.network=="main")
-	    {
-	   		url=window.apiURL+'balance';
-			axios.get(url, {
-				params: {
-					network: window.network,
-					a: vm.publicAddress
-				}
-			})
-			.then(function (response)
+   		url=window.apiURL+'balance';
+		axios.get(url, {
+			params: {
+				network: window.network,
+				a: vm.publicAddress
+			}
+		})
+		.then(function (response)
+		{
+			vm.balanceInfo=response.data;
+		})
+		.catch(function (error)
+		{
+			console.log(error);
+			if(error.response.data.status=="404")
 			{
-				vm.balanceInfo=response.data;
-			})
-			.catch(function (error)
-			{
-				console.log(error);
-				if(error.response.data.status=="404")
-				{
-					vm.balanceInfo={"balance":"0","received":"0"}
-				}
-			})
-		    .then(function ()
-			{
-			}); 
-		}
+				vm.balanceInfo={"balance":"0","received":"0"}
+			}
+		})
+	    .then(function ()
+		{
+		});
     },
  	getStakingReward: function (tx)
 	{
 		return(sb.toBitcoin(parseFloat(tx.output)-parseFloat(tx.input)));
 	},
-    doCopy: function ()
+    doCopy: function (value)
     {
-        this.$copyText(this.publicAddress).then(function (e)
-        {
-            vm.$ons.notification.toast(vm.$t('message.clipboardSuccess'), { timeout: 1000, animation: 'fall' });
-        },
-        function (e)
-        {
-            vm.$ons.notification.toast(vm.$t('message.clipboardFailed'), { timeout: 1000, animation: 'fall' });
-        })
-    },
-    doCopy2: function ()
-    {
-        this.$copyText(config.private_address).then(function (e)
+        this.$copyText(value).then(function (e)
         {
             vm.$ons.notification.toast(vm.$t('message.clipboardSuccess'), { timeout: 1000, animation: 'fall' });
         },
@@ -232,7 +268,7 @@ export default {
     txhistory()
     {
         let vm=this;
-        axios.get(window.apiURL+'history?a='+this.publicAddress, {
+        axios.get(window.apiURL+'history?a='+this.publicAddress+"&network="+window.network, {
             params: {}
         })
         .then(function (response)

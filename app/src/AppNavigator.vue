@@ -53,22 +53,22 @@
 			  		{{$t('message.terms')}}
 				</h2>
 				  <p>
-				    This is a binding Agreement between NavCoin Developers (“NavCoin” or “We”) and the person, persons, or entity (“You” or “Your”) using the service, Software, or application (“Software”).
+				    This is a binding Agreement between Navcoin Developers (“Navcoin” or “We”) and the person, persons, or entity (“You” or “Your”) using the service, Software, or application (“Software”).
 				  </p>
 				  <p class="terms__heading">
 				    RIGHTS AND OBLIGATIONS
 				  </p>
 				  <p>
-				    NavCoin provides the Software solely on the terms and conditions set forth in this Agreement and on the condition that You accept and comply with them. By using the Software You (a) accept this Agreement and agree that You are legally bound by its terms; and (b) represent and warrant that: (i) You are of legal age to enter into a binding agreement; and (ii) if You are a corporation, governmental organization or other legal entity, You have the right, power and authority to enter into this Agreement on behalf of the corporation, governmental organization or other legal entity and bind them to these terms.
+				    Navcoin provides the Software solely on the terms and conditions set forth in this Agreement and on the condition that You accept and comply with them. By using the Software You (a) accept this Agreement and agree that You are legally bound by its terms; and (b) represent and warrant that: (i) You are of legal age to enter into a binding agreement; and (ii) if You are a corporation, governmental organization or other legal entity, You have the right, power and authority to enter into this Agreement on behalf of the corporation, governmental organization or other legal entity and bind them to these terms.
 				  </p>
 				  <p>
-				    This Software functions as a free, open source, and multi-signature digital wallet. The Software does not constitute an account where We or other third parties serve as financial intermediaries or custodians of Your NavCoin(s).
+				    This Software functions as a free, open source, and multi-signature digital wallet. The Software does not constitute an account where We or other third parties serve as financial intermediaries or custodians of Your Navcoin(s).
 				  </p>
 				  <p>
 				    While the Software has undergone beta testing and continues to be improved by feedback from the open-source user and developer community, We cannot guarantee there will not be bugs in the Software. You acknowledge that Your use of this Software is at Your own discretion and in compliance with all applicable laws. You are responsible for safekeeping Your passwords, private key pairs, PINs, and any other codes You use to access the Software.
 				  </p>
 				  <p>
-				    IF YOU LOSE ACCESS TO YOUR NAV COIN WALLET OR YOUR ENCRYPTED PRIVATE KEYS AND YOU HAVE NOT SEPARATELY STORED A BACKUP OF YOUR WALLET AND CORRESPONDING PASSWORD, YOU ACKNOWLEDGE AND AGREE THAT ANY NAV COIN YOU HAVE ASSOCIATED WITH THAT WALLET WILL BECOME INACCESSIBLE. All transaction requests are irreversible. The authors of the Software, employees and affiliates of NAV COIN, copyright holders, and NAV COIN cannot retrieve Your private keys or passwords if You lose or forget them and cannot guarantee transaction confirmation as they do not have control over the NavCoin network.
+				    IF YOU LOSE ACCESS TO YOUR NAV COIN WALLET OR YOUR ENCRYPTED PRIVATE KEYS AND YOU HAVE NOT SEPARATELY STORED A BACKUP OF YOUR WALLET AND CORRESPONDING PASSWORD, YOU ACKNOWLEDGE AND AGREE THAT ANY NAV COIN YOU HAVE ASSOCIATED WITH THAT WALLET WILL BECOME INACCESSIBLE. All transaction requests are irreversible. The authors of the Software, employees and affiliates of NAV COIN, copyright holders, and NAV COIN cannot retrieve Your private keys or passwords if You lose or forget them and cannot guarantee transaction confirmation as they do not have control over the Navcoin network.
 				  </p>
 				  <p class="terms__heading">
 				    DISCLAIMER
@@ -83,7 +83,7 @@
 				    INTELLECTUAL PROPERTY
 				  </p>
 				  <p>
-				    We retain all right, title, and interest in and to the Content and all of NavCoin’s brands, logos, and trademarks, including, but not limited to, NavCoin, NEXT, NEXT Wallet, NEXT Mobile Wallet, and variations of the wording of the aforementioned brands, logos, and trademarks.
+				    We retain all right, title, and interest in and to the Content and all of Navcoin’s brands, logos, and trademarks, including, but not limited to, Navcoin, NEXT, NEXT Wallet, NEXT Mobile Wallet, and variations of the wording of the aforementioned brands, logos, and trademarks.
 				  </p>
 				  <p class="terms__heading">
 				    CHOICE OF LAW
@@ -216,16 +216,16 @@
 </template>
 
 <script>
-const njs = require('../navcoin');
-console.log(njs);
+const njs = require('navcoin-js');
 const walletFile = 'wallet.db'; // File name of the wallet database
 const password = undefined; // Password used to encrypt and open the wallet database
 const spendingPassword = undefined; // Password used to send transactions
 const mnemonic = "text brush cost token inquiry iron guard use frequent bullet earth annual"; // Mnemonic to import
 const type = "next"; // Wallet type next or navcoin-js-v1
-const zapwallettxes = false; // Should the wallet be cleared of its history?
+const zapwallettxes = (localStorage.getItem("ZapWallet")=="true"?true:false); // Should the wallet be cleared of its history?
 const log = true; // Log to console
-
+console.log("Zap Wallet : " + zapwallettxes);
+if (localStorage.getItem("ZapWallet")) localStorage.setItem("ZapWallet",false);
 let alreadySent = false;
 
 const IV_LENGTH = 16; // For AES, this is always 16
@@ -236,7 +236,7 @@ const Mnemonic = require('bitcore-mnemonic');
 var ENCRYPTION_KEY;
 window.config={ headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, responseType: 'text' }
 window.apiURL='https://navcommunity.net/api/lw/';
-window.network='main';
+window.network='testnet';
 function encrypt (text)
 {
     let iv = crypto.randomBytes(IV_LENGTH);
@@ -288,10 +288,10 @@ export default {
       addr:{},
       carouselIndex: 0,
       carouselItems: [
-      	{"title_1":"Welcome to NavCoin NEXT","title_2":"<p>NavCoin is an open-source, blockchain based Proof of Stake cryptocurrency.</p><p>Its design is public, nobody owns or controls NavCoin, and everyone can take part.</p><p>It’s a platform that’s run by its users, for its users - with an incentivised network of nodes verifying payments all around the world.</p>","bgcolor":"red"},
+      	{"title_1":"Welcome to Navcoin NEXT","title_2":"<p>Navcoin is an open-source, blockchain based Proof of Stake cryptocurrency.</p><p>Its design is public, nobody owns or controls Navcoin, and everyone can take part.</p><p>It’s a platform that’s run by its users, for its users - with an incentivised network of nodes verifying payments all around the world.</p>","bgcolor":"red"},
       	{"title_1":"Spend Easily","title_2":"<p>Designed for fast, cheap, and secure peer-to-peer payments.</p><p>A network that's driven to lowering the cost of doing business.</p>","bgcolor":"blue"},
       	{"title_1":"Take Control","title_2":"Take full control and customize your wallet to your needs.","bgcolor":"orange"},
-      	{"title_1":"Community Fund","title_2":"<p>Projects are funded and approved by the decentralized network with no central authority.</p><p>This ensures NavCoin’s direction remains firmly in the best interest of the entire network.</p><p>This fund pays you to take your idea, nurture it, and build a team to bring it to life.</p>","bgcolor":"orange"},
+      	{"title_1":"Community Fund","title_2":"<p>Projects are funded and approved by the decentralized network with no central authority.</p><p>This ensures Navcoin’s direction remains firmly in the best interest of the entire network.</p><p>This fund pays you to take your idea, nurture it, and build a team to bring it to life.</p>","bgcolor":"orange"},
       	{"title_1":"Cold Staking","title_2":"<p>Cold-staking means that your wallet is not online staking and subject to attacks.</p><p>Instead, a staking wallet which contains no NAV will be staking on behalf of your spending wallet which holds your NAV.</p><p>Bear in mind that you still need a node actively staking ideally 24⁄7 to get your staking rewards.</p>","bgcolor":"orange"},
       ]
 	}
@@ -313,6 +313,7 @@ export default {
   },
   created: function ()
   {
+		this.$store.commit('config/setSyncStatus', "Wallet loading...");
 		let vm=this;
 		if (typeof(QRScanner) != "undefined")
 		{
@@ -364,7 +365,7 @@ export default {
     	this.$store.commit('config/setLanguage', {name:config.language.name,code:config.language.code})
     	this.$store.commit('config/setCurrency', {symbol:config.currency.symbol,code:config.currency.code})
 		this.$i18n.locale=config.language.code;
-    	if (window.network=="main")
+    	if (window.network=="mainnet")
 		{
 			bitcore.Networks.defaultNetwork = bitcore.Networks.livenet;
 		}
@@ -477,17 +478,18 @@ export default {
         },
     	initNavcoinJS: function (mnemonic)
        	{
-       		/*njs.wallet.WalletFile.ListWallets().then((value) => {
+       		njs.wallet.WalletFile.ListWallets().then((value) =>
+       		{
 			  console.log(value);
 			});
 
-			njs.wallet.WalletFile.RemoveWallet("wallet.db").then((value) => {
-			  console.log(value);
-			});*/
+       		console.log("Wallet loading...");
+			njs.wallet.Init().then(async () =>
+			{
+			    const wallet = new njs.wallet.WalletFile({file: walletFile, network:window.network,mnemonic: mnemonic, type: "next", password: password, spendingPassword: spendingPassword, zapwallettxes: zapwallettxes, log: log})
 
-			njs.wallet.Init().then(async () => {
-			    const wallet = new njs.wallet.WalletFile({file: walletFile, mnemonic: mnemonic, type: "next", password: password, spendingPassword: spendingPassword, zapwallettxes: zapwallettxes, log: log})
-
+			    window.wallet=wallet;
+			    
 			    wallet.on('new_mnemonic', (mnemonic) => console.log(`wallet created with mnemonic ${mnemonic} - please back it up!`));
 
 			    wallet.on('loaded', async () =>
@@ -496,69 +498,70 @@ export default {
 		        	wallet.xNavReceivingAddresses(false).then((value) =>
 		        	{
 		  				console.log("XNAV receiving address : " + value[0].address);
+						this.$store.commit('config/setSyncStatus', "Wallet loaded.");
 	            		this.$store.commit('config/setPrivateAddress', value[0].address);
 					});
 			        console.log('NAV receiving address: '+ (await wallet.NavReceivingAddresses(false))[0].address);
 			        await wallet.Connect();
 			    });
 
-			    wallet.on('sync_started', () => console.log('sync started.'));
+			    wallet.on('sync_started', () => 
+		    	{
+		    		console.log('sync started.')
+					this.$store.commit('config/setSyncStatus', vm.$t('message.walletSyncStarted'));
+		    	});
 
 			    wallet.on('sync_finished', () =>
 			    {
 			    	console.log('sync finished.');
 			    	wallet.GetBalance().then((value) =>
 		        	{
-	            		this.$store.commit('config/setxNAVBalance', value);
+	            		this.$store.commit('config/setBalance', value);
+ 		 	    		this.$store.commit('config/setSyncStatus', vm.$t('message.walletSyncFinished'));
 					});
 			    });
 
 	    		wallet.GetBalance().then((value) =>
 		        {
-	            	this.$store.commit('config/setxNAVBalance', value);
+	            	this.$store.commit('config/setBalance', value);
 				});
 
-			    wallet.on('connected', () => console.log('connected. waiting for sync.'));
+			    wallet.on('connected', () =>
+			    {
+			    	console.log('connected. waiting for sync.')
+ 	    		    this.$store.commit('config/setSyncStatus', vm.$t('message.walletConnected'));
+				});
+
+			    wallet.on('connection_failed', () =>
+			    {
+			    	console.log('connection failed.')
+ 	    		    this.$store.commit('config/setSyncStatus', vm.$t('message.walletConnectionFailed'));
+				});
 
 			    wallet.on('sync_status', async (progress, scripthash) => {
 			        //console.log(`Sync ${progress}%`)
     		        this.$store.commit('config/setSyncProgress', progress);
-			        if (progress == 100 && scripthash == "6032c38c0bc0e91e726f1e55e1832e434509001a7aed5cfd881b6ef07215e84a") {
-			            if (!alreadySent)
-			            {
-			                /*let txHash = await wallet.xNavSend((await wallet.xNavReceivingAddresses(false))[0].address, 1e6, 'memo for xnav payment', spendingPassword);
-			                console.log(`Transaction sent to ${(await wallet.xNavReceivingAddresses(false))[0].address}.... with hash ${txHash}`);
-			                alreadySent = true;*/
-			            }
-			            //console.log(await wallet.GetHistory())
-			        }
+ 	    		    this.$store.commit('config/setSyncStatus', vm.$t('message.walletSyncProgress') + " (%"+progress+")");
 			    });
 
 			    wallet.on('new_tx', async (list) => {
 			        console.log(`Received transaction ${JSON.stringify(list)}`)
 			        console.log(`Balance ${JSON.stringify(await wallet.GetBalance())}`)
+		        	//this.$store.commit('config/setSyncStatus', vm.$t('message.walletNewTransaction'));
 		    		wallet.GetBalance().then((value) =>
 			        {
-		            	this.$store.commit('config/setxNAVBalance', value);
+		            	this.$store.commit('config/setBalance', value);
 					});
 			    });
 
 			    wallet.on('remove_tx', async (txid) => {
+			        //this.$store.commit('config/setSyncStatus', vm.$t('message.walletRemoveTransaction'));
 			        console.log(`Removed tx transaction ${txid}`)
 			    });
 
 			    await wallet.Load();
-			     //console.log(await wallet.GetHistory());
-			     //console.log(await wallet.GetUtxos());
-			     console.log(`Last block: ${await wallet.GetTip()}`);
-			     console.log(`Balance ${JSON.stringify(await wallet.GetBalance())}`)
-
-			    // let txHash = await wallet.xNavSend('xN123124fa123123123212131231', 10*1e8, 'memo for xnav payment', spendingPassword);
-			    // console.log(`Transaction sent to xN1231.... with hash ${txHash}`);
-
-			    // txHash = await wallet.xNavSend('N123124fa123121', 10*1e8, '', spendingPassword);
-			    // console.log(`Transaction sent to N1231.... with hash ${txHash}`);
-
+			    console.log(`Last block: ${await wallet.GetTip()}`);
+			    console.log(`Balance ${JSON.stringify(await wallet.GetBalance())}`)
 			});
        	},
        	createDatabase: function (bImport)
@@ -582,7 +585,7 @@ export default {
             window.db.get('addr').push({publicAddress: address.toString(),privateKey: privateKey.toWIF(),xpriv: xpriv.toString()}).write();
             this.walletExist=true;
             this.walletUnlocked=true;
-            this.initNavcoinJS(this.mnemonics);
+            this.initNavcoinJS(code.toString());
             /*console.log("*** Create wallet");
             console.log("*** Password:"+this.password);
             console.log("*** Password Again:"+this.password_again);

@@ -66,8 +66,9 @@ export default {
       {
       	address:"",
       	private_address:"",
+      	sync_status:"",
       	sync_progress:"",
-      	xNAVBalance:null,
+      	Balance:null,
       	lock_wallet_on_deactivate:false,
       	cold_staking_active:false,
       	cold_staking_address:"",
@@ -97,13 +98,17 @@ export default {
         {
 			state.private_address=address;
         },
+      	setSyncStatus(state,status)
+        {
+			state.sync_status=status;
+        },
       	setSyncProgress(state,progress)
         {
 			state.sync_progress=progress;
         },
-		setxNAVBalance(state,amount)
+		setBalance(state,balance)
         {
-			state.xNAVBalance=amount;
+			state.Balance=balance;
         },
       	setLockWalletOnDeactivate(state,b)
         {

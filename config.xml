@@ -9,7 +9,8 @@
     </author>
     <content src="index.html" />
     <preference name="StatusBarOverlaysWebView" value="true" />
-    <preference name="StatusBarBackgroundColor" value="#673ab7" />
+    <preference name="StatusBarStyle" value="lightcontent" />
+    <preference name="StatusBarBackgroundColor" value="#000000" />
     <preference name="NavigationBarBackgroundColor" value="#000000" />
     <access origin="*" />
     <allow-intent href="http://*/*" />

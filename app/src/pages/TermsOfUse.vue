@@ -4,22 +4,22 @@
 		<v-ons-card>
 			<div id="terms" class="enable_text_select">
 			  <p>
-			    This is a binding Agreement between NavCoin Developers (“NavCoin” or “We”) and the person, persons, or entity (“You” or “Your”) using the service, Software, or application (“Software”).
+			    This is a binding Agreement between Navcoin Developers (“Navcoin” or “We”) and the person, persons, or entity (“You” or “Your”) using the service, Software, or application (“Software”).
 			  </p>
 			  <p class="terms__heading">
 			    RIGHTS AND OBLIGATIONS
 			  </p>
 			  <p>
-			    NavCoin provides the Software solely on the terms and conditions set forth in this Agreement and on the condition that You accept and comply with them. By using the Software You (a) accept this Agreement and agree that You are legally bound by its terms; and (b) represent and warrant that: (i) You are of legal age to enter into a binding agreement; and (ii) if You are a corporation, governmental organization or other legal entity, You have the right, power and authority to enter into this Agreement on behalf of the corporation, governmental organization or other legal entity and bind them to these terms.
+			    Navcoin provides the Software solely on the terms and conditions set forth in this Agreement and on the condition that You accept and comply with them. By using the Software You (a) accept this Agreement and agree that You are legally bound by its terms; and (b) represent and warrant that: (i) You are of legal age to enter into a binding agreement; and (ii) if You are a corporation, governmental organization or other legal entity, You have the right, power and authority to enter into this Agreement on behalf of the corporation, governmental organization or other legal entity and bind them to these terms.
 			  </p>
 			  <p>
-			    This Software functions as a free, open source, and multi-signature digital wallet. The Software does not constitute an account where We or other third parties serve as financial intermediaries or custodians of Your NavCoin(s).
+			    This Software functions as a free, open source, and multi-signature digital wallet. The Software does not constitute an account where We or other third parties serve as financial intermediaries or custodians of Your Navcoin(s).
 			  </p>
 			  <p>
 			    While the Software has undergone beta testing and continues to be improved by feedback from the open-source user and developer community, We cannot guarantee there will not be bugs in the Software. You acknowledge that Your use of this Software is at Your own discretion and in compliance with all applicable laws. You are responsible for safekeeping Your passwords, private key pairs, PINs, and any other codes You use to access the Software.
 			  </p>
 			  <p>
-			    IF YOU LOSE ACCESS TO YOUR NAV COIN WALLET OR YOUR ENCRYPTED PRIVATE KEYS AND YOU HAVE NOT SEPARATELY STORED A BACKUP OF YOUR WALLET AND CORRESPONDING PASSWORD, YOU ACKNOWLEDGE AND AGREE THAT ANY NAV COIN YOU HAVE ASSOCIATED WITH THAT WALLET WILL BECOME INACCESSIBLE. All transaction requests are irreversible. The authors of the Software, employees and affiliates of NAV COIN, copyright holders, and NAV COIN cannot retrieve Your private keys or passwords if You lose or forget them and cannot guarantee transaction confirmation as they do not have control over the NavCoin network.
+			    IF YOU LOSE ACCESS TO YOUR NAV COIN WALLET OR YOUR ENCRYPTED PRIVATE KEYS AND YOU HAVE NOT SEPARATELY STORED A BACKUP OF YOUR WALLET AND CORRESPONDING PASSWORD, YOU ACKNOWLEDGE AND AGREE THAT ANY NAV COIN YOU HAVE ASSOCIATED WITH THAT WALLET WILL BECOME INACCESSIBLE. All transaction requests are irreversible. The authors of the Software, employees and affiliates of NAV COIN, copyright holders, and NAV COIN cannot retrieve Your private keys or passwords if You lose or forget them and cannot guarantee transaction confirmation as they do not have control over the Navcoin network.
 			  </p>
 			  <p class="terms__heading">
 			    DISCLAIMER
@@ -34,7 +34,7 @@
 			    INTELLECTUAL PROPERTY
 			  </p>
 			  <p>
-			    We retain all right, title, and interest in and to the Content and all of NavCoin’s brands, logos, and trademarks, including, but not limited to, NavCoin, NEXT, NEXT Wallet, NEXT Mobile Wallet, and variations of the wording of the aforementioned brands, logos, and trademarks.
+			    We retain all right, title, and interest in and to the Content and all of Navcoin’s brands, logos, and trademarks, including, but not limited to, Navcoin, NEXT, NEXT Wallet, NEXT Mobile Wallet, and variations of the wording of the aforementioned brands, logos, and trademarks.
 			  </p>
 			  <p class="terms__heading">
 			    CHOICE OF LAW

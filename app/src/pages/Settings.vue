@@ -101,7 +101,7 @@
 				  		<v-ons-icon icon="ion-ios-unlock" class="list-item__icon"></v-ons-icon>
 					</div>
 			      <div class="center">
-						Lock wallet if app goes background
+						{{$t('message.lockWalletIfAppGoesBackground')}}
 					</div>
 			      <div class="right">
 			        <v-ons-switch v-model="bLockWalletOnDeactivate" v-on:click="$store.commit('config/setLockWalletOnDeactivate',bLockWalletOnDeactivate);"></v-ons-switch>
@@ -124,6 +124,14 @@
 					</div>
 					<div class="center">
 				  		{{$t('message.settingsBackupWallet')}}
+					</div>
+				</v-ons-list-item>
+				<v-ons-list-item tappable modifier="nodivider" v-on:click="zapWallet()">
+					<div class="left">
+						<v-ons-icon icon="ion-md-sync" class="list-item__icon"></v-ons-icon>
+					</div>
+					<div class="center">
+				  		{{$t('message.settingsZapWallet')}}
 					</div>
 				</v-ons-list-item>
 				<v-ons-list-item tappable modifier="nodivider" v-on:click="deleteWallet()">
@@ -151,6 +159,8 @@ import SweepPrivateKey from './SweepPrivateKey.vue';
 import TermsOfUse from './TermsOfUse.vue';
 import Share from './Share.vue';
 import BackupWallet from './BackupWallet.vue';
+const njs = require('navcoin-js');
+
 export default {
   data () {
     return {
@@ -249,6 +259,19 @@ export default {
       		}
     	});
     },
+    zapWallet: function ()
+    {
+    	let vm=this;
+    	vm.$ons.notification.confirm(vm.$t('message.confirmZapWalletMessage'),{title:vm.$t('message.confirmZapWalletTitle'),buttonLabels:[vm.$t('message.confirmZapWalletNo'), vm.$t('message.confirmZapWalletYes')]})
+		.then((response) =>
+    	{
+    		if (response)
+    		{
+    			localStorage.setItem("ZapWallet",true);
+				navigator.app.exitApp();
+    		}
+    	});
+    },    
     deleteWallet: function ()
     {
     	let vm=this;
@@ -260,7 +283,11 @@ export default {
 	      		if (crypto.createHash('md5').update(input).digest("hex")==window.ENCRYPTION_KEY)
 	      		{
 					localStorage.clear();
-					vm.$ons.notification.toast(vm.$t('message.walletRemoved'), { timeout: 2000, animation: 'fall' });
+					njs.wallet.WalletFile.RemoveWallet("wallet.db").then(() =>
+					{
+						console.log("Wallet removed.");
+					});
+					vm.$ons.notification.toast(vm.$t('message.walletRemoved'), { timeout: 3000, animation: 'fall' });
 					navigator.app.exitApp();
 	      		}
 	      		else
