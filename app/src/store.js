@@ -106,6 +106,10 @@ export default {
         {
 			state.sync_progress=progress;
         },
+      	setCurrentNode(state,node)
+        {
+			state.current_node=node;
+        },
 		setBalance(state,balance)
         {
 			state.Balance=balance;

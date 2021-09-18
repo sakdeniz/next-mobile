@@ -50,7 +50,15 @@
 						{{config.sync_status}}
 					</span>
                 </div>
-            </v-ons-list-item>            
+            </v-ons-list-item>
+
+            <v-ons-list-item modifier="nodivider" v-if="config.sync_progress!=100">
+                <div class="left">
+                    <span class="list-item__subtitle">
+						{{config.current_node}}
+					</span>
+                </div>
+            </v-ons-list-item>
         </v-ons-list>
     	<v-ons-card style="margin:0px;margin-top:1px;padding-top:0px;padding-left:0px;padding-right:0px;background: #ffffff">
 			<div style="clear:both">

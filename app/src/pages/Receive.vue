@@ -51,7 +51,7 @@
     					<div class="title" style="margin-top:30px;">
 		                	{{$t('message.transactionHistory')}}
 		            	</div>
-		                <v-ons-list>
+		                <!--<v-ons-list>
 		                    <v-ons-list-item v-for="tx in txs">
 		                        <div class="left">
 		                        	<a v-bind:href="'https://www.navexplorer.com/tx/'+tx.txid">
@@ -66,7 +66,20 @@
 		                        </div>
 		                        <div class="right">{{formatDate(tx.time)}}</div>
 		                    </v-ons-list-item>
-		                </v-ons-list>
+		                </v-ons-list>!-->
+		                <v-ons-list>
+		                    <v-ons-list-item v-for="tx in private_txs" v-if="tx.type=='nav'">
+		                        <div class="left">
+		                          <v-ons-icon v-if="tx.amount>0" style="color:#669900" icon="ion-md-arrow-round-down" class="list-item__icon"></v-ons-icon>
+		                          <v-ons-icon v-if="tx.amount<0" style="color:#cc6600" icon="ion-md-arrow-round-up" class="list-item__icon"></v-ons-icon>
+		                        </div>
+		                        <div class="center">
+		                            <span style="color:#cc6600" v-if="tx.amount<0">{{formatBalance(tx.amount)}}</span>
+		                            <span style="color:#669900" v-if="tx.amount>0">+{{formatBalance(tx.amount)}}</span>
+		                        </div>
+		                        <div class="right">{{formatDate(tx.timestamp)}}</div>
+		                    </v-ons-list-item>
+		                </v-ons-list>		                
 		            </div>		            
 				</div>
 

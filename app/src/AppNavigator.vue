@@ -526,10 +526,11 @@ export default {
 	            	this.$store.commit('config/setBalance', value);
 				});
 
-			    wallet.on('connected', () =>
+			    wallet.on('connected', async(node) =>
 			    {
-			    	console.log('connected. waiting for sync.')
+			    	console.log('connected to -> ' + node);
  	    		    this.$store.commit('config/setSyncStatus', vm.$t('message.walletConnected'));
+ 	    		    this.$store.commit('config/setCurrentNode', node);
 				});
 
 			    wallet.on('connection_failed', () =>
@@ -538,10 +539,10 @@ export default {
  	    		    this.$store.commit('config/setSyncStatus', vm.$t('message.walletConnectionFailed'));
 				});
 
-			    wallet.on('sync_status', async (progress, scripthash) => {
+			    wallet.on('sync_status', async (progress, pending, total) => {
 			        //console.log(`Sync ${progress}%`)
     		        this.$store.commit('config/setSyncProgress', progress);
- 	    		    this.$store.commit('config/setSyncStatus', vm.$t('message.walletSyncProgress') + " (%"+progress+")");
+ 	    		    this.$store.commit('config/setSyncStatus', vm.$t('message.walletSyncProgress') + " (%"+progress+") " + pending + "/" + total);
 			    });
 
 			    wallet.on('new_tx', async (list) => {

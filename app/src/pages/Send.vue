@@ -124,11 +124,12 @@ export default {
 	      const bitcore=require('bitcore-lib');
 	      if (vm.isPrivateTransaction)
 	      {
-			vm.amount=(this.$store.state.config.xNAVBalance.xnav.confirmed-vm.fee)/100000000;
+			vm.amount=(this.$store.state.config.Balance.xnav.confirmed)/100000000;
 	      }
 	      else
 	      {
-		      axios.get(window.apiURL+'utxo', {
+	      	vm.amount=(this.$store.state.config.Balance.nav.confirmed)/100000000;
+		      /*axios.get(window.apiURL+'utxo', {
 		        params: {
 		          network: window.network,
 		          a: this.publicAddress
@@ -153,7 +154,7 @@ export default {
 		                vm.$ons.notification.alert(err,{title:vm.$t('message.send')});
 		            }
 		        }
-		      });
+		      });*/
 	      }
     },
     send()
