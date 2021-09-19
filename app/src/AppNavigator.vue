@@ -236,7 +236,7 @@ const Mnemonic = require('bitcore-mnemonic');
 var ENCRYPTION_KEY;
 window.config={ headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, responseType: 'text' }
 window.apiURL='https://navcommunity.net/api/lw/';
-window.network='testnet';
+window.network='mainnet';
 function encrypt (text)
 {
     let iv = crypto.randomBytes(IV_LENGTH);

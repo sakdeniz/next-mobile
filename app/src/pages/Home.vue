@@ -35,6 +35,20 @@
                 	<span style="margin-left: 5px;" v-if="!hideBalance&&!config.Balance">{{$t('message.loading')}}</span>
                 </div>
             </v-ons-list-item>
+			<v-ons-list-item>
+                <div class="center">
+                	<!-- !-->
+                    <i class="ion-ios-snow" style="margin-left: 9px;width:32px;"></i>
+                	<span style="margin-left: -4px;" v-if="!hideBalance&&config.Balance">
+                		{{formatBalance(config.Balance.cold.confirmed)}} NAV (Cold Staking)
+                		<span v-if="config.Balance.cold.pending!=0">
+                			(Pending : {{formatBalance(config.Balance.cold.pending)}})
+                		</span>
+                	</span>
+                	<span style="margin-left: 5px;" v-if="hideBalance">*****</span>
+                	<span style="margin-left: 5px;" v-if="!hideBalance&&!config.Balance">{{$t('message.loading')}}</span>                
+                </div>
+            </v-ons-list-item>
 
             <v-ons-list-item modifier="nodivider">
                 <div class="center">

@@ -128,7 +128,7 @@ export default {
 	      }
 	      else
 	      {
-	      	vm.amount=(this.$store.state.config.Balance.nav.confirmed)/100000000;
+	      	vm.amount=(this.$store.state.config.Balance.nav.confirmed+this.$store.state.config.Balance.cold.confirmed)/100000000;
 		      /*axios.get(window.apiURL+'utxo', {
 		        params: {
 		          network: window.network,
