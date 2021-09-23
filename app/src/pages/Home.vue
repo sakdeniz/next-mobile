@@ -42,7 +42,7 @@
                 	<span style="margin-left: -4px;" v-if="!hideBalance&&config.Balance">
                 		{{formatBalance(config.Balance.cold.confirmed)}} NAV (Cold Staking)
                 		<span v-if="config.Balance.cold.pending!=0">
-                			(Pending : {{formatBalance(config.Balance.cold.pending)}})
+                			(Pending : {{formatBalance(config.Balance.staked.pending)}})
                 		</span>
                 	</span>
                 	<span style="margin-left: 5px;" v-if="hideBalance">*****</span>
@@ -153,7 +153,7 @@
 
 		</v-ons-card>!-->
 
-		<v-ons-card v-show="status.maintenance_mode==1" style="margin:0px;margin-top:20px;background: #ffffff">
+		<v-ons-card v-if="status.maintenance_mode==1" style="margin:0px;margin-top:20px;background: #ffffff">
 			<h3><i class="ion-ios-build"></i>&nbsp;{{$t('maintenanceMode')}}</h3>
 			<p>{{status.maintenance_message}}</p>
 			<p>{{$t('currentBlock')}} : {{status.blocks}}/{{status.headers}}</p>
@@ -412,11 +412,11 @@ export default {
     },
     getFiatValue()
     {
-        if (!this.balanceInfo.balance) return "0";
+        if (!this.$store.state.config.Balance) return "0";
         var a=0;
         try
         {
-            var t=sb.toBitcoin((this.balanceInfo.balance+(this.$store.state.config.Balance?this.$store.state.config.Balance.xnav.confirmed:0)))*this.price[this.config.currency.code];
+            var t=sb.toBitcoin((this.$store.state.config.Balance.nav.confirmed+this.$store.state.config.Balance.xnav.confirmed)*this.price[this.config.currency.code]);
             a=this.formatNumbers(t.toFixed(2));
         }
         catch (e)
