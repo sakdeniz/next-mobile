@@ -52,7 +52,6 @@
 	</v-ons-page>
 </template>
 <script>
-import axios from 'axios';
 import sb from 'satoshi-bitcoin';
 import AddressBook from './AddressBook.vue';
 export default
