@@ -59,8 +59,7 @@ export default
 {
 	data ()
 	{
-		return
-		{
+		return {
 			modalVisible: false,
 			publicAddress:'',
 			isPrivateTransaction:false,
@@ -68,7 +67,8 @@ export default
 			address:'',
 			amount:'',
 			fee:100000,
-			pages: [{
+			pages: [
+			{
 				component: AddressBook,
 				label: 'AddressBook',
 				desc: 'AddressBook'
