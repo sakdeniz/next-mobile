@@ -40,8 +40,8 @@
                 	<!-- !-->
                     <i class="ion-ios-snow" style="margin-left: 9px;width:32px;"></i>
                 	<span style="margin-left: -4px;" v-if="!hideBalance&&config.Balance">
-                		{{formatBalance(config.Balance.cold.confirmed)}} NAV (Cold Staking)
-                		<span v-if="config.Balance.cold.pending!=0">
+                		{{formatBalance(config.Balance.staked.confirmed)}} NAV (Cold Staking)
+                		<span v-if="config.Balance.staked.pending!=0">
                 			(Pending : {{formatBalance(config.Balance.staked.pending)}})
                 		</span>
                 	</span>
@@ -413,10 +413,12 @@ export default {
     getFiatValue()
     {
         if (!this.$store.state.config.Balance) return "0";
+        if (!this.price) return "0";
+
         var a=0;
         try
         {
-            var t=sb.toBitcoin((this.$store.state.config.Balance.nav.confirmed+this.$store.state.config.Balance.xnav.confirmed)*this.price[this.config.currency.code]);
+            var t=sb.toBitcoin((this.$store.state.config.Balance.nav.confirmed+this.$store.state.config.Balance.xnav.confirmed))*this.price[this.config.currency.code];
             a=this.formatNumbers(t.toFixed(2));
         }
         catch (e)

@@ -38,6 +38,7 @@
     "nedb-async": "^0.1.6",
     "net": "^1.0.2",
     "onsenui": "^2.10.2",
+    "pouchdb-adapter-websql": "^7.0.0",
     "sass-loader": "^10.1.1",
     "satoshi-bitcoin": "^1.0.4",
     "style-loader": "^2.0.0",

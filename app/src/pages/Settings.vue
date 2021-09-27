@@ -282,13 +282,13 @@ export default {
     		{
 	      		if (crypto.createHash('md5').update(input).digest("hex")==window.ENCRYPTION_KEY)
 	      		{
-					localStorage.clear();
-					njs.wallet.WalletFile.RemoveWallet("wallet.db").then(() =>
-					{
-						console.log("Wallet removed.");
-					});
-					vm.$ons.notification.toast(vm.$t('message.walletRemoved'), { timeout: 3000, animation: 'fall' });
-					navigator.app.exitApp();
+							localStorage.clear();
+							njs.wallet.WalletFile.RemoveWallet("wallet.db").then(() =>
+							{
+								console.log("Wallet removed.");
+							});
+							vm.$ons.notification.toast(vm.$t('message.walletRemoved'), { timeout: 3000, animation: 'fall' });
+							navigator.app.exitApp();
 	      		}
 	      		else
 	      		{

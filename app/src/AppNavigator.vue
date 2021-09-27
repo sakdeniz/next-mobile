@@ -220,7 +220,7 @@ const njs = require('navcoin-js');
 const walletFile = 'wallet.db'; // File name of the wallet database
 const password = undefined; // Password used to encrypt and open the wallet database
 const spendingPassword = undefined; // Password used to send transactions
-const mnemonic = "text brush cost token inquiry iron guard use frequent bullet earth annual"; // Mnemonic to import
+const mnemonic = ""; // Mnemonic to import
 const type = "next"; // Wallet type next or navcoin-js-v1
 const zapwallettxes = (localStorage.getItem("ZapWallet")=="true"?true:false); // Should the wallet be cleared of its history?
 const log = true; // Log to console
@@ -497,11 +497,11 @@ export default {
 		        	console.log('wallet loaded');
 		        	wallet.xNavReceivingAddresses(false).then((value) =>
 		        	{
-		  				console.log("XNAV receiving address : " + value[0].address);
+		  				console.log("XNAV receiving address : " + value.filter((e) => e.path == "0/0")[0].address);
 						this.$store.commit('config/setSyncStatus', "Wallet loaded.");
-	            		this.$store.commit('config/setPrivateAddress', value[0].address);
+	            		this.$store.commit('config/setPrivateAddress', value.filter((e) => e.path == "0/0")[0].address);
 					});
-			        console.log('NAV receiving address: '+ (await wallet.NavReceivingAddresses(false))[0].address);
+			        console.log('NAV receiving address: '+ (await wallet.NavReceivingAddresses(true))[0].address);
 			        await wallet.Connect();
 			    });
 
@@ -516,6 +516,7 @@ export default {
 			    	console.log('sync finished.');
 			    	wallet.GetBalance().then((value) =>
 		        	{
+		        	    this.$store.commit('config/setSyncProgress', 100);
 	            		this.$store.commit('config/setBalance', value);
  		 	    		this.$store.commit('config/setSyncStatus', vm.$t('message.walletSyncFinished'));
 					});
