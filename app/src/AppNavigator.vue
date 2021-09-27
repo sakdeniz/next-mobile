@@ -1,22 +1,26 @@
 <template>
-   <v-ons-page v-if="!walletExist || !walletUnlocked || !walletBackedup">
+	<v-ons-page v-if="!walletExist || !walletUnlocked || !walletBackedup">
 		<v-ons-carousel fullscreen swipeable auto-scroll overscrollable :index.sync="carouselIndex" :auto-scroll-ratio="0.1" v-show="bCarousel">
-  			<v-ons-carousel-item v-for="(itm) in carouselItems" class="carousel-item">
-    			<div class="title-1"><span v-html="itm.title_1"></span></div>
-    			<div class="title-2"><center><span v-html="itm.title_2"></span></center></div>
+			<v-ons-carousel-item v-for="(itm) in carouselItems" class="carousel-item">
+				<div class="title-1">
+					<span v-html="itm.title_1"></span>
+				</div>
+				<div class="title-2">
+					<center>
+						<span v-html="itm.title_2"></span>
+					</center>
+				</div>
 				<div>
 					<v-ons-button v-show="carouselIndex<Object.keys(carouselItems).length-1" v-on:click="skip()">Skip</v-ons-button>
 					<v-ons-button v-show="carouselIndex==Object.keys(carouselItems).length-1" v-on:click="skip()">Let's Start</v-ons-button>
 				</div>
- 	 		</v-ons-carousel-item>
+			</v-ons-carousel-item>
 		</v-ons-carousel>
-
-    	<div class="dots" v-show="bCarousel">
-    		<span v-for="dotIndex in Object.keys(carouselItems).length" :key="dotIndex" @click="carouselIndex = dotIndex - 1">
-        		{{ carouselIndex === dotIndex - 1 ? '\u25CF' : '\u25CB' }}
-     		</span>
-    	</div>
-
+		<div class="dots" v-show="bCarousel">
+			<span v-for="dotIndex in Object.keys(carouselItems).length" :key="dotIndex" @click="carouselIndex = dotIndex - 1">
+				{{ carouselIndex === dotIndex - 1 ? '\u25CF' : '\u25CB' }}
+			</span>
+		</div>
 		<div class="main" v-show="!walletExist && !languageSelected && !bCarousel">
 			<div class="wrapper">
 				<center>
@@ -50,9 +54,9 @@
 					NEXT
 				</div>
 				<h2 class="title">
-			  		{{$t('message.terms')}}
+					{{$t('message.terms')}}
 				</h2>
-				  <p>
+				<p>
 				    This is a binding Agreement between Navcoin Developers (“Navcoin” or “We”) and the person, persons, or entity (“You” or “Your”) using the service, Software, or application (“Software”).
 				  </p>
 				  <p class="terms__heading">
@@ -111,110 +115,104 @@
 				  </center>
 			</div>
 		</div>
-
 		<div class="main" v-show="termsAccepted">
 			<div class="wrapper">
 				<center>
-			    	<div class="welcome_logo">NEXT</div>
-				    
-				    <div v-show="walletExist && walletUnlocked && termsAccepted && !walletBackedup">
-	  			      	<div style="margin-bottom:15px;padding:10px;">
-	 			      		<p>
-	 			      			<small>
-	 			      			{{$t('message.backupInfo1')}}
-	 			      			</small>
-	 			      		</p>
-	 			      		<p>
-	 			      			<small>
-	 			      			{{$t('message.backupInfo2')}}
-	 			      			</small>
-	 			      		</p>
-	  			      	</div>
-				    	<div>
-				    		<h3>
-				    			{{$t('message.backupPhrase')}}
-				    		</h3>
-				    		<code>
-				    			{{mnemonics}}
-				    		</code>
-				    	</div>
-				    	<v-ons-button style="margin-top: 30px" v-on:click="confirmBackupWallet()">{{$t('message.confirmBackupWallet')}}</v-ons-button>
-				    </div>
-
-				    <div v-show="!walletExist && !walletUnlocked && termsAccepted && languageSelected">
-				      <div class="title" style="margin-bottom:15px;">
-				        {{$t('message.hello')}}
-				      </div>
-	  			      <div style="margin-bottom:15px;padding:10px;">
-	 			      		<p>
-	 			      			<small>
-	 			      			{{$t('message.passwordInfo1')}}
-	 			      			</small>
-	 			      		</p>
-	 			      		<p>
-	 			      			<small style="color:'red'">
-	 			      			{{$t('message.passwordInfo2')}}
-	 			      			</small>
-	 			      		</p>
-	  			      </div>
-				      <div class="content" style="padding:10px;">
-				    	
-				    	<v-ons-segment :index.sync="segmentIndex" style="width:100%;margin-bottom:30px;">
-	          				<button>{{$t('message.segmentCreateWallet')}}</button>
-	          				<button>{{$t('message.segmentImportWallet')}}</button>
-	        			</v-ons-segment>
-	        			<div v-show="segmentIndex==0">
-					        <div class="center">
-					          <v-ons-input type="password" :placeholder="$t('message.password')" v-model="password" float style="width:100%"></v-ons-input>
-					        </div>
-					        <br />
-					        <div class="center" style="margin-top:10px;margin-bottom:10px;">
-					          <v-ons-input type="password" :placeholder="$t('message.passwordAgain')" v-model="password_again" float style="width:100%"></v-ons-input>
-					        </div>
-					        <br />
-					        <v-ons-button v-show="!busy" style="margin: 6px 0" v-on:click="createWallet()">{{$t('message.createWallet')}}</v-ons-button>
-				            <v-ons-progress-circular indeterminate v-show="busy"></v-ons-progress-circular>
-			        	</div>
-			        	<div v-show="segmentIndex==1">
-				        	<div class="center" style="margin-bottom:30px;">
-					          	<v-ons-input type="text" :placeholder="$t('message.mnemonics')" v-model="mnemonics" float style="width:100%"></v-ons-input>
-				          	</div>
-							<div class="center" style="margin-top:30px;margin-bottom:30px;">
-					        	<v-ons-input type="password" :placeholder="$t('message.password')" v-model="password" float style="width:100%"></v-ons-input>
-					        </div>
-					        <div class="center" style="margin-top:30px;margin-bottom:15px;">
-					        	<v-ons-input type="password" :placeholder="$t('message.passwordAgain')" v-model="password_again" float style="width:100%"></v-ons-input>
-					        </div>
-					        <br />
-				        	<v-ons-button v-show="!busy" style="margin: 6px 0" v-on:click="importWallet()">{{$t('message.importWallet')}}</v-ons-button>
-			            	<v-ons-progress-circular indeterminate v-show="busy"></v-ons-progress-circular>
-			        	</div>
-				      </div>
-				    </div>
-
-				    <div v-show="walletExist && !walletUnlocked">
-				      <div class="title" style="margin-bottom:30px;">
-				        {{$t('message.unlock')}}
-				      </div>
-				      <div class="content" style="margin-bottom:15px;">
-				        <div class="center">
-				            <v-ons-input placeholder="Password" type="password" float v-model="password"></v-ons-input>
-				        </div>
-				        <v-ons-button style="margin-top: 30px" v-on:click="unlockWallet()">{{$t('message.btnUnlock')}}</v-ons-button>
-				      </div>
-				    </div>
+					<div class="welcome_logo">NEXT</div>
+					<div v-show="walletExist && walletUnlocked && termsAccepted && !walletBackedup">
+						<div style="margin-bottom:15px;padding:10px;">
+							<p>
+								<small>
+									{{$t('message.backupInfo1')}}
+								</small>
+							</p>
+							<p>
+								<small>
+									{{$t('message.backupInfo2')}}
+								</small>
+							</p>
+						</div>
+						<div>
+							<h3>
+								{{$t('message.backupPhrase')}}
+							</h3>
+							<code>
+								{{mnemonics}}
+							</code>
+						</div>
+						<v-ons-button style="margin-top: 30px" v-on:click="confirmBackupWallet()">{{$t('message.confirmBackupWallet')}}</v-ons-button>
+					</div>
+					<div v-show="!walletExist && !walletUnlocked && termsAccepted && languageSelected">
+						<div class="title" style="margin-bottom:15px;">
+							{{$t('message.hello')}}
+						</div>
+						<div style="margin-bottom:15px;padding:10px;">
+							<p>
+								<small>
+									{{$t('message.passwordInfo1')}}
+								</small>
+							</p>
+							<p>
+								<small style="color:'red'">
+									{{$t('message.passwordInfo2')}}
+								</small>
+							</p>
+						</div>
+						<div class="content" style="padding:10px;">
+							<v-ons-segment :index.sync="segmentIndex" style="width:100%;margin-bottom:30px;">
+								<button>{{$t('message.segmentCreateWallet')}}</button>
+								<button>{{$t('message.segmentImportWallet')}}</button>
+							</v-ons-segment>
+							<div v-show="segmentIndex==0">
+								<div class="center">
+									<v-ons-input type="password" :placeholder="$t('message.password')" v-model="password" float style="width:100%"></v-ons-input>
+								</div>
+								<br/>
+								<div class="center" style="margin-top:10px;margin-bottom:10px;">
+									<v-ons-input type="password" :placeholder="$t('message.passwordAgain')" v-model="password_again" float style="width:100%"></v-ons-input>
+								</div>
+								<br/>
+								<v-ons-button v-show="!busy" style="margin: 6px 0" v-on:click="createWallet()">{{$t('message.createWallet')}}</v-ons-button>
+								<v-ons-progress-circular indeterminate v-show="busy"></v-ons-progress-circular>
+							</div>
+							<div v-show="segmentIndex==1">
+								<div class="center" style="margin-bottom:30px;">
+									<v-ons-input type="text" :placeholder="$t('message.mnemonics')" v-model="mnemonics" float style="width:100%"></v-ons-input>
+								</div>
+								<div class="center" style="margin-top:30px;margin-bottom:30px;">
+									<v-ons-input type="password" :placeholder="$t('message.password')" v-model="password" float style="width:100%"></v-ons-input>
+								</div>
+								<div class="center" style="margin-top:30px;margin-bottom:15px;">
+									<v-ons-input type="password" :placeholder="$t('message.passwordAgain')" v-model="password_again" float style="width:100%"></v-ons-input>
+								</div>
+								<br />
+								<v-ons-button v-show="!busy" style="margin: 6px 0" v-on:click="importWallet()">{{$t('message.importWallet')}}</v-ons-button>
+								<v-ons-progress-circular indeterminate v-show="busy"></v-ons-progress-circular>
+							</div>
+						</div>
+					</div>
+					<div v-show="walletExist && !walletUnlocked">
+						<div class="title" style="margin-bottom:30px;">
+							{{$t('message.unlock')}}
+						</div>
+						<div class="content" style="margin-bottom:15px;">
+							<div class="center">
+								<v-ons-input placeholder="Password" type="password" float v-model="password"></v-ons-input>
+							</div>
+							<v-ons-button style="margin-top: 30px" v-on:click="unlockWallet()">{{$t('message.btnUnlock')}}</v-ons-button>
+						</div>
+					</div>
 				</center>
 			</div>
 		</div>
-  </v-ons-page>
-  <v-ons-navigator v-else swipeable swipe-target-width="50px"
-    :page-stack="pageStack"
-    :pop-page="storePop"
-    :options="options"
-    :class="{ 'border-radius': borderRadius }"
-  ></v-ons-navigator>
+	</v-ons-page>
+	<v-ons-navigator v-else swipeable swipe-target-width="50px"
+		:page-stack="pageStack"
+		:pop-page="storePop"
+		:options="options"
+		:class="{ 'border-radius': borderRadius }">
+	</v-ons-navigator>
 </template>
-
 <script>
 const njs = require('navcoin-js');
 const walletFile = 'wallet.db'; // File name of the wallet database
@@ -494,14 +492,21 @@ export default {
 
 			    wallet.on('loaded', async () =>
 			    {
-		        	console.log('wallet loaded');
+					this.$store.commit('config/setSyncStatus', "Wallet loaded.");
+		        	console.log('Wallet loaded.');
+
+		        	wallet.NavReceivingAddresses(true).then((value) =>
+		        	{
+						console.log("NAV receiving address : " + value[0].address);
+		        	});
+
 		        	wallet.xNavReceivingAddresses(false).then((value) =>
 		        	{
-		  				console.log("XNAV receiving address : " + value.filter((e) => e.path == "0/0")[0].address);
-						this.$store.commit('config/setSyncStatus', "Wallet loaded.");
-	            		this.$store.commit('config/setPrivateAddress', value.filter((e) => e.path == "0/0")[0].address);
+		        		let xNAVAddress=value.filter((e) => e.path == "0/0")[0].address;
+	            		this.$store.commit('config/setPrivateAddress', xNAVAddress);
+		  				console.log("xNAV receiving address : " + xNAVAddress);
 					});
-			        console.log('NAV receiving address: '+ (await wallet.NavReceivingAddresses(true))[0].address);
+
 			        await wallet.Connect();
 			    });
 
@@ -519,6 +524,10 @@ export default {
 		        	    this.$store.commit('config/setSyncProgress', 100);
 	            		this.$store.commit('config/setBalance', value);
  		 	    		this.$store.commit('config/setSyncStatus', vm.$t('message.walletSyncFinished'));
+ 		 				window.wallet.GetHistory().then((value) =>
+						{
+							this.$store.commit('config/setTXHistory', value);
+						});
 					});
 			    });
 
@@ -547,13 +556,13 @@ export default {
 			    });
 
 			    wallet.on('new_tx', async (list) => {
-			        console.log(`Received transaction ${JSON.stringify(list)}`)
-			        console.log(`Balance ${JSON.stringify(await wallet.GetBalance())}`)
+			        //console.log(`Received transaction ${JSON.stringify(list)}`)
+			        //console.log(`Balance ${JSON.stringify(await wallet.GetBalance())}`)
 		        	//this.$store.commit('config/setSyncStatus', vm.$t('message.walletNewTransaction'));
-		    		wallet.GetBalance().then((value) =>
+		    		/*wallet.GetBalance().then((value) =>
 			        {
 		            	this.$store.commit('config/setBalance', value);
-					});
+					});*/
 			    });
 
 			    wallet.on('remove_tx', async (txid) => {
@@ -562,8 +571,8 @@ export default {
 			    });
 
 			    await wallet.Load();
-			    console.log(`Last block: ${await wallet.GetTip()}`);
-			    console.log(`Balance ${JSON.stringify(await wallet.GetBalance())}`)
+			    //console.log(`Last block: ${await wallet.GetTip()}`);
+			    //console.log(`Balance ${JSON.stringify(await wallet.GetBalance())}`)
 			});
        	},
        	createDatabase: function (bImport)

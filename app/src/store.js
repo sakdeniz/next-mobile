@@ -69,6 +69,7 @@ export default {
       	sync_status:"",
       	sync_progress:"",
       	Balance:null,
+      	txs:[],
       	lock_wallet_on_deactivate:false,
       	cold_staking_active:false,
       	cold_staking_address:"",
@@ -97,6 +98,10 @@ export default {
       	setPrivateAddress(state,address)
         {
 			state.private_address=address;
+        },
+      	setTXHistory(state,txs)
+        {
+			state.txs=txs;
         },
       	setSyncStatus(state,status)
         {

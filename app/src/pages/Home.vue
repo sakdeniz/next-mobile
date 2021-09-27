@@ -413,12 +413,10 @@ export default {
     getFiatValue()
     {
         if (!this.$store.state.config.Balance) return "0";
-        if (!this.price) return "0";
-
         var a=0;
         try
         {
-            var t=sb.toBitcoin((this.$store.state.config.Balance.nav.confirmed+this.$store.state.config.Balance.xnav.confirmed))*this.price[this.config.currency.code];
+            var t=sb.toBitcoin(this.$store.state.config.Balance.nav.confirmed+this.$store.state.config.Balance.xnav.confirmed)*this.price[this.config.currency.code];
             a=this.formatNumbers(t.toFixed(2));
         }
         catch (e)

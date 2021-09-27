@@ -18,7 +18,7 @@
 	      		<div class="center" style="margin-bottom:15px;">
 	        		<v-ons-segment :index.sync="segmentIndex" style="width:100%">
 	          			<button><ons-icon icon="ion-ios-unlock"></ons-icon>&nbsp;{{$t('message.public')}}</button>
-	          			<button @click="getxNAVQRCode()"><ons-icon icon="ion-ios-lock"></ons-icon>&nbsp;{{$t('message.private')}}</button>
+	          			<button><ons-icon icon="ion-ios-lock"></ons-icon>&nbsp;{{$t('message.private')}}</button>
 	        		</v-ons-segment>
 	      		</div>
 		
@@ -32,55 +32,6 @@
 		            <center>
 		            	<div v-html="qrcode_nav"></div>
 		            </center>
-		            <div class="content">
-			            <div class="title">
-			                {{$t('message.balanceSummary')}}
-			            </div>
-			            <div class="content">
-				            <table class="ui table">
-							  <tbody>
-							    <tr>
-							      <td class="collapsing">
-							        <i class="ion-md-arrow-round-down"></i> {{$t('message.balanceSummaryReceived')}}
-							      </td>
-							      <td>{{balanceInfo.received?formatBalance(balanceInfo.received):0}}</td>
-							    </tr>
-							  </tbody>
-							</table>
-						</div>
-    					<div class="title" style="margin-top:30px;">
-		                	{{$t('message.transactionHistory')}}
-		            	</div>
-		                <!--<v-ons-list>
-		                    <v-ons-list-item v-for="tx in txs">
-		                        <div class="left">
-		                        	<a v-bind:href="'https://www.navexplorer.com/tx/'+tx.txid">
-		                        	  <v-ons-icon style="color:#232323" icon="ion-md-open" class="list-item__icon"></v-ons-icon>
-		                      	   	</a>
-		                          <v-ons-icon v-if="tx.changes.balance>0" style="color:#669900" icon="ion-md-arrow-round-down" class="list-item__icon"></v-ons-icon>
-		                          <v-ons-icon v-if="tx.changes.balance<0" style="color:#cc6600" icon="ion-md-arrow-round-up" class="list-item__icon"></v-ons-icon>
-		                        </div>
-		                        <div class="center">
-		                            <span style="color:#669900" v-if="tx.changes.balance>0">+{{formatBalance(tx.changes.balance)}}</span>
-		                            <span style="color:#cc6600" v-if="tx.changes.balance<0">{{formatBalance(tx.changes.balance)}}</span>
-		                        </div>
-		                        <div class="right">{{formatDate(tx.time)}}</div>
-		                    </v-ons-list-item>
-		                </v-ons-list>!-->
-		                <v-ons-list>
-		                    <v-ons-list-item v-for="tx in private_txs" v-if="tx.type=='nav'">
-		                        <div class="left">
-		                          <v-ons-icon v-if="tx.amount>0" style="color:#669900" icon="ion-md-arrow-round-down" class="list-item__icon"></v-ons-icon>
-		                          <v-ons-icon v-if="tx.amount<0" style="color:#cc6600" icon="ion-md-arrow-round-up" class="list-item__icon"></v-ons-icon>
-		                        </div>
-		                        <div class="center">
-		                            <span style="color:#cc6600" v-if="tx.amount<0">{{formatBalance(tx.amount)}}</span>
-		                            <span style="color:#669900" v-if="tx.amount>0">+{{formatBalance(tx.amount)}}</span>
-		                        </div>
-		                        <div class="right">{{formatDate(tx.timestamp)}}</div>
-		                    </v-ons-list-item>
-		                </v-ons-list>		                
-		            </div>		            
 				</div>
 
 				<div v-show="segmentIndex==1">
@@ -93,23 +44,42 @@
 		            <center>
 		            	<div v-html="qrcode_xnav"></div>
 		            </center>
+				</div>
+
 					<div class="title" style="margin-top:30px;">
 	                	{{$t('message.transactionHistory')}}
 	            	</div>
-	                <v-ons-list>
-	                    <v-ons-list-item v-for="tx in private_txs" v-if="tx.type=='xnav'">
-	                        <div class="left">
-	                          <v-ons-icon v-if="tx.amount>0" style="color:#669900" icon="ion-md-arrow-round-down" class="list-item__icon"></v-ons-icon>
-	                          <v-ons-icon v-if="tx.amount<0" style="color:#cc6600" icon="ion-md-arrow-round-up" class="list-item__icon"></v-ons-icon>
-	                        </div>
-	                        <div class="center">
-	                            <span style="color:#cc6600" v-if="tx.amount<0">{{formatBalance(tx.amount)}}</span>
-	                            <span style="color:#669900" v-if="tx.amount>0">+{{formatBalance(tx.amount)}}</span>
-	                        </div>
-	                        <div class="right">{{formatDate(tx.timestamp)}}</div>
-	                    </v-ons-list-item>
-	                </v-ons-list>
-				</div>
+
+					<div class="title" style="margin-top:15px;">
+						{{config.txs.length}} Total Transaction
+					</div>
+
+					<div class="title" style="margin-top:15px;">
+						{{config.txs.filter((e) => e.type == "nav").length}} Public Transaction
+					</div>
+
+					<div class="title" style="margin-top:12px;">
+						{{config.txs.filter((e) => e.type == "xnav").length}} Private Transaction
+					</div>
+
+					<div class="title" style="margin-top:12px;">
+						{{config.txs.filter((e) => e.type == "cold_staking").length}} Cold Staking
+					</div>
+
+                <v-ons-list>
+                    <v-ons-list-item v-for="(tx,i) in config.txs">
+                        <div class="left">
+                          <!--<span style="color:#cc6600">{{i+1}} {{tx.type}}</span>!-->
+                          <v-ons-icon v-if="tx.amount>0" style="color:#669900" icon="ion-md-arrow-round-down" class="list-item__icon"></v-ons-icon>
+                          <v-ons-icon v-if="tx.amount<0" style="color:#cc6600" icon="ion-md-arrow-round-up" class="list-item__icon"></v-ons-icon>
+                        </div>
+                        <div class="center">
+                            <span style="color:#cc6600" v-if="tx.amount<0">{{formatBalance(tx.amount)}}</span>
+                            <span style="color:#669900" v-if="tx.amount>0">+{{formatBalance(tx.amount)}}</span>
+                        </div>
+                        <div class="right">{{formatDate(tx.timestamp)}}</div>
+                    </v-ons-list-item>
+                </v-ons-list>
             </div>
 
         </v-ons-card>
@@ -138,7 +108,7 @@ export default {
     qrcode_xnav:'',
     prefix:"navcoin:",
     txs:[],
-    private_txs:[]
+    navcoinjs_txs:[]
     };
   },
   created: function ()
@@ -155,6 +125,10 @@ export default {
   {
   	config()
   	{
+  		if (this.$store.state.config.private_address)
+  		{
+  			this.getxNAVQRCode();
+  		}
     	return this.$store.state.config;
   	}
   },
@@ -163,11 +137,6 @@ export default {
   	{
 	    var qrcode=new QRCode(this.prefix+this.$store.state.config.private_address);
 	    this.qrcode_xnav=qrcode.svg();
-		window.wallet.GetHistory().then((value) =>
-		{
-			console.log(value);
-			this.private_txs=value;
-		});
   	},
   	getBalance()
     {
@@ -252,8 +221,6 @@ export default {
     },
     loadItem(done)
     {
-        this.txs=[];
-        this.txhistory();
         setTimeout(() =>
         {
             this.items = [...this.items, this.items.length + 1];
