@@ -7,13 +7,11 @@
 	      		<v-ons-progress-circular indeterminate></v-ons-progress-circular>
 	     	</span>
 	    </v-ons-pull-hook>
+        
         <v-ons-list modifier="noborder">
+            
             <v-ons-list-item modifier="nodivider">
                 <div class="center">
-                    <!--<img style="width:32px;height:auto;" src="images/nav-logo-border.svg">
-                   	<span style="margin-left: 5px;" v-if="!hideBalance">{{formatBalance(balanceInfo.balance)}} NAV</span>
-                   	<span style="margin-left: 5px;" v-else>*****</span>!-->
-                	<!-- !-->
                     <img style="width:32px;height:auto;" src="images/nav-logo-border.svg">
                 	<span style="margin-left: 5px;" v-if="!hideBalance&&config.Balance">
                 		{{formatBalance(config.Balance.nav.confirmed)}} NAV
@@ -23,8 +21,12 @@
                 	</span>
                 	<span style="margin-left: 5px;" v-if="hideBalance">*****</span>
                 	<span style="margin-left: 5px;" v-if="!hideBalance&&!config.Balance">{{$t('message.loading')}}</span>
-                	<!-- !-->
-                    <img style="margin-left: 32px;width:32px;height:auto;" src="images/xnav-logo-border.svg">
+                </div>
+            </v-ons-list-item>
+
+            <v-ons-list-item modifier="nodivider">
+                <div class="center">
+                    <img style="width:32px;height:auto;" src="images/xnav-logo-border.svg">
                 	<span style="margin-left: 5px;" v-if="!hideBalance&&config.Balance">
                 		{{formatBalance(config.Balance.xnav.confirmed)}} xNAV
                 		<span v-if="config.Balance.xnav.pending!=0">
@@ -35,18 +37,19 @@
                 	<span style="margin-left: 5px;" v-if="!hideBalance&&!config.Balance">{{$t('message.loading')}}</span>
                 </div>
             </v-ons-list-item>
+
 			<v-ons-list-item>
                 <div class="center">
                 	<!-- !-->
-                    <i class="ion-ios-snow" style="margin-left: 9px;width:32px;"></i>
-                	<span style="margin-left: -4px;" v-if="!hideBalance&&config.Balance">
-                		{{formatBalance(config.Balance.staked.confirmed)}} NAV (Cold Staking)
+                    <i class="ion-ios-apps fa-2x" style="margin-left: 5px;width:27px;"></i>
+                	<span style="margin-left: 5px;" v-if="!hideBalance&&config.Balance">
+                		{{formatBalance(config.Balance.staked.confirmed)}} NAV
                 		<span v-if="config.Balance.staked.pending!=0">
                 			(Pending : {{formatBalance(config.Balance.staked.pending)}})
                 		</span>
                 	</span>
                 	<span style="margin-left: 5px;" v-if="hideBalance">*****</span>
-                	<span style="margin-left: 5px;" v-if="!hideBalance&&!config.Balance">{{$t('message.loading')}}</span>                
+                	<span style="margin-left: 5px;" v-if="!hideBalance&&!config.Balance">{{$t('message.loading')}}</span>
                 </div>
             </v-ons-list-item>
 
@@ -60,19 +63,23 @@
 
             <v-ons-list-item modifier="nodivider" v-if="config.sync_progress!=100">
                 <div class="left">
-                    <span class="list-item__subtitle">
-						{{config.sync_status}}
+                    <span class="notification notification--material">
+						<small>The wallet is currently syncing, the balances won't be accurate.</small>
 					</span>
                 </div>
             </v-ons-list-item>
 
             <v-ons-list-item modifier="nodivider" v-if="config.sync_progress!=100">
-                <div class="left">
+                <div class="center">
+                    <span class="list-item__title">
+						{{config.sync_status}}
+					</span>
                     <span class="list-item__subtitle">
 						{{config.current_node}}
 					</span>
                 </div>
             </v-ons-list-item>
+
         </v-ons-list>
     	<v-ons-card style="margin:0px;margin-top:1px;padding-top:0px;padding-left:0px;padding-right:0px;background: #ffffff">
 			<div style="clear:both">

@@ -222,6 +222,7 @@
 		"walletNewTransaction":"New transaction",
 		"walletRemoveTransaction":"Remove transaction",
 		"lockWalletIfAppGoesBackground":"Lock wallet if app goes background",
-		"txInProgress":"Transaction in progress..."
+		"txInProgress":"Transaction in progress...",
+		"pleaseWait":"Please wait..."
     }
 }

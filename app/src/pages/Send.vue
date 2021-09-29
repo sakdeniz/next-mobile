@@ -5,6 +5,11 @@
 				{{$t('message.txInProgress')}} <v-ons-icon icon="fa-spinner" spin></v-ons-icon>
 			</p>
 		</v-ons-modal>
+		<v-ons-modal :visible="modalVisible_2" @click="modalVisible_2 = false">
+			<p style="text-align: center">
+				{{$t('message.pleaseWait')}} <v-ons-icon icon="fa-spinner" spin></v-ons-icon>
+			</p>
+		</v-ons-modal>
 		<v-ons-card>
 			<div class="title">
 				{{$t('message.send')}}
@@ -59,7 +64,8 @@ export default
 	data ()
 	{
 		return {
-			modalVisible: false,
+			modalVisible:false,
+			modalVisible_2:false,
 			publicAddress:'',
 			isPrivateTransaction:false,
 			isIncludesTxFee:false,
@@ -133,8 +139,10 @@ export default
 			{
 				try
 				{
+					vm.modalVisible_2=true;
 					window.wallet.xNavCreateTransaction(vm.address, vm.amount * 1e8, '', undefined, vm.isIncludesTxFee).then(function (tx)
 					{
+						vm.modalVisible_2=false;
 						console.log(`transaction ${tx.tx} with fee ${tx.fee}`);
 						vm.$ons.notification.confirm(vm.$t('message.amountToSend') + " : " + sb.toBitcoin((vm.isIncludesTxFee?(vm.amount*1e8)-tx.fee:vm.amount*1e8)) + " xNAV<br/>" + vm.$t('message.transactionFee') + " : " + sb.toBitcoin(tx.fee) + " xNAV<br/>" + vm.$t('message.totalAmount') + " : " + sb.toBitcoin((vm.isIncludesTxFee?vm.amount*1e8:(vm.amount*1e8)+tx.fee)) + " xNAV"+"<br/><br/>"+vm.$t('message.sendConfirmQuestion'),{title:vm.$t('message.sendConfirm'),buttonLabels:[vm.$t('message.sendConfirmNo'), vm.$t('message.sendConfirmYes')]})
 						.then((response) =>
@@ -148,11 +156,13 @@ export default
 									if (result==false)
 									{
 										vm.modalVisible=false;
+										vm.modalVisible_2=false;
 										vm.$ons.notification.alert(vm.$t('message.txSubmitError'),{title:vm.$t('message.send')});
 									}
 									else
 									{
 										vm.modalVisible=false;
+										vm.modalVisible_2=false;
 										vm.address=null;
 										vm.amount=null;
 										vm.$ons.notification.toast(vm.$t('message.sendSuccess'), { timeout: 3000, animation: 'fall' });
@@ -161,6 +171,7 @@ export default
 								.catch((e) =>
 								{
 									vm.modalVisible=false;
+									vm.modalVisible_2=false;
 									vm.$ons.notification.alert(e.message,{title:vm.$t('message.send')});
 								});
 							}
@@ -168,63 +179,81 @@ export default
 						.catch((e) =>
 						{
 							vm.modalVisible=false;
+							vm.modalVisible_2=false;
 							vm.$ons.notification.alert(e.message,{title:vm.$t('message.send')});
 						});
 					})
 					.catch((e) =>
 					{
 						vm.modalVisible=false;
+						vm.modalVisible_2=false;
 						vm.$ons.notification.alert(e.message,{title:vm.$t('message.send')});
 					});
 				}
 				catch(e)
 				{
 					vm.modalVisible=false;
+					vm.modalVisible_2=false;
 					vm.$ons.notification.alert(e.message,{title:vm.$t('message.send')});
 				}
 			}
 			else
 			{
-				window.wallet.NavCreateTransaction(vm.address,vm.amount * 1e8, '', undefined, vm.isIncludesTxFee).then(function (tx)
+				try
 				{
-					console.log(`transaction ${tx.tx} with fee ${tx.fee}`);
-					vm.$ons.notification.confirm(vm.$t('message.amountToSend') + " : " + sb.toBitcoin((vm.isIncludesTxFee?(vm.amount*1e8)-tx.fee:vm.amount*1e8)) + " NAV<br/>" + vm.$t('message.transactionFee') + " : " + sb.toBitcoin(tx.fee) + " NAV<br/>" + vm.$t('message.totalAmount') + " : " + sb.toBitcoin((vm.isIncludesTxFee?vm.amount*1e8:(vm.amount*1e8)+tx.fee)) + " NAV"+"<br/><br/>"+vm.$t('message.sendConfirmQuestion'),{title:vm.$t('message.sendConfirm'),buttonLabels:[vm.$t('message.sendConfirmNo'), vm.$t('message.sendConfirmYes')]})
-					.then((response) =>
+					vm.modalVisible_2=true;
+					window.wallet.NavCreateTransaction(vm.address,vm.amount * 1e8, '', undefined, vm.isIncludesTxFee).then(function (tx)
 					{
-						if (response)
+						vm.modalVisible_2=false;
+						console.log(`transaction ${tx.tx} with fee ${tx.fee}`);
+						vm.$ons.notification.confirm(vm.$t('message.amountToSend') + " : " + sb.toBitcoin((vm.isIncludesTxFee?(vm.amount*1e8)-tx.fee:vm.amount*1e8)) + " NAV<br/>" + vm.$t('message.transactionFee') + " : " + sb.toBitcoin(tx.fee) + " NAV<br/>" + vm.$t('message.totalAmount') + " : " + sb.toBitcoin((vm.isIncludesTxFee?vm.amount*1e8:(vm.amount*1e8)+tx.fee)) + " NAV"+"<br/><br/>"+vm.$t('message.sendConfirmQuestion'),{title:vm.$t('message.sendConfirm'),buttonLabels:[vm.$t('message.sendConfirmNo'), vm.$t('message.sendConfirmYes')]})
+						.then((response) =>
 						{
-							vm.modalVisible=true;
-							window.wallet.SendTransaction(tx.tx).then(function (result)
+							if (response)
 							{
-								console.log(result);
-								if (result==false)
+								vm.modalVisible=true;
+								window.wallet.SendTransaction(tx.tx).then(function (result)
+								{
+									console.log(result);
+									if (result==false)
+									{
+										vm.modalVisible=false;
+										vm.modalVisible_2=false;
+										vm.$ons.notification.alert(vm.$t('message.txSubmitError'),{title:vm.$t('message.send')});
+									}
+									else
+									{
+										vm.modalVisible=false;
+										vm.modalVisible_2=false;
+										vm.address=null;
+										vm.amount=null;
+										vm.$ons.notification.toast(vm.$t('message.sendSuccess'), { timeout: 3000, animation: 'fall' });
+									}
+								})
+								.catch((e) =>
 								{
 									vm.modalVisible=false;
-									vm.$ons.notification.alert(vm.$t('message.txSubmitError'),{title:vm.$t('message.send')});
-								}
-								else
-								{
-									vm.modalVisible=false;
-									vm.address=null;
-									vm.amount=null;
-									vm.$ons.notification.toast(vm.$t('message.sendSuccess'), { timeout: 3000, animation: 'fall' });
-								}
-							})
-							.catch((e) =>
-							{
-								vm.modalVisible=false;
-								console.log(e.message);
-								vm.$ons.notification.alert(e.message,{title:vm.$t('message.send')});
-							});
-						}
+									vm.modalVisible_2=false;
+									console.log(e.message);
+									vm.$ons.notification.alert(e.message,{title:vm.$t('message.send')});
+								});
+							}
+						});
+					})
+					.catch((e) =>
+					{
+						vm.modalVisible=false;
+						vm.modalVisible_2=false;
+						console.log(e.message);
+						vm.$ons.notification.alert(e.message,{title:vm.$t('message.send')});
 					});
-				})
-				.catch((e) =>
+				}
+				catch(e)
 				{
 					vm.modalVisible=false;
-					console.log(e.message);
+					vm.modalVisible_2=false;
 					vm.$ons.notification.alert(e.message,{title:vm.$t('message.send')});
-				});
+				}
 			}
 		},
 		push(page, key)

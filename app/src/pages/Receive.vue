@@ -45,25 +45,59 @@
 						<div v-html="qrcode_xnav"></div>
 					</center>
 				</div>
-				<div class="title" style="margin-top:30px;">
-					{{$t('message.transactionHistory')}}
-				</div>
-				<div class="title" style="margin-top:15px;">
-					{{config.txs.length}} Total Transaction
-				</div>
-				<div class="title" style="margin-top:15px;">
-					{{config.txs.filter((e) => e.type == "nav").length}} Public Transaction
-				</div>
-				<div class="title" style="margin-top:12px;">
-					{{config.txs.filter((e) => e.type == "xnav").length}} Private Transaction
-				</div>
-				<div class="title" style="margin-top:12px;">
-					{{config.txs.filter((e) => e.type == "cold_staking").length}} Cold Staking
-				</div>
 				<v-ons-list>
+					<v-ons-list-item>
+						<div class="left">
+							<img style="width:32px;height:auto;" src="images/nav-logo-border.svg">
+						</div>
+						<div class="center">
+							Public Transaction
+						</div>
+						<div class="right">
+							{{config.txs.filter((e) => e.type == "nav").length}}
+						</div>
+					</v-ons-list-item>
+					<v-ons-list-item>
+						<div class="left">
+							<img style="width:32px;height:auto;" src="images/xnav-logo-border.svg">
+						</div>
+						<div class="center">
+							Private Transaction
+						</div>
+						<div class="right">
+							{{config.txs.filter((e) => e.type == "xnav").length}}
+						</div>
+					</v-ons-list-item>
+					<v-ons-list-item>
+						<div class="left">
+							<v-ons-icon style="margin-left: 5px;" icon="ion-ios-snow" class="list-item__icon"></v-ons-icon>
+						</div>
+						<div class="center">
+							Cold Staking
+						</div>
+						<div class="right">
+							{{config.txs.filter((e) => e.type == "cold_staking").length}}
+						</div>
+					</v-ons-list-item>
+					<v-ons-list-item>
+						<div class="left">
+							<v-ons-icon style="margin-left: 5px;" icon="ion-ios-swap" class="list-item__icon"></v-ons-icon>
+						</div>
+						<div class="center">
+							Total Transaction
+						</div>
+						<div class="right">
+							{{config.txs.length}}
+						</div>
+					</v-ons-list-item>
+				</v-ons-list>
+				<v-ons-list>
+					<v-ons-list-header>{{$t('message.transactionHistory')}}</v-ons-list-header>
 					<v-ons-list-item v-for="(tx,i) in config.txs">
 						<div class="left">
-							<!--<span style="color:#cc6600">{{i+1}} {{tx.type}}</span>!-->
+							<img v-show="tx.type=='nav'" style="width:32px;height:auto;" src="images/nav-logo-no-border.svg">
+							<img v-show="tx.type=='xnav'" style="width:32px;height:auto;" src="images/xnav-logo-no-border.svg">
+							<v-ons-icon v-show="tx.type=='cold_staking'" style="margin-left: 5px;width:19px;height:auto;" icon="ion-ios-snow" class="list-item__icon"></v-ons-icon>
 							<v-ons-icon v-if="tx.amount>0" style="color:#669900" icon="ion-md-arrow-round-down" class="list-item__icon"></v-ons-icon>
 							<v-ons-icon v-if="tx.amount<0" style="color:#cc6600" icon="ion-md-arrow-round-up" class="list-item__icon"></v-ons-icon>
 						</div>
@@ -99,6 +133,7 @@ export default
 			qrcode_xnav:'',
 			prefix:"navcoin:",
 			txs:[],
+			isExpanded:false,
 			navcoinjs_txs:[]
 		};
 	},
