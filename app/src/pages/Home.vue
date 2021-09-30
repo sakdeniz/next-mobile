@@ -41,7 +41,13 @@
 			<v-ons-list-item>
                 <div class="center">
                 	<!-- !-->
-                    <i class="ion-ios-apps fa-2x" style="margin-left: 5px;width:27px;"></i>
+                    <i class="ion-ios-leaf fa-2x" style="margin-left: 5px;width:27px; background: -moz-linear-gradient(top, #bc00ff 0%, #3fddfb 100%);
+					  background: -webkit-linear-gradient(top, #bc00ff 0%, #3fddfb 100%);
+					  background: linear-gradient(to bottom, #bc00ff 0%, #3fddfb 100%);
+					  -webkit-background-clip: text;
+					  -moz-background-clip: text;
+					  background-clip: text;
+					  -webkit-text-fill-color: transparent;"></i>
                 	<span style="margin-left: 5px;" v-if="!hideBalance&&config.Balance">
                 		{{formatBalance(config.Balance.staked.confirmed)}} NAV
                 		<span v-if="config.Balance.staked.pending!=0">
