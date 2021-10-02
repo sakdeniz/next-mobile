@@ -60,10 +60,13 @@
             </v-ons-list-item>
 
             <v-ons-list-item modifier="nodivider">
-                <div class="center">
+                <div class="left">
                 	<span v-if="!hideBalance">{{getFiatValue()}} {{config.currency.symbol}}</span>
                 	<span v-else>*****</span>&nbsp;
          			<i v-bind:class="{ 'ion-ios-eye': !hideBalance, 'ion-ios-eye-off': hideBalance }" aria-hidden="true" v-on:click="showHideBalance()"></i>
+                </div>
+                <div class="right">
+                	<v-ons-button style="float:right" v-on:click="push(pages[0].component, 'Swap')"><i class="ion-ios-repeat"></i>&nbsp;{{$t('message.swap')}}</v-ons-button>
                 </div>
             </v-ons-list-item>
 
@@ -256,6 +259,7 @@ import sb from 'satoshi-bitcoin';
 import Vue from 'vue'
 import VueChartkick from 'vue-chartkick'
 import Chart from 'chart.js'
+import Swap from './Swap.vue';
 Vue.use(VueChartkick, {adapter: Chart})
 export default {
   data () {
@@ -273,7 +277,15 @@ export default {
     graphLimit:90,
     hideBalance:false,
     proposals:[],
-    proposalFilter:''
+    proposalFilter:'',
+    pages:
+    [
+    	{
+          component: Swap,
+          label: 'Swap',
+          desc: 'Desc'
+        }
+    ]
     };
   },
   created: function ()
@@ -299,7 +311,10 @@ export default {
     {
         return proposals.filter(proposal => proposal.featured==1);
     },
-    secondsToDhms:function(seconds)
+  	swap()
+  	{
+  	},
+  	secondsToDhms:function(seconds)
 	{
 		seconds=Number(seconds);
 		var d=Math.floor(seconds / (3600*24));

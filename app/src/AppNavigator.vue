@@ -1,5 +1,5 @@
 <template>
-	<v-ons-page v-if="!walletExist || !walletUnlocked || !walletBackedup">
+	<v-ons-page v-if="!walletExist || !walletUnlocked || !walletBackedup || !walletBackupConfirmed" >
 		<v-ons-carousel fullscreen swipeable auto-scroll overscrollable :index.sync="carouselIndex" :auto-scroll-ratio="0.1" v-show="bCarousel">
 			<v-ons-carousel-item v-for="(itm) in carouselItems" class="carousel-item">
 				<div class="title-1">
@@ -119,6 +119,29 @@
 			<div class="wrapper">
 				<center>
 					<div class="welcome_logo">NEXT</div>
+					<div v-show="walletExist && walletUnlocked && termsAccepted && walletBackedup && !walletBackupConfirmed">
+						<div style="margin-bottom:15px;padding:10px;">
+							<p>
+								We want to make sure you back up the seed words for your safety. Please confirm by clicking the words that make up your seed phrases in order.
+							</p>
+						</div>
+						<div>
+							<v-ons-row>
+								<v-ons-col v-for="(word,i) in wordArray" style="margin:5px;width:25%">
+									<v-ons-button modifier="outline" v-on:click="addWordtoArray(word)">
+										{{word}}
+									</v-ons-button>
+								</v-ons-col>
+							</v-ons-row>
+							<p>
+								<span v-for="(word,i) in wordArrayConfirm">
+									{{word}}
+								</span>
+							</p>
+						</div>
+						<v-ons-button style="margin-top: 30px" v-on:click="confirmBackupPhrase()">{{$t('message.confirmBackupPhrase')}}</v-ons-button>
+						<v-ons-button style="margin-top: 30px" v-on:click="wordArrayConfirm=[];">{{$t('message.confirmBackupPhraseClear')}}</v-ons-button>
+					</div>
 					<div v-show="walletExist && walletUnlocked && termsAccepted && !walletBackedup">
 						<div style="margin-bottom:15px;padding:10px;">
 							<p>
@@ -234,7 +257,7 @@ const Mnemonic = require('bitcore-mnemonic');
 var ENCRYPTION_KEY;
 window.config={ headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, responseType: 'text' }
 window.apiURL='https://navcommunity.net/api/lw/';
-window.network='testnet';
+window.network='mainnet';
 function encrypt (text)
 {
     let iv = crypto.randomBytes(IV_LENGTH);
@@ -279,11 +302,14 @@ export default {
       languageSelected:false,
       walletUnlocked:false,
       walletBackedup:false,
+      walletBackupConfirmed:false,
       termsAccepted:false,
       bCarousel:false,
       mnemonics:'',
       closeConfirmActive:false,
       addr:{},
+      wordArray:[],
+      wordArrayConfirm:[],
       carouselIndex: 0,
       carouselItems: [
       	{"title_1":"Welcome to Navcoin NEXT","title_2":"<p>Navcoin is an open-source, blockchain based Proof of Stake cryptocurrency.</p><p>Its design is public, nobody owns or controls Navcoin, and everyone can take part.</p><p>It’s a platform that’s run by its users, for its users - with an incentivised network of nodes verifying payments all around the world.</p>","bgcolor":"red"},
@@ -375,7 +401,8 @@ export default {
 		{
 			this.walletExist=true;
 			this.termsAccepted=true;
-            this.walletBackedup=true;
+			this.walletBackedup=true;
+			this.walletBackupConfirmed=true;
 			console.log("Wallet exist.");
 		}
 		else
@@ -423,6 +450,29 @@ export default {
     	confirmBackupWallet: function ()
     	{
     		this.walletBackedup=true;
+    		this.wordArray = this.shuffle(this.mnemonics.toString().split(' '));
+    	},
+    	shuffle: function (array)
+    	{
+  			return array.sort(() => Math.random() - 0.5);
+		},
+    	confirmBackupPhrase: function ()
+    	{
+    		console.log(this.mnemonics.toString());
+    		console.log(this.wordArrayConfirm.join(" "));
+    		if (this.mnemonics.toString()==this.wordArrayConfirm.join(" "))
+    		{
+    			this.walletBackupConfirmed=true;
+    		}
+    		else
+    		{
+    			this.$ons.notification.toast(vm.$t('message.mnemonicCheckFailed'), { timeout: 5000, animation: 'fall' });
+    			this.wordArrayConfirm=[];
+    		}
+    	},
+    	addWordtoArray: function (word)
+    	{
+    		this.wordArrayConfirm.push(word);
     	},
     	importWallet: function ()
     	{
@@ -451,6 +501,8 @@ export default {
 	    		}
 	    		else
 	    		{
+					this.walletBackedup=true;
+	    			this.walletBackupConfirmed=true;
 	    			this.createDatabase(true);
 	    		}
 	    	}
@@ -521,6 +573,8 @@ export default {
 			    	console.log('sync finished.');
 			    	wallet.GetBalance().then((value) =>
 		        	{
+						console.log("Wallet balance");
+		        		console.log(value);
 		        	    this.$store.commit('config/setSyncProgress', 100);
 	            		this.$store.commit('config/setBalance', value);
  		 	    		this.$store.commit('config/setSyncStatus', vm.$t('message.walletSyncFinished'));

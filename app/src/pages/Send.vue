@@ -143,7 +143,6 @@ export default
 					window.wallet.xNavCreateTransaction(vm.address, vm.amount * 1e8, '', undefined, vm.isIncludesTxFee).then(function (tx)
 					{
 						vm.modalVisible_2=false;
-						console.log(`transaction ${tx.tx} with fee ${tx.fee}`);
 						vm.$ons.notification.confirm(vm.$t('message.amountToSend') + " : " + sb.toBitcoin((vm.isIncludesTxFee?(vm.amount*1e8)-tx.fee:vm.amount*1e8)) + " xNAV<br/>" + vm.$t('message.transactionFee') + " : " + sb.toBitcoin(tx.fee) + " xNAV<br/>" + vm.$t('message.totalAmount') + " : " + sb.toBitcoin((vm.isIncludesTxFee?vm.amount*1e8:(vm.amount*1e8)+tx.fee)) + " xNAV"+"<br/><br/>"+vm.$t('message.sendConfirmQuestion'),{title:vm.$t('message.sendConfirm'),buttonLabels:[vm.$t('message.sendConfirmNo'), vm.$t('message.sendConfirmYes')]})
 						.then((response) =>
 						{
@@ -152,12 +151,11 @@ export default
 								vm.modalVisible=true;
 								window.wallet.SendTransaction(tx.tx).then(function (result)
 								{
-									console.log(result);
-									if (result==false)
+									if (result.error)
 									{
 										vm.modalVisible=false;
 										vm.modalVisible_2=false;
-										vm.$ons.notification.alert(vm.$t('message.txSubmitError'),{title:vm.$t('message.send')});
+										vm.$ons.notification.alert(result.error,{title:vm.$t('message.txSubmitError')});
 									}
 									else
 									{
@@ -205,7 +203,6 @@ export default
 					window.wallet.NavCreateTransaction(vm.address,vm.amount * 1e8, '', undefined, vm.isIncludesTxFee).then(function (tx)
 					{
 						vm.modalVisible_2=false;
-						console.log(`transaction ${tx.tx} with fee ${tx.fee}`);
 						vm.$ons.notification.confirm(vm.$t('message.amountToSend') + " : " + sb.toBitcoin((vm.isIncludesTxFee?(vm.amount*1e8)-tx.fee:vm.amount*1e8)) + " NAV<br/>" + vm.$t('message.transactionFee') + " : " + sb.toBitcoin(tx.fee) + " NAV<br/>" + vm.$t('message.totalAmount') + " : " + sb.toBitcoin((vm.isIncludesTxFee?vm.amount*1e8:(vm.amount*1e8)+tx.fee)) + " NAV"+"<br/><br/>"+vm.$t('message.sendConfirmQuestion'),{title:vm.$t('message.sendConfirm'),buttonLabels:[vm.$t('message.sendConfirmNo'), vm.$t('message.sendConfirmYes')]})
 						.then((response) =>
 						{
@@ -214,12 +211,11 @@ export default
 								vm.modalVisible=true;
 								window.wallet.SendTransaction(tx.tx).then(function (result)
 								{
-									console.log(result);
-									if (result==false)
+									if (result.error)
 									{
 										vm.modalVisible=false;
 										vm.modalVisible_2=false;
-										vm.$ons.notification.alert(vm.$t('message.txSubmitError'),{title:vm.$t('message.send')});
+										vm.$ons.notification.alert(result.error,{title:vm.$t('message.txSubmitError')});
 									}
 									else
 									{
@@ -234,7 +230,6 @@ export default
 								{
 									vm.modalVisible=false;
 									vm.modalVisible_2=false;
-									console.log(e.message);
 									vm.$ons.notification.alert(e.message,{title:vm.$t('message.send')});
 								});
 							}
@@ -244,7 +239,6 @@ export default
 					{
 						vm.modalVisible=false;
 						vm.modalVisible_2=false;
-						console.log(e.message);
 						vm.$ons.notification.alert(e.message,{title:vm.$t('message.send')});
 					});
 				}
