@@ -66,7 +66,6 @@ data () {
 	return {
 		state:false,
 		publicAddress:'',
-		fee:100000,
 		cold_staking_active:false,
 		cold_staking_address:"",
 		modalVisible:false

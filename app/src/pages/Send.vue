@@ -125,25 +125,26 @@ export default
 		{
 			if (this.isPrivateTransaction)
 			{
-				this.amount=(this.$store.state.config.Balance.xnav.confirmed)/100000000;
+				this.amount=(this.$store.state.config.Balance.xnav.confirmed)/1e8;
 			}
 			else
 			{
-				this.amount=(this.$store.state.config.Balance.nav.confirmed+this.$store.state.config.Balance.staked.confirmed)/100000000;
+				this.amount=(this.$store.state.config.Balance.nav.confirmed+this.$store.state.config.Balance.staked.confirmed)/1e8;
 			}
 		},
 		send()
 		{
 			let vm=this;
+			let amount=parseFloat((vm.amount*1e8).toFixed(0));
 			if (vm.isPrivateTransaction)
 			{
 				try
 				{
 					vm.modalVisible_2=true;
-					window.wallet.xNavCreateTransaction(vm.address, vm.amount * 1e8, '', undefined, vm.isIncludesTxFee).then(function (tx)
+					window.wallet.xNavCreateTransaction(vm.address, amount, '', undefined, vm.isIncludesTxFee).then(function (tx)
 					{
 						vm.modalVisible_2=false;
-						vm.$ons.notification.confirm(vm.$t('message.amountToSend') + " : " + sb.toBitcoin((vm.isIncludesTxFee?(vm.amount*1e8)-tx.fee:vm.amount*1e8)) + " xNAV<br/>" + vm.$t('message.transactionFee') + " : " + sb.toBitcoin(tx.fee) + " xNAV<br/>" + vm.$t('message.totalAmount') + " : " + sb.toBitcoin((vm.isIncludesTxFee?vm.amount*1e8:(vm.amount*1e8)+tx.fee)) + " xNAV"+"<br/><br/>"+vm.$t('message.sendConfirmQuestion'),{title:vm.$t('message.sendConfirm'),buttonLabels:[vm.$t('message.sendConfirmNo'), vm.$t('message.sendConfirmYes')]})
+						vm.$ons.notification.confirm(vm.$t('message.amountToSend') + " : " + sb.toBitcoin((vm.isIncludesTxFee?amount-tx.fee:amount)) + " xNAV<br/>" + vm.$t('message.transactionFee') + " : " + sb.toBitcoin(tx.fee) + " xNAV<br/>" + vm.$t('message.totalAmount') + " : " + sb.toBitcoin((vm.isIncludesTxFee?amount:amount+tx.fee)) + " xNAV"+"<br/><br/>"+vm.$t('message.sendConfirmQuestion'),{title:vm.$t('message.sendConfirm'),buttonLabels:[vm.$t('message.sendConfirmNo'), vm.$t('message.sendConfirmYes')]})
 						.then((response) =>
 						{
 							if (response)
@@ -200,10 +201,10 @@ export default
 				try
 				{
 					vm.modalVisible_2=true;
-					window.wallet.NavCreateTransaction(vm.address,vm.amount * 1e8, '', undefined, vm.isIncludesTxFee).then(function (tx)
+					window.wallet.NavCreateTransaction(vm.address,amount, '', undefined, vm.isIncludesTxFee).then(function (tx)
 					{
 						vm.modalVisible_2=false;
-						vm.$ons.notification.confirm(vm.$t('message.amountToSend') + " : " + sb.toBitcoin((vm.isIncludesTxFee?(vm.amount*1e8)-tx.fee:vm.amount*1e8)) + " NAV<br/>" + vm.$t('message.transactionFee') + " : " + sb.toBitcoin(tx.fee) + " NAV<br/>" + vm.$t('message.totalAmount') + " : " + sb.toBitcoin((vm.isIncludesTxFee?vm.amount*1e8:(vm.amount*1e8)+tx.fee)) + " NAV"+"<br/><br/>"+vm.$t('message.sendConfirmQuestion'),{title:vm.$t('message.sendConfirm'),buttonLabels:[vm.$t('message.sendConfirmNo'), vm.$t('message.sendConfirmYes')]})
+						vm.$ons.notification.confirm(vm.$t('message.amountToSend') + " : " + sb.toBitcoin((vm.isIncludesTxFee?amount-tx.fee:amount)) + " NAV<br/>" + vm.$t('message.transactionFee') + " : " + sb.toBitcoin(tx.fee) + " NAV<br/>" + vm.$t('message.totalAmount') + " : " + sb.toBitcoin((vm.isIncludesTxFee?amount:amount+tx.fee)) + " NAV"+"<br/><br/>"+vm.$t('message.sendConfirmQuestion'),{title:vm.$t('message.sendConfirm'),buttonLabels:[vm.$t('message.sendConfirmNo'), vm.$t('message.sendConfirmYes')]})
 						.then((response) =>
 						{
 							if (response)
@@ -250,7 +251,7 @@ export default
 				}
 			}
 		},
-		push(page, key)
+		push(page,key)
 		{
 			this.$store.commit('navigator/push', {
 				extends: page,

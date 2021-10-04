@@ -8,60 +8,74 @@
 	     	</span>
 	    </v-ons-pull-hook>
         
-        <v-ons-list modifier="noborder">
-            
-            <v-ons-list-item modifier="nodivider">
-                <div class="center">
-                    <img style="width:32px;height:auto;" src="images/nav-logo-border.svg">
-                	<span style="margin-left: 5px;" v-if="!hideBalance&&config.Balance">
-                		{{formatBalance(config.Balance.nav.confirmed)}} NAV
+        <div class="asset-card asset-card-nav">
+			<div class="asset-card-icon">
+				<img style="width:40px;height:auto;" src="images/nav-logo-border.svg">
+			</div>
+        	<div class="asset-card-content">
+	        	<div class="card-title">
+	        		Public
+	        	</div>
+	        	<div class="card-sub-title">
+	        		<span v-if="!hideBalance&&config.Balance">
+                		 NAV {{formatBalance(config.Balance.nav.confirmed)}} / {{getAssetFiatValue(config.Balance.nav.confirmed)}} {{config.currency.symbol}}
                 		<span v-if="config.Balance.nav.pending!=0">
                 			(Pending : {{formatBalance(config.Balance.nav.pending)}})
                 		</span>
                 	</span>
-                	<span style="margin-left: 5px;" v-if="hideBalance">*****</span>
-                	<span style="margin-left: 5px;" v-if="!hideBalance&&!config.Balance">{{$t('message.loading')}}</span>
-                </div>
-            </v-ons-list-item>
+                	<span v-if="hideBalance">*****</span>
+                	<span v-if="!hideBalance&&!config.Balance">{{$t('message.loading')}}</span>
+	        	</div>
+        	</div>
+        </div>
 
-            <v-ons-list-item modifier="nodivider">
-                <div class="center">
-                    <img style="width:32px;height:auto;" src="images/xnav-logo-border.svg">
-                	<span style="margin-left: 5px;" v-if="!hideBalance&&config.Balance">
-                		{{formatBalance(config.Balance.xnav.confirmed)}} xNAV
+        <div class="asset-card asset-card-xnav">
+			<div class="asset-card-icon">
+				<img style="width:40px;height:auto;" src="images/xnav-logo-border.svg">
+			</div>
+        	<div class="asset-card-content">
+	        	<div class="card-title">
+	        		Private
+	        	</div>
+	        	<div class="card-sub-title">
+					<span v-if="!hideBalance&&config.Balance">
+                		xNAV {{formatBalance(config.Balance.xnav.confirmed)}} / {{getAssetFiatValue(config.Balance.xnav.confirmed)}} {{config.currency.symbol}}
                 		<span v-if="config.Balance.xnav.pending!=0">
                 			(Pending : {{formatBalance(config.Balance.xnav.pending)}})
                 		</span>
                 	</span>
-                	<span style="margin-left: 5px;" v-if="hideBalance">*****</span>
-                	<span style="margin-left: 5px;" v-if="!hideBalance&&!config.Balance">{{$t('message.loading')}}</span>
-                </div>
-            </v-ons-list-item>
+                	<span v-if="hideBalance">*****</span>
+                	<span v-if="!hideBalance&&!config.Balance">{{$t('message.loading')}}</span>
+	        	</div>
+        	</div>
+        </div>
 
-			<v-ons-list-item>
-                <div class="center">
-                	<!-- !-->
-                    <i class="ion-ios-leaf fa-2x" style="margin-left: 5px;width:27px; background: -moz-linear-gradient(top, #bc00ff 0%, #3fddfb 100%);
-					  background: -webkit-linear-gradient(top, #bc00ff 0%, #3fddfb 100%);
-					  background: linear-gradient(to bottom, #bc00ff 0%, #3fddfb 100%);
-					  -webkit-background-clip: text;
-					  -moz-background-clip: text;
-					  background-clip: text;
-					  -webkit-text-fill-color: transparent;"></i>
-                	<span style="margin-left: 5px;" v-if="!hideBalance&&config.Balance">
-                		{{formatBalance(config.Balance.staked.confirmed)}} NAV
+        <div class="asset-card asset-card-staking">
+			<div class="asset-card-icon">
+				<i class="ion-ios-leaf" style="margin-left: 10px;font-size: 32px;"></i>
+			</div>
+        	<div class="asset-card-content">
+	        	<div class="card-title">
+	        		Cold Staking
+	        	</div>
+	        	<div class="card-sub-title">
+					<span v-if="!hideBalance&&config.Balance">
+                		NAV {{formatBalance(config.Balance.staked.confirmed)}} / {{getAssetFiatValue(config.Balance.staked.confirmed)}} {{config.currency.symbol}}
                 		<span v-if="config.Balance.staked.pending!=0">
                 			(Pending : {{formatBalance(config.Balance.staked.pending)}})
                 		</span>
                 	</span>
-                	<span style="margin-left: 5px;" v-if="hideBalance">*****</span>
-                	<span style="margin-left: 5px;" v-if="!hideBalance&&!config.Balance">{{$t('message.loading')}}</span>
-                </div>
-            </v-ons-list-item>
+                	<span v-if="hideBalance">*****</span>
+                	<span v-if="!hideBalance&&!config.Balance">{{$t('message.loading')}}</span>
+	        	</div>
+        	</div>
+        </div>
+
+        <v-ons-list modifier="noborder">
 
             <v-ons-list-item modifier="nodivider">
                 <div class="left">
-                	<span v-if="!hideBalance">{{getFiatValue()}} {{config.currency.symbol}}</span>
+                	<span v-if="!hideBalance">{{getTotalFiatValue()}} {{config.currency.symbol}}</span>
                 	<span v-else>*****</span>&nbsp;
          			<i v-bind:class="{ 'ion-ios-eye': !hideBalance, 'ion-ios-eye-off': hideBalance }" aria-hidden="true" v-on:click="showHideBalance()"></i>
                 </div>
@@ -438,13 +452,28 @@ export default {
         {
         }); 
     },
-    getFiatValue()
+    getTotalFiatValue()
     {
         if (!this.$store.state.config.Balance) return "0";
         var a=0;
         try
         {
-            var t=sb.toBitcoin(this.$store.state.config.Balance.nav.confirmed+this.$store.state.config.Balance.xnav.confirmed)*this.price[this.config.currency.code];
+            var t=sb.toBitcoin(this.$store.state.config.Balance.nav.confirmed+this.$store.state.config.Balance.xnav.confirmed+this.$store.state.config.Balance.staked.confirmed)*this.price[this.config.currency.code];
+            a=this.formatNumbers(t.toFixed(2));
+        }
+        catch (e)
+        {
+            console.log(e);
+        }
+        return a;
+    },
+    getAssetFiatValue(amount)
+    {
+        if (!amount) return "0";
+        var a=0;
+        try
+        {
+            var t=sb.toBitcoin(amount)*this.price[this.config.currency.code];
             a=this.formatNumbers(t.toFixed(2));
         }
         catch (e)
@@ -737,5 +766,45 @@ p {
 {
 	color:#DD4B39;
 	font-size:10pt;
+}
+.asset-card-icon
+{
+	width: 60px;
+	margin-top: 5px;
+}
+.asset-card-content
+{
+	flex-grow: 1;
+}
+.asset-card
+{
+	color: #FFFFFF;
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	display: flex;
+}
+.asset-card-nav
+{
+	background: #6F55D8;
+}
+.asset-card-xnav
+{
+	background: #232323;
+}
+.asset-card-staking
+{
+	background: #1E7DF0;
+}
+.card-title
+{
+	font-size: 12pt;
+	margin-top: 5px;
+}
+.card-sub-title
+{
+	font-size: 10pt;
+	margin-top: 3px;
 }
 </style>
