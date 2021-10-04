@@ -254,6 +254,10 @@
 		"coldStakingPending":"Pendiente",
 		"coldStakingActivelyStaking":"Stakeando",
 		"coldStakingStartCustomStaking":"Usar una dirección de Staking personalizada",
-		"coldStakingSpecifyCustomAddress":"Por favor indica tu dirección personalizada para Staking"
+		"coldStakingSpecifyCustomAddress":"Por favor indica tu dirección personalizada para Staking",
+		"publicTransaction":"Transacción pública",
+		"privateTransaction":"Transacción privada",
+		"coldStakingTransaction":"Transacción Cold Staking",
+		"totalTransaction":"Transacción total"
     }
 }

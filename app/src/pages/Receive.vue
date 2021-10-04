@@ -51,7 +51,7 @@
 							<img style="width:32px;height:auto;" src="images/nav-logo-border.svg">
 						</div>
 						<div class="center">
-							Public Transaction
+							{{$t('message.publicTransaction')}}
 						</div>
 						<div class="right">
 							{{config.txs.filter((e) => e.type == "nav").length}}
@@ -62,7 +62,7 @@
 							<img style="width:32px;height:auto;" src="images/xnav-logo-border.svg">
 						</div>
 						<div class="center">
-							Private Transaction
+							{{$t('message.privateTransaction')}}
 						</div>
 						<div class="right">
 							{{config.txs.filter((e) => e.type == "xnav").length}}
@@ -73,7 +73,7 @@
 							<v-ons-icon style="margin-left: 5px;" icon="ion-ios-snow" class="list-item__icon"></v-ons-icon>
 						</div>
 						<div class="center">
-							Cold Staking
+							{{$t('message.coldStakingTransaction')}}
 						</div>
 						<div class="right">
 							{{config.txs.filter((e) => e.type == "cold_staking").length}}
@@ -84,7 +84,7 @@
 							<v-ons-icon style="margin-left: 5px;" icon="ion-ios-swap" class="list-item__icon"></v-ons-icon>
 						</div>
 						<div class="center">
-							Total Transaction
+							{{$t('message.totalTransaction')}}
 						</div>
 						<div class="right">
 							{{config.txs.length}}
