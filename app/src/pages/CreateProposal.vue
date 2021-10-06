@@ -151,15 +151,16 @@ export default {
 					console.log(e);
 				})
 			}
-			catch(err)
+			catch(e)
 			{
 				vm.$ons.notification.toast(e, { timeout: 2000, animation: 'fall' });
-				console.log(err);
+				console.log(e);
 			}
 		})
-		.catch(function (error)
+		.catch(function (e)
 		{
-			console.log(error);
+			vm.$ons.notification.toast(e, { timeout: 2000, animation: 'fall' });
+			console.log(e);
 		})
 		.then(function ()
 		{
