@@ -245,10 +245,6 @@ const mnemonic = ""; // Mnemonic to import
 const type = "next"; // Wallet type next or navcoin-js-v1
 const zapwallettxes = (localStorage.getItem("ZapWallet")=="true"?true:false); // Should the wallet be cleared of its history?
 const log = true; // Log to console
-console.log("Zap Wallet : " + zapwallettxes);
-if (localStorage.getItem("ZapWallet")) localStorage.setItem("ZapWallet",false);
-let alreadySent = false;
-
 const IV_LENGTH = 16; // For AES, this is always 16
 const buffer=require('buffer');
 const crypto=require('crypto');
@@ -258,231 +254,233 @@ var ENCRYPTION_KEY;
 window.config={ headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, responseType: 'text' }
 window.apiURL='https://navcommunity.net/api/lw/';
 window.network='mainnet';
+console.log("Zap Wallet : " + zapwallettxes);
+if (localStorage.getItem("ZapWallet")) localStorage.setItem("ZapWallet",false);
 function encrypt (text)
 {
-    let iv = crypto.randomBytes(IV_LENGTH);
-    let cipher = crypto.createCipheriv('aes-256-cbc', new Buffer(ENCRYPTION_KEY), iv);
-    let encrypted = cipher.update(text);
-    encrypted = Buffer.concat([encrypted, cipher.final()]);
-    return iv.toString('hex') + ':' + encrypted.toString('hex');
+	let iv = crypto.randomBytes(IV_LENGTH);
+	let cipher = crypto.createCipheriv('aes-256-cbc', new Buffer(ENCRYPTION_KEY), iv);
+	let encrypted = cipher.update(text);
+	encrypted = Buffer.concat([encrypted, cipher.final()]);
+	return iv.toString('hex') + ':' + encrypted.toString('hex');
 }
 function decrypt (text)
 {
-    try
-    {
-        let textParts=text.split(':');
-        let iv=new buffer.Buffer(textParts.shift(), 'hex');
-        let encryptedText=new buffer.Buffer(textParts.join(':'), 'hex');
-        let decipher=crypto.createDecipheriv('aes-256-cbc', new buffer.Buffer(ENCRYPTION_KEY), iv);
-        let decrypted=decipher.update(encryptedText);
-        decrypted=buffer.Buffer.concat([decrypted, decipher.final()]);
-        return decrypted.toString();
-    }
-    catch (e)
-    {
-        return false;
-    }
+	try
+	{
+		let textParts=text.split(':');
+		let iv=new buffer.Buffer(textParts.shift(), 'hex');
+		let encryptedText=new buffer.Buffer(textParts.join(':'), 'hex');
+		let decipher=crypto.createDecipheriv('aes-256-cbc', new buffer.Buffer(ENCRYPTION_KEY), iv);
+		let decrypted=decipher.update(encryptedText);
+		decrypted=buffer.Buffer.concat([decrypted, decipher.final()]);
+		return decrypted.toString();
+	}
+	catch (e)
+	{
+		return false;
+	}
 }
-
 import AppSplitter from './AppSplitter.vue';
 export default {
-  beforeCreate() {
-    this.$store.commit('navigator/push', AppSplitter);
-  },
-  data() {
-    return {
-	  selectedLanguage: 'en',
-      busy:false,
-      shutUp: this.md,
-      step:0,
-      segmentIndex: 0,
-      password:"",
-      password_again:"",
-      walletExist:false,
-      languageSelected:false,
-      walletUnlocked:false,
-      walletBackedup:false,
-      walletBackupConfirmed:false,
-      termsAccepted:false,
-      bCarousel:false,
-      mnemonics:'',
-      closeConfirmActive:false,
-      addr:{},
-      wordArray:[],
-      wordArrayConfirm:[],
-      carouselIndex: 0,
-      carouselItems: [
-      	{"title_1":"Welcome to Navcoin NEXT","title_2":"<p>Navcoin is an open-source, blockchain based Proof of Stake cryptocurrency.</p><p>Its design is public, nobody owns or controls Navcoin, and everyone can take part.</p><p>It’s a platform that’s run by its users, for its users - with an incentivised network of nodes verifying payments all around the world.</p>","bgcolor":"red"},
-      	{"title_1":"Spend Easily","title_2":"<p>Designed for fast, cheap, and secure peer-to-peer payments.</p><p>A network that's driven to lowering the cost of doing business.</p>","bgcolor":"blue"},
-      	{"title_1":"Take Control","title_2":"Take full control and customize your wallet to your needs.","bgcolor":"orange"},
-      	{"title_1":"Community Fund","title_2":"<p>Projects are funded and approved by the decentralized network with no central authority.</p><p>This ensures Navcoin’s direction remains firmly in the best interest of the entire network.</p><p>This fund pays you to take your idea, nurture it, and build a team to bring it to life.</p>","bgcolor":"orange"},
-      	{"title_1":"Cold Staking","title_2":"<p>Cold-staking means that your wallet is not online staking and subject to attacks.</p><p>Instead, a staking wallet which contains no NAV will be staking on behalf of your spending wallet which holds your NAV.</p><p>Bear in mind that you still need a node actively staking ideally 24⁄7 to get your staking rewards.</p>","bgcolor":"orange"},
-      ]
+beforeCreate()
+{
+	this.$store.commit('navigator/push', AppSplitter);
+},
+data()
+{
+	return {
+		selectedLanguage: 'en',
+		busy:false,
+		shutUp: this.md,
+		step:0,
+		segmentIndex: 0,
+		password:"",
+		password_again:"",
+		walletExist:false,
+		languageSelected:false,
+		walletUnlocked:false,
+		walletBackedup:false,
+		walletBackupConfirmed:false,
+		termsAccepted:false,
+		bCarousel:false,
+		mnemonics:'',
+		closeConfirmActive:false,
+		addr:{},
+		wordArray:[],
+		wordArrayConfirm:[],
+		carouselIndex: 0,
+		carouselItems: [
+			{"title_1":"Welcome to Navcoin NEXT","title_2":"<p>Navcoin is an open-source, blockchain based Proof of Stake cryptocurrency.</p><p>Its design is public, nobody owns or controls Navcoin, and everyone can take part.</p><p>It’s a platform that’s run by its users, for its users - with an incentivised network of nodes verifying payments all around the world.</p>","bgcolor":"red"},
+			{"title_1":"Spend Easily","title_2":"<p>Designed for fast, cheap, and secure peer-to-peer payments.</p><p>A network that's driven to lowering the cost of doing business.</p>","bgcolor":"blue"},
+			{"title_1":"Take Control","title_2":"Take full control and customize your wallet to your needs.","bgcolor":"orange"},
+			{"title_1":"Community Fund","title_2":"<p>Projects are funded and approved by the decentralized network with no central authority.</p><p>This ensures Navcoin’s direction remains firmly in the best interest of the entire network.</p><p>This fund pays you to take your idea, nurture it, and build a team to bring it to life.</p>","bgcolor":"orange"},
+			{"title_1":"Cold Staking","title_2":"<p>Cold-staking means that your wallet is not online staking and subject to attacks.</p><p>Instead, a staking wallet which contains no NAV will be staking on behalf of your spending wallet which holds your NAV.</p><p>Bear in mind that you still need a node actively staking ideally 24⁄7 to get your staking rewards.</p>","bgcolor":"orange"},
+		]
 	}
-  },
-  computed: {
-  	config()
-  	{
+},
+computed: {
+	config()
+	{
 		return this.$store.state.config;
-  	},
-    pageStack() {
+	},
+	pageStack() {
 		return this.$store.state.navigator.stack;
-    },
-    options() {
+	},
+	options() {
 		return this.$store.state.navigator.options;
-    },
-    borderRadius() {
+	},
+	borderRadius() {
 		return new URL(window.location).searchParams.get('borderradius') !== null;
-    }
-  },
-  created: function ()
-  {
-		this.$store.commit('config/setSyncStatus', "Wallet loading...");
-		let vm=this;
-		if (typeof(QRScanner) != "undefined")
-		{
-			this.$ons.ready(() => {
-				document.addEventListener('resume', this.onResume, false);
-				vm.$ons.setDefaultDeviceBackButtonListener(function(event)
+	}
+},
+created: function ()
+{
+	this.$store.commit('config/setSyncStatus', "Wallet loading...");
+	let vm=this;
+	if (typeof(QRScanner) != "undefined")
+	{
+		this.$ons.ready(() => {
+			document.addEventListener('resume', this.onResume, false);
+			vm.$ons.setDefaultDeviceBackButtonListener(function(event)
+			{
+				if (vm.closeConfirmActive) return;
+				vm.closeConfirmActive=true;
+				QRScanner.getStatus(function(status)
 				{
-					if (vm.closeConfirmActive) return;
-					vm.closeConfirmActive=true;
-					QRScanner.getStatus(function(status)
+					if (status.scanning)
 					{
-						if (status.scanning)
+						QRScanner.cancelScan(function(status)
 						{
-							QRScanner.cancelScan(function(status)
-			    			{
-							});
-			    			$("#page-send").show();
-			    			$("#page-add-contact").show();
-					  	}
-						else
+						});
+						$("#page-send").show();
+						$("#page-add-contact").show();
+					}
+					else
+					{
+						vm.$ons.notification.confirm(vm.$t('message.confirmCloseQuestion'),{title:vm.$t('message.confirmClose'),buttonLabels:[vm.$t('message.confirmCloseNo'), vm.$t('message.confirmCloseYes')]})
+						.then((response) =>
 						{
-					    	vm.$ons.notification.confirm(vm.$t('message.confirmCloseQuestion'),{title:vm.$t('message.confirmClose'),buttonLabels:[vm.$t('message.confirmCloseNo'), vm.$t('message.confirmCloseYes')]})
-							.then((response) =>
-					    	{
-					    		if (response)
-					    		{
-					    			navigator.app.exitApp();
-					    		}
-					    		else
-					    		{
-					    			vm.closeConfirmActive=false;
-					    		}
-					    	});
-					  	}
-					});
+							if (response)
+							{
+								navigator.app.exitApp();
+							}
+							else
+							{
+								vm.closeConfirmActive=false;
+							}
+						});
+					}
 				});
 			});
-		}
-
-    	if (!localStorage.getItem("config"))
-    	{
-    		localStorage.setItem("config",'{"language":{"name":"English","code":"en"},"currency":{"symbol":"USD","code":"USD"},"book":[]}');
-    	}
-    	var config=JSON.parse(localStorage.getItem("config"));
-    	this.$store.commit('config/setLockWalletOnDeactivate', config.lock_wallet_on_deactivate);
-    	this.$store.commit('config/setColdStakingActive', config.cold_staking_active);
-    	this.$store.commit('config/setColdStakingAddress', config.cold_staking_address);
-    	this.$store.commit('config/setBook', config.book);
-    	this.$store.commit('config/setLanguage', {name:config.language.name,code:config.language.code})
-    	this.$store.commit('config/setCurrency', {symbol:config.currency.symbol,code:config.currency.code})
-		this.$i18n.locale=config.language.code;
-    	if (window.network=="mainnet")
+		});
+	}
+	if (!localStorage.getItem("config"))
+	{
+		localStorage.setItem("config",'{"language":{"name":"English","code":"en"},"currency":{"symbol":"USD","code":"USD"},"book":[]}');
+	}
+	var config=JSON.parse(localStorage.getItem("config"));
+	this.$store.commit('config/setLockWalletOnDeactivate', config.lock_wallet_on_deactivate);
+	this.$store.commit('config/setColdStakingActive', config.cold_staking_active);
+	this.$store.commit('config/setColdStakingAddress', config.cold_staking_address);
+	this.$store.commit('config/setBook', config.book);
+	this.$store.commit('config/setLanguage', {name:config.language.name,code:config.language.code})
+	this.$store.commit('config/setCurrency', {symbol:config.currency.symbol,code:config.currency.code})
+	this.$i18n.locale=config.language.code;
+	if (window.network=="mainnet")
+	{
+		bitcore.Networks.defaultNetwork = bitcore.Networks.livenet;
+	}
+	else
+	{
+		bitcore.Networks.defaultNetwork = bitcore.Networks.testnet;
+	}
+	if (localStorage.getItem('db'))
+	{
+		this.walletExist=true;
+		this.termsAccepted=true;
+		this.walletBackedup=true;
+		this.walletBackupConfirmed=true;
+		console.log("Wallet exist.");
+	}
+	else
+	{
+		this.bCarousel=true;
+		console.log("Wallet not exist.");
+	}
+},
+	methods:
+	{
+		skip()
 		{
-			bitcore.Networks.defaultNetwork = bitcore.Networks.livenet;
-		}
-		else
-		{
-			bitcore.Networks.defaultNetwork = bitcore.Networks.testnet;
-		}
-		if (localStorage.getItem('db'))
-		{
-			this.walletExist=true;
-			this.termsAccepted=true;
-			this.walletBackedup=true;
-			this.walletBackupConfirmed=true;
-			console.log("Wallet exist.");
-		}
-		else
-		{
-			this.bCarousel=true;
-			console.log("Wallet not exist.");
-		}
-    },
-    methods:
-    {
-    	skip()
-    	{
-    		this.bCarousel=false;
-    	},
-    	onResume()
-    	{
-    		if (this.$store.state.config.lock_wallet_on_deactivate)
-    		{
-    			console.log("Wallet locked.")
-	    		this.password="";
-	    		this.walletUnlocked=false;
-	    	}
-	    	else
-	    	{
-	    		console.log("Auto locking disabled.")
-	    	}
+			this.bCarousel=false;
 		},
-    	disableScanner()
-    	{
-    		console.log("disable");
+		onResume()
+		{
+			if (this.$store.state.config.lock_wallet_on_deactivate)
+			{
+				console.log("Wallet locked.")
+				this.password="";
+				this.walletUnlocked=false;
+			}
+			else
+			{
+				console.log("Auto locking disabled.")
+			}
+		},
+		disableScanner()
+		{
+			console.log("disable");
 			$("#page1").show();
 			$("#page2").show();
-    	},
-    	setLanguage(language)
-	    {
-	    	this.selectedLanguage=language.code;
+		},
+		setLanguage(language)
+		{
+			this.selectedLanguage=language.code;
 			this.$store.commit('config/setLanguage', language)
 			this.$i18n.locale=language.code;
 			this.$store.commit('navigator/pop');
-	    },
-    	acceptTerms: function ()
-    	{
-    		this.termsAccepted=true;
-    	},
-    	confirmBackupWallet: function ()
-    	{
-    		this.walletBackedup=true;
-    		this.wordArray = this.shuffle(this.mnemonics.toString().split(' '));
-    	},
-    	shuffle: function (array)
-    	{
-  			return array.sort(() => Math.random() - 0.5);
 		},
-    	confirmBackupPhrase: function ()
-    	{
-    		console.log(this.mnemonics.toString());
-    		console.log(this.wordArrayConfirm.join(" "));
-    		if (this.mnemonics.toString()==this.wordArrayConfirm.join(" "))
-    		{
-    			this.walletBackupConfirmed=true;
-    		}
-    		else
-    		{
-    			this.$ons.notification.toast(vm.$t('message.mnemonicCheckFailed'), { timeout: 5000, animation: 'fall' });
-    			this.wordArrayConfirm=[];
-    		}
-    	},
-    	addWordtoArray: function (word)
-    	{
-    		this.wordArrayConfirm.push(word);
-    	},
-    	importWallet: function ()
-    	{
-        	if (!this.mnemonics)
+		acceptTerms: function ()
+		{
+			this.termsAccepted=true;
+		},
+		confirmBackupWallet: function ()
+		{
+			this.walletBackedup=true;
+			this.wordArray = this.shuffle(this.mnemonics.toString().split(' '));
+		},
+		shuffle: function (array)
+		{
+			return array.sort(() => Math.random() - 0.5);
+		},
+		confirmBackupPhrase: function ()
+		{
+			console.log(this.mnemonics.toString());
+			console.log(this.wordArrayConfirm.join(" "));
+			if (this.mnemonics.toString()==this.wordArrayConfirm.join(" "))
 			{
-                this.$ons.notification.toast(vm.$t('message.errorPleaseSpecifyMnemonics'), { timeout: 1000, animation: 'fall' });
+				this.walletBackupConfirmed=true;
 			}
-        	else if (!this.password)
+			else
 			{
-                this.$ons.notification.toast(vm.$t('message.errorPleaseSpecifyPassword'), { timeout: 1000, animation: 'fall' });
+				this.$ons.notification.toast(vm.$t('message.mnemonicCheckFailed'), { timeout: 5000, animation: 'fall' });
+				this.wordArrayConfirm=[];
+			}
+		},
+		addWordtoArray: function (word)
+		{
+			this.wordArrayConfirm.push(word);
+		},
+		importWallet: function ()
+		{
+			if (!this.mnemonics)
+			{
+				this.$ons.notification.toast(vm.$t('message.errorPleaseSpecifyMnemonics'), { timeout: 1000, animation: 'fall' });
+			}
+			else if (!this.password)
+			{
+				this.$ons.notification.toast(vm.$t('message.errorPleaseSpecifyPassword'), { timeout: 1000, animation: 'fall' });
 			}
 			else if (this.password.length<6)
 			{
@@ -494,24 +492,24 @@ export default {
 			}
 			else
 			{
-	    		var valid = Mnemonic.isValid(this.mnemonics);
-	    		if (!valid)
-	    		{
-	    			this.$ons.notification.toast(vm.$t('message.invalidMnemonics'), { timeout: 1000, animation: 'fall' });
-	    		}
-	    		else
-	    		{
+				var valid = Mnemonic.isValid(this.mnemonics);
+				if (!valid)
+				{
+					this.$ons.notification.toast(vm.$t('message.invalidMnemonics'), { timeout: 1000, animation: 'fall' });
+				}
+				else
+				{
 					this.walletBackedup=true;
-	    			this.walletBackupConfirmed=true;
-	    			this.createDatabase(true);
-	    		}
-	    	}
-    	},
-        createWallet: function ()
-        {
-        	if (!this.password)
+					this.walletBackupConfirmed=true;
+					this.createDatabase(true);
+				}
+			}
+		},
+		createWallet: function ()
+		{
+			if (!this.password)
 			{
-                this.$ons.notification.toast(vm.$t('message.errorPleaseSpecifyPassword'), { timeout: 1000, animation: 'fall' });
+				this.$ons.notification.toast(vm.$t('message.errorPleaseSpecifyPassword'), { timeout: 1000, animation: 'fall' });
 			}
 			else if (this.password.length<6)
 			{
@@ -524,175 +522,160 @@ export default {
 			else
 			{
 				this.createDatabase(false);
-        	}
-        },
-    	initNavcoinJS: function (mnemonic)
-       	{
-       		njs.wallet.WalletFile.ListWallets().then((value) =>
-       		{
-			  console.log(value);
+			}
+		},
+		initNavcoinJS: function (mnemonic)
+		{
+			njs.wallet.WalletFile.ListWallets().then((value) =>
+			{
+				console.log("NavcoinJS wallet file found : " + value);
 			});
-
-       		console.log("Wallet loading...");
+			console.log("Wallet loading...");
 			njs.wallet.Init().then(async () =>
 			{
-			    const wallet = new njs.wallet.WalletFile({file: walletFile, network:window.network,mnemonic: mnemonic, type: "next", password: password, spendingPassword: spendingPassword, zapwallettxes: zapwallettxes, log: log})
-
-			    window.wallet=wallet;
-			    
-			    wallet.on('new_mnemonic', (mnemonic) => console.log(`wallet created with mnemonic ${mnemonic} - please back it up!`));
-
-			    wallet.on('loaded', async () =>
-			    {
+				const wallet = new njs.wallet.WalletFile({file: walletFile, network:window.network,mnemonic: mnemonic, type: "next", password: password, spendingPassword: spendingPassword, zapwallettxes: zapwallettxes, log: log})
+				window.wallet=wallet;
+				wallet.on('new_mnemonic', (mnemonic) => console.log(`wallet created with mnemonic ${mnemonic} - please back it up!`));
+				wallet.on('loaded', async () =>
+				{
 					this.$store.commit('config/setSyncStatus', "Wallet loaded.");
-		        	console.log('Wallet loaded.');
-
-		        	wallet.NavReceivingAddresses(true).then((value) =>
-		        	{
+					console.log('Wallet loaded.');
+					wallet.NavReceivingAddresses(true).then((value) =>
+					{
 						console.log("NAV receiving address : " + value[0].address);
-		        	});
-
-		        	wallet.xNavReceivingAddresses(false).then((value) =>
-		        	{
-		        		let xNAVAddress=value.filter((e) => e.path == "0/0")[0].address;
-	            		this.$store.commit('config/setPrivateAddress', xNAVAddress);
-		  				console.log("xNAV receiving address : " + xNAVAddress);
 					});
-
-			        await wallet.Connect();
-			    });
-
-			    wallet.on('sync_started', () => 
-		    	{
-		    		console.log('sync started.')
+					wallet.xNavReceivingAddresses(false).then((value) =>
+					{
+						let xNAVAddress=value.filter((e) => e.path == "0/0")[0].address;
+						this.$store.commit('config/setPrivateAddress', xNAVAddress);
+						console.log("xNAV receiving address : " + xNAVAddress);
+					});
+					await wallet.Connect();
+				});
+				wallet.on('sync_started', () => 
+				{
+					console.log('sync started.')
 					this.$store.commit('config/setSyncStatus', vm.$t('message.walletSyncStarted'));
-		    	});
-
-			    wallet.on('sync_finished', () =>
-			    {
-			    	console.log('sync finished.');
-			    	wallet.GetBalance().then((value) =>
-		        	{
+				});
+				wallet.on('no_servers_available', () => 
+				{
+					console.log('No server available.')
+					this.$store.commit('config/setSyncStatus', vm.$t('message.noServerAvailable'));
+				});
+				wallet.on('sync_finished', () =>
+				{
+					console.log('Sync finished.');
+					wallet.GetBalance().then((value) =>
+					{
 						console.log("Wallet balance");
-		        		console.log(value);
-		        	    this.$store.commit('config/setSyncProgress', 100);
-	            		this.$store.commit('config/setBalance', value);
- 		 	    		this.$store.commit('config/setSyncStatus', vm.$t('message.walletSyncFinished'));
- 		 				window.wallet.GetHistory().then((value) =>
+						console.log(value);
+						this.$store.commit('config/setSyncProgress', 100);
+						this.$store.commit('config/setBalance', value);
+						this.$store.commit('config/setSyncStatus', vm.$t('message.walletSyncFinished'));
+						window.wallet.GetHistory().then((value) =>
 						{
 							this.$store.commit('config/setTXHistory', value);
 						});
 					});
-			    });
-
-	    		wallet.GetBalance().then((value) =>
-		        {
-	            	this.$store.commit('config/setBalance', value);
 				});
-
-			    wallet.on('connected', async(node) =>
-			    {
-			    	console.log('connected to -> ' + node);
- 	    		    this.$store.commit('config/setSyncStatus', vm.$t('message.walletConnected'));
- 	    		    this.$store.commit('config/setCurrentNode', node);
+				wallet.GetBalance().then((value) =>
+				{
+					this.$store.commit('config/setBalance', value);
 				});
-
-			    wallet.on('connection_failed', () =>
-			    {
-			    	console.log('connection failed.')
- 	    		    this.$store.commit('config/setSyncStatus', vm.$t('message.walletConnectionFailed'));
+				wallet.on('connected', async(node) =>
+				{
+					console.log('connected to -> ' + node);
+					this.$store.commit('config/setSyncStatus', vm.$t('message.walletConnected'));
+					this.$store.commit('config/setCurrentNode', node);
 				});
-
-			    wallet.on('sync_status', async (progress, pending, total) => {
-			        //console.log(`Sync ${progress}%`)
-    		        this.$store.commit('config/setSyncProgress', progress);
- 	    		    this.$store.commit('config/setSyncStatus', vm.$t('message.walletSyncProgress') + " (%"+progress+") " + pending + "/" + total);
-			    });
-
-			    wallet.on('new_tx', async (list) => {
-			        //console.log(`Received transaction ${JSON.stringify(list)}`)
-			        //console.log(`Balance ${JSON.stringify(await wallet.GetBalance())}`)
-		        	//this.$store.commit('config/setSyncStatus', vm.$t('message.walletNewTransaction'));
-		    		/*wallet.GetBalance().then((value) =>
-			        {
-		            	this.$store.commit('config/setBalance', value);
+				wallet.on('connection_failed', () =>
+				{
+					console.log('connection failed.')
+					this.$store.commit('config/setSyncStatus', vm.$t('message.walletConnectionFailed'));
+				});
+				wallet.on('sync_status', async (progress, pending, total) => 
+				{
+					this.$store.commit('config/setSyncProgress', progress);
+					this.$store.commit('config/setSyncStatus', vm.$t('message.walletSyncProgress') + " (%"+progress+") " + pending + "/" + total);
+				});
+				wallet.on('new_tx', async (list) =>
+				{
+					//console.log(`Received transaction ${JSON.stringify(list)}`)
+					//console.log(`Balance ${JSON.stringify(await wallet.GetBalance())}`)
+					//this.$store.commit('config/setSyncStatus', vm.$t('message.walletNewTransaction'));
+					/*wallet.GetBalance().then((value) =>
+					{
+						this.$store.commit('config/setBalance', value);
 					});*/
-			    });
-
-			    wallet.on('remove_tx', async (txid) => {
-			        //this.$store.commit('config/setSyncStatus', vm.$t('message.walletRemoveTransaction'));
-			        console.log(`Removed tx transaction ${txid}`)
-			    });
-
-			    await wallet.Load();
-			    //console.log(`Last block: ${await wallet.GetTip()}`);
-			    //console.log(`Balance ${JSON.stringify(await wallet.GetBalance())}`)
+				});
+				wallet.on('remove_tx', async (txid) => 
+				{
+					//this.$store.commit('config/setSyncStatus', vm.$t('message.walletRemoveTransaction'));
+					console.log(`Removed tx transaction ${txid}`)
+				});
+				await wallet.Load();
+				//console.log(`Last block: ${await wallet.GetTip()}`);
+				//console.log(`Balance ${JSON.stringify(await wallet.GetBalance())}`)
 			});
-       	},
-       	createDatabase: function (bImport)
-       	{
+		},
+		createDatabase: function (bImport)
+		{
 			var code;
 			this.busy=true;
-            if (bImport) code=new Mnemonic(this.mnemonics); else code=new Mnemonic(Mnemonic.Words.ENGLISH);
-            this.mnemonics=code;
-            var xpriv=code.toHDPrivateKey();
-            var value=buffer.Buffer.from(code.toString());
-            var hash=bitcore.crypto.Hash.sha256(value);
-            var bn=bitcore.crypto.BN.fromBuffer(hash);
-            var privateKey=new bitcore.PrivateKey(bn);
-            var address=privateKey.toAddress();
-            var exported=privateKey.toWIF();
-            ENCRYPTION_KEY=crypto.createHash('md5').update(this.password).digest("hex");
-            window.ENCRYPTION_KEY=ENCRYPTION_KEY;
-            window.adapter=new LocalStorage('db', {serialize: (data) => encrypt(JSON.stringify(data)),deserialize: (data) => JSON.parse(decrypt(data))});
-            window.db=low(window.adapter);
-            window.db.defaults({addr:[],mnemonics:code.toString(),count:0}).write();
-            window.db.get('addr').push({publicAddress: address.toString(),privateKey: privateKey.toWIF(),xpriv: xpriv.toString()}).write();
-            this.walletExist=true;
-            this.walletUnlocked=true;
-            this.initNavcoinJS(code.toString());
-            /*console.log("*** Create wallet");
-            console.log("*** Password:"+this.password);
-            console.log("*** Password Again:"+this.password_again);
-            console.log("*** DB:"+JSON.stringify(window.db.get('addr')));
-            console.log("*** Mnemonics\r\n" + code);
-            console.log("*** Private Key\r\n" + privateKey);
-            console.log("*** HD Private Key\r\n" + xpriv);
-            console.log("*** Public Address\r\n" + address);*/
-       	},
-        unlockWallet: function ()
-        {
-            //if (!this.password)
-			//{
-            //    this.$ons.notification.toast(vm.$t('message.errorPleaseSpecifyPassword'), { timeout: 2000, animation: 'fall' });
-			//}
-			//else
-			//{
-	            ENCRYPTION_KEY=crypto.createHash('md5').update(this.password).digest("hex");
-	            window.ENCRYPTION_KEY=ENCRYPTION_KEY;
-	            window.adapter=new LocalStorage('db', {serialize: (data) => encrypt(JSON.stringify(data)),deserialize: (data) => JSON.parse(decrypt(data))});
-	            window.db=low(window.adapter);
-	            if (db.has('addr').value())
-	            {
-	                this.walletUnlocked=true;
-	                this.addr=JSON.stringify(window.db.get('addr'));
-	                this.initNavcoinJS(window.db.get('mnemonics').value())
-	            }
-	            else
-	            {
-	                this.$ons.notification.toast(vm.$t('message.invalidPassword'), { timeout: 2000, animation: 'fall' });
-	            }
-            //}
-        },
-      st1: function ()
-      {
-        this.step=1;
-      },
-      storePop() {
-        $("#page1").show();
-        this.$store.commit('navigator/pop');
-      }
-    }
+			if (bImport) code=new Mnemonic(this.mnemonics); else code=new Mnemonic(Mnemonic.Words.ENGLISH);
+			this.mnemonics=code;
+			var xpriv=code.toHDPrivateKey();
+			var value=buffer.Buffer.from(code.toString());
+			var hash=bitcore.crypto.Hash.sha256(value);
+			var bn=bitcore.crypto.BN.fromBuffer(hash);
+			var privateKey=new bitcore.PrivateKey(bn);
+			var address=privateKey.toAddress();
+			var exported=privateKey.toWIF();
+			ENCRYPTION_KEY=crypto.createHash('md5').update(this.password).digest("hex");
+			window.ENCRYPTION_KEY=ENCRYPTION_KEY;
+			window.adapter=new LocalStorage('db', {serialize: (data) => encrypt(JSON.stringify(data)),deserialize: (data) => JSON.parse(decrypt(data))});
+			window.db=low(window.adapter);
+			window.db.defaults({addr:[],mnemonics:code.toString(),count:0}).write();
+			window.db.get('addr').push({publicAddress: address.toString(),privateKey: privateKey.toWIF(),xpriv: xpriv.toString()}).write();
+			this.walletExist=true;
+			this.walletUnlocked=true;
+			this.initNavcoinJS(code.toString());
+			/*console.log("*** Create wallet");
+			console.log("*** Password:"+this.password);
+			console.log("*** Password Again:"+this.password_again);
+			console.log("*** DB:"+JSON.stringify(window.db.get('addr')));
+			console.log("*** Mnemonics\r\n" + code);
+			console.log("*** Private Key\r\n" + privateKey);
+			console.log("*** HD Private Key\r\n" + xpriv);
+			console.log("*** Public Address\r\n" + address);*/
+		},
+		unlockWallet: function ()
+		{
+			ENCRYPTION_KEY=crypto.createHash('md5').update(this.password).digest("hex");
+			window.ENCRYPTION_KEY=ENCRYPTION_KEY;
+			window.adapter=new LocalStorage('db', {serialize: (data) => encrypt(JSON.stringify(data)),deserialize: (data) => JSON.parse(decrypt(data))});
+			window.db=low(window.adapter);
+			if (db.has('addr').value())
+			{
+				this.walletUnlocked=true;
+				this.addr=JSON.stringify(window.db.get('addr'));
+				this.initNavcoinJS(window.db.get('mnemonics').value())
+			}
+			else
+			{
+				this.$ons.notification.toast(vm.$t('message.invalidPassword'), { timeout: 2000, animation: 'fall' });
+			}
+		},
+		st1: function ()
+		{
+			this.step=1;
+		},
+		storePop()
+		{
+			$("#page1").show();
+			this.$store.commit('navigator/pop');
+		}
+	}
 };
 </script>
 <style>
@@ -727,15 +710,15 @@ html, body {
 
 .main
 {
-    height: 100%;
-    width: 100%;
-    display: table;
+	height: 100%;
+	width: 100%;
+	display: table;
 }
 
 .wrapper {
-    display: table-cell;
-    height: 100%;
-    vertical-align: middle;
+	display: table-cell;
+	height: 100%;
+	vertical-align: middle;
 }
 
 ons-card {
@@ -788,8 +771,8 @@ p {
 
 .sub-title
 {
-    font-size:15px;
-    color:#7D5AB5;
+	font-size:15px;
+	color:#7D5AB5;
 }
 .purple
 {
@@ -797,17 +780,17 @@ p {
 }
 
 .progress-bar {
-    border-radius: 10px;
-    margin-top:5px;
+	border-radius: 10px;
+	margin-top:5px;
 }
 .progress-bar__primary,
 .progress-bar--material__primary {
-    background-color: #A4C639;
+	background-color: #A4C639;
 }
 
 .progress-bar__secondary,
 .progress-bar--material__secondary {
-    background-color: #f5f5f5;
+	background-color: #f5f5f5;
 }
 
 .badge
@@ -866,39 +849,39 @@ p {
 }
 
 .carousel-item {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 ons-carousel
 {
-  background: rgb(2,0,36);
-  background: radial-gradient(circle, rgba(2,0,36,1) 0%, rgba(99,35,95,1) 0%, rgba(19,0,22,1) 100%); 
+	background: rgb(2,0,36);
+	background: radial-gradient(circle, rgba(2,0,36,1) 0%, rgba(99,35,95,1) 0%, rgba(19,0,22,1) 100%); 
 }
 .title-1 {
-  color: #ffffff;
-  font-size: 20px;
-  font-weight: bold;
-  text-shadow: 1px 1px #232323;
+	color: #ffffff;
+	font-size: 20px;
+	font-weight: bold;
+	text-shadow: 1px 1px #232323;
 
 }
 .title-2{
-  color: #ffffff;
-  font-size: 20px;
-  text-shadow: 1px 1px #232323;
-  padding:30px;
+	color: #ffffff;
+	font-size: 20px;
+	text-shadow: 1px 1px #232323;
+	padding:30px;
 }
 .dots {
-  text-align: center;
-  font-size: 30px;
-  color: #fff;
-  position: absolute;
-  bottom: 40px;
-  left: 0;
-  right: 0;
+	text-align: center;
+	font-size: 30px;
+	color: #fff;
+	position: absolute;
+	bottom: 40px;
+	left: 0;
+	right: 0;
 }
 .dots > span {
-  cursor: pointer;
+	cursor: pointer;
 }
 </style>

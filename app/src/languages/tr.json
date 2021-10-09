@@ -258,6 +258,7 @@
 		"publicTransaction":"Genel İşlem",
 		"privateTransaction":"Özel İşlem",
 		"coldStakingTransaction":"Soğuk İstifleme İşlemi",
-		"totalTransaction":"Toplam İşlem"
+		"totalTransaction":"Toplam İşlem",
+		"noServerAvailable":"Aktif sunucu bulunamadı"
     }
 }

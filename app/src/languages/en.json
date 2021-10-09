@@ -259,6 +259,7 @@
 		"publicTransaction":"Public Transaction",
 		"privateTransaction":"Private Transaction",
 		"coldStakingTransaction":"Cold Staking Transaction",
-		"totalTransaction":"Total Transaction"
+		"totalTransaction":"Total Transaction",
+		"noServerAvailable":"No server available"
    }
 }

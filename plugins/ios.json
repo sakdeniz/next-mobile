@@ -10,6 +10,9 @@
     "cordova-plugin-navigationbar-color": {
       "PACKAGE_NAME": "net.navcommunity.next"
     },
+    "cordova-plugin-qrscanner": {
+      "PACKAGE_NAME": "net.navcommunity.next"
+    },
     "cordova-plugin-statusbar": {
       "PACKAGE_NAME": "net.navcommunity.next"
     },
@@ -18,13 +21,13 @@
     },
     "cordova-sqlcipher-adapter": {
       "PACKAGE_NAME": "net.navcommunity.next"
-    },
-    "cordova-plugin-qrscanner": {
-      "PACKAGE_NAME": "net.navcommunity.next"
     }
   },
   "dependent_plugins": {
     "cordova-plugin-add-swift-support": {
+      "PACKAGE_NAME": "net.navcommunity.next"
+    },
+    "cordova-plugin-compat": {
       "PACKAGE_NAME": "net.navcommunity.next"
     }
   }

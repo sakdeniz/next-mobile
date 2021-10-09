@@ -260,6 +260,7 @@
 		"publicTransaction":"Öffentliche Transaktion",
 		"privateTransaction":"Private Transaktion",
 		"coldStakingTransaction":"Cold-Staking-Transaktion",
-		"totalTransaction":"Transaktion gesamt"
+		"totalTransaction":"Transaktion gesamt",
+		"noServerAvailable":"No server available"
     }
 }
