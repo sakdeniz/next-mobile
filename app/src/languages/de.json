@@ -56,14 +56,15 @@
 		"filterProposalPending":"Ausstehende Anträge",
 		"filterProposalAccepted":"Angenommene Anträge",
 		"filterProposalRejected":"Abgelehnte Anträge",
-		"filterProposalAcceptedWaitingForEndOfVotingPeriod":"Angenommen, warte auf Ende der Wahlperiode",
-		"filterProposalExpiredPendingVotingOfPaymentRequests":"Abgelaufen, warte auf Abstimmung über Zahlungsanforderung",
+		"filterProposalExpired":"Abgelaufen",
+		"filterProposalAcceptedExpired":"Akzeptiert Abgelaufen",
+		"filterProposalPaid":"Bezahlt",
 		"filterPaymentRequestAll":"Alle Zahlungsanforderungen",
 		"filterPaymentRequestMy":"Meine Zahlungsanforderungen",
 		"filterPaymentRequestPending":"Ausstehende Zahlungsanforderungen",
 		"filterPaymentRequestAccepted":"Angenommene Zahlungsanforderungen",
 		"filterPaymentRequestRejected":"Abgelehnte Zahlungsanforderungen",
-		"filterPaymentRequestAcceptedWaitingForEndOfVotingPeriod":"Angenommen, warte auf Ende der Wahlperiode",
+		"filterPaymentRequestExpired":"Abgelaufen",
 		"settings":"Einstellungen",
 		"sign":"Unterzeichnen",
 		"verify":"Verifizieren",
@@ -261,6 +262,8 @@
 		"privateTransaction":"Private Transaktion",
 		"coldStakingTransaction":"Cold-Staking-Transaktion",
 		"totalTransaction":"Transaktion gesamt",
-		"noServerAvailable":"No server available"
+		"noServerAvailable":"No server available",
+		"pending":"Ausstehend",
+		"walletSyncProgressInfo":"Das Wallet wird derzeit synchronisiert, die Salden werden nicht korrekt sein."
     }
 }

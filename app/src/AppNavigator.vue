@@ -336,7 +336,6 @@ computed: {
 },
 created: function ()
 {
-	this.$store.commit('config/setSyncStatus', "Wallet loading...");
 	let vm=this;
 	if (typeof(QRScanner) != "undefined")
 	{
@@ -530,6 +529,7 @@ created: function ()
 			{
 				console.log("NavcoinJS wallet file found : " + value);
 			});
+			this.$store.commit('config/setSyncStatus', vm.$t('message.walletLoading'));
 			console.log("Wallet loading...");
 			njs.wallet.Init().then(async () =>
 			{
@@ -538,7 +538,7 @@ created: function ()
 				wallet.on('new_mnemonic', (mnemonic) => console.log(`wallet created with mnemonic ${mnemonic} - please back it up!`));
 				wallet.on('loaded', async () =>
 				{
-					this.$store.commit('config/setSyncStatus', "Wallet loaded.");
+					this.$store.commit('config/setSyncStatus', vm.$t('message.walletLoaded'));
 					console.log('Wallet loaded.');
 					wallet.NavReceivingAddresses(true).then((value) =>
 					{

@@ -48,7 +48,7 @@
 				<v-ons-list>
 					<v-ons-list-item>
 						<div class="left">
-							<img style="width:32px;height:auto;" src="images/nav-logo-border.svg">
+							<img style="width:24px;height:auto;" src="images/nav-logo-border.svg">
 						</div>
 						<div class="center">
 							{{$t('message.publicTransaction')}}
@@ -59,7 +59,7 @@
 					</v-ons-list-item>
 					<v-ons-list-item>
 						<div class="left">
-							<img style="width:32px;height:auto;" src="images/xnav-logo-border.svg">
+							<img style="width:24px;height:auto;" src="images/xnav-logo-border.svg">
 						</div>
 						<div class="center">
 							{{$t('message.privateTransaction')}}
@@ -91,9 +91,16 @@
 						</div>
 					</v-ons-list-item>
 				</v-ons-list>
-				<v-ons-list>
+				<div style="float:right">
+					<center>
+						<v-ons-button :disabled="currentPage==1" @click="prev"><i class="ion-ios-arrow-round-back"></i></v-ons-button>
+						<span>{{currentPage}} / {{maxPage}}</span>
+						<v-ons-button :disabled="currentPage==maxPage || maxPage==0" @click="next"><i class="ion-ios-arrow-round-forward"></i></v-ons-button>
+					</center>
+				</div>
+				<v-ons-list style="clear:both">
 					<v-ons-list-header>{{$t('message.transactionHistory')}}</v-ons-list-header>
-					<v-ons-list-item v-for="(tx,i) in config.txs">
+					<v-ons-list-item v-for="(tx,i) in paginatedTxs">
 						<div class="left">
 							<img v-show="tx.type=='nav'" style="width:32px;height:auto;" src="images/nav-logo-no-border.svg">
 							<img v-show="tx.type=='xnav'" style="width:32px;height:auto;" src="images/xnav-logo-no-border.svg">
@@ -116,6 +123,7 @@
 import sb from 'satoshi-bitcoin';
 import Vue from 'vue'
 import VueClipboard from 'vue-clipboard2'
+import { mapGetters,mapActions,mapState} from 'vuex';
 VueClipboard.config.autoSetContainer=true;
 Vue.use(VueClipboard);
 export default
@@ -134,32 +142,51 @@ export default
 			prefix:"navcoin:",
 			txs:[],
 			isExpanded:false,
-			navcoinjs_txs:[]
+			navcoinjs_txs:[],
+			pageSize: 10,
+			currentPage:1
 		};
 	},
 	created: function ()
 	{
+	},
+	updated: function()
+	{
 		this.publicAddress=db.get('addr').value()[0].publicAddress;
-		var qrcode=new QRCode(this.prefix+this.publicAddress);
-		this.qrcode_nav=qrcode.svg();
+		this.qrcode_nav=new QRCode(this.prefix+this.publicAddress).svg();
+		this.qrcode_xnav=new QRCode(this.prefix+this.$store.state.config.private_address).svg();
 	},
 	computed:
 	{
-		config()
+		...mapState({
+			config: state => state.config,
+		}),
+		indexStart()
 		{
-			if (this.$store.state.config.private_address)
-			{
-				this.getxNAVQRCode();
-			}
-			return this.$store.state.config;
+			return (this.currentPage - 1) * this.pageSize;
+		},
+		indexEnd()
+		{
+			return this.indexStart + this.pageSize;
+		},
+		maxPage()
+		{
+			return Math.round(this.$store.state.config.txs.length/this.pageSize);
+		},
+		paginatedTxs()
+		{
+			return this.$store.state.config.txs.slice(this.indexStart, this.indexEnd);
 		}
 	},
 	methods:
 	{
-		getxNAVQRCode()
+		prev()
 		{
-			var qrcode=new QRCode(this.prefix+this.$store.state.config.private_address);
-			this.qrcode_xnav=qrcode.svg();
+			this.currentPage--;
+		},
+		next()
+		{
+			this.currentPage++;
 		},
 		doCopy: function (value)
 		{

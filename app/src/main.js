@@ -17,6 +17,7 @@ Vue.use(VueOnsen);
 var locale;
 const messages={en:en,es:es,de:de,tr:tr}
 const i18n=new VueI18n({locale:locale,messages});
+export const bus = new Vue();
 Vue.component('custom-toolbar',CustomToolbar);
 setTimeout(function()
 {
@@ -29,6 +30,7 @@ setTimeout(function()
 	    beforeCreate()
 	    {
 	        Vue.prototype.md = this.$ons.platform.isAndroid();
+        	this.$ons.disableAnimations();
 	        if (window.location.search.match(/iphonex/i))
 	        {
 	            document.documentElement.setAttribute('onsflag-iphonex-portrait', '');

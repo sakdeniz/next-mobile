@@ -24,7 +24,7 @@
 					</center>
 				</div>
 				<ons-list>
-					<ons-list-header>Settings</ons-list-header>
+					<ons-list-header>{{$t('message.settings')}}</ons-list-header>
 					<ons-list-item>
 						<div class="center">
 							<span v-if="isPrivateTransaction">{{$t('message.sendPrivateDescription')}}</span> <span v-else>{{$t('message.sendPublicDescription')}}</span>

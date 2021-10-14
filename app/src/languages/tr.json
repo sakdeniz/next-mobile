@@ -56,14 +56,15 @@
 		"filterProposalPending":"Bekleyen Öneriler",
 		"filterProposalAccepted":"Kabul Edilen Öneriler",
 		"filterProposalRejected":"Reddedilen Öneriler",
-		"filterProposalAcceptedWaitingForEndOfVotingPeriod":"Kabul edildi, periyod sonu bekleniyor",
-		"filterProposalExpiredPendingVotingOfPaymentRequests":"Zaman aşımı, ödeme talebi bekleniyor",
+		"filterProposalExpired":"Süresi Geçti",
+		"filterProposalAcceptedExpired":"Kabul Edildi, Süresi Geçti",
+		"filterProposalPaid":"Ödendi",
 		"filterPaymentRequestAll":"Tüm Ödeme Talepleri",
 		"filterPaymentRequestMy":"Benim Ödeme Taleplerim",
 		"filterPaymentRequestPending":"Bekleyen Ödeme Talepleri",
 		"filterPaymentRequestAccepted":"Kabul Edilen Ödeme Talepleri",
 		"filterPaymentRequestRejected":"Reddedilen Ödeme Talepleri",
-		"filterPaymentRequestAcceptedWaitingForEndOfVotingPeriod":"Kabul edildi, periyod sonu bekleniyor",
+		"filterPaymentRequestExpired":"Süresi Geçti",
 		"settings":"Tercihler",
 		"sign":"İmzala",
 		"verify":"Doğrula",
@@ -259,6 +260,8 @@
 		"privateTransaction":"Özel İşlem",
 		"coldStakingTransaction":"Soğuk İstifleme İşlemi",
 		"totalTransaction":"Toplam İşlem",
-		"noServerAvailable":"Aktif sunucu bulunamadı"
+		"noServerAvailable":"Aktif sunucu bulunamadı",
+		"pending":"Bekliyor",
+		"walletSyncProgressInfo":"Cüzdan şu anda senkronize ediliyor, bakiye doğru görüntülenmeyebilir."
     }
 }

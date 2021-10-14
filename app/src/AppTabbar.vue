@@ -75,12 +75,6 @@ export default {
         },
         {
           label: '',
-          icon: this.md ? 'ion-md-code' : 'ion-md-code',
-          page: Dex,
-          theme: purple
-        },
-        {
-          label: '',
           icon: this.md ? 'ion-ios-cog' : 'ion-ios-cog',
           page: Settings,
           theme: purple

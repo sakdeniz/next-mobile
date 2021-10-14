@@ -28,7 +28,6 @@ export default {
         }
       }
     },
-
     splitter: {
       strict: true,
       namespaced: true,

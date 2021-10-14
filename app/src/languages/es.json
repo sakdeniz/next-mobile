@@ -56,14 +56,15 @@
 		"filterProposalPending":"Propuestas Pendientes",
 		"filterProposalAccepted":"Propuestas Aceptadas",
 		"filterProposalRejected":"Propuestas Rechazadas",
-		"filterProposalAcceptedWaitingForEndOfVotingPeriod":"Aceptado en Espera para el Final del Período de Votación",
-		"filterProposalExpiredPendingVotingOfPaymentRequests":"Expirado Pendiente de Votación del Pago Solicitado",
+		"filterProposalExpired":"Caducado",
+		"filterProposalAcceptedExpired":"Aceptadas, Caducado",
+		"filterProposalPaid":"Pagado",
 		"filterPaymentRequestAll":"Todas las Solicitudes de Pago",
 		"filterPaymentRequestMy":"Mis Solicitudes de Pago",
 		"filterPaymentRequestPending":"Solicitudes de Pago Pendientes",
 		"filterPaymentRequestAccepted":"Solicitudes de Pago Aceptadas",
 		"filterPaymentRequestRejected":"Solicitudes de Pago Rechazadas",
-		"filterPaymentRequestAcceptedWaitingForEndOfVotingPeriod":"Aceptado Esperando el Final del Periodo de Votación",
+		"filterPaymentRequestExpired":"Solicitudes de Pago Caducado",
 		"settings":"Ajustes",
 		"sign":"Firmar",
 		"verify":"Verificar",
@@ -259,6 +260,8 @@
 		"privateTransaction":"Transacción privada",
 		"coldStakingTransaction":"Transacción Cold Staking",
 		"totalTransaction":"Transacción total",
-		"noServerAvailable":"No server available"
+		"noServerAvailable":"No server available",
+		"pending":"Pendiente",
+		"walletSyncProgressInfo":"La billetera se está sincronizando actualmente, los saldos no serán precisos."
     }
 }

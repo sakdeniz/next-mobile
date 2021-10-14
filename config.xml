@@ -71,10 +71,7 @@
         <splash density="port-xxhdpi" src="res/screen/android/splash-port-xxhdpi.png" />
         <splash density="port-xxxhdpi" src="res/screen/android/splash-port-xxxhdpi.png" />
     </platform>
-    <plugin name="cordova-plugin-whitelist" spec="1" />
-    <plugin name="cordova-sqlcipher-adapter" spec="~0.4.0" />
     <plugin name="cordova-plugin-statusbar" spec="~2.4.2" />
     <plugin name="cordova-plugin-navigationbar-color" spec="~0.0.8" />
     <plugin name="cordova-plugin-qrscanner" spec="^2.6.2" />
-    <engine name="ios" spec="^4.5.5" />
 </widget>

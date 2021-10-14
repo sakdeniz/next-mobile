@@ -28,20 +28,21 @@
 		<v-ons-action-sheet :visible.sync="actionSheetVisible" cancelable :title="$t('message.proposalFilter')">
 			<v-ons-action-sheet-button v-on:click="setProposalFilter('all proposals')">{{$t('message.filterProposalAll')}}</v-ons-action-sheet-button>
 			<v-ons-action-sheet-button v-on:click="setProposalFilter('my proposals')">{{$t('message.filterProposalMy')}}</v-ons-action-sheet-button>
-			<v-ons-action-sheet-button v-on:click="setProposalFilter('pending')">{{$t('message.filterProposalPending')}}</v-ons-action-sheet-button>
-			<v-ons-action-sheet-button v-on:click="setProposalFilter('accepted')">{{$t('message.filterProposalAccepted')}}</v-ons-action-sheet-button>
-			<v-ons-action-sheet-button v-on:click="setProposalFilter('rejected')">{{$t('message.filterProposalRejected')}}</v-ons-action-sheet-button>
-			<v-ons-action-sheet-button v-on:click="setProposalFilter('accepted waiting for end of voting period')">{{$t('message.filterProposalAcceptedWaitingForEndOfVotingPeriod')}}</v-ons-action-sheet-button>
-			<v-ons-action-sheet-button v-on:click="setProposalFilter('expired pending voting of payment requests')">{{$t('message.filterProposalExpiredPendingVotingOfPaymentRequests')}}</v-ons-action-sheet-button>
+			<v-ons-action-sheet-button v-on:click="setProposalFilter(0)">{{$t('message.filterProposalPending')}}</v-ons-action-sheet-button>
+			<v-ons-action-sheet-button v-on:click="setProposalFilter(1)">{{$t('message.filterProposalAccepted')}}</v-ons-action-sheet-button>
+			<v-ons-action-sheet-button v-on:click="setProposalFilter(2)">{{$t('message.filterProposalRejected')}}</v-ons-action-sheet-button>
+			<v-ons-action-sheet-button v-on:click="setProposalFilter(3)">{{$t('message.filterProposalExpired')}}</v-ons-action-sheet-button>
+			<v-ons-action-sheet-button v-on:click="setProposalFilter(16)">{{$t('message.filterProposalAcceptedExpired')}}</v-ons-action-sheet-button>
+			<v-ons-action-sheet-button v-on:click="setProposalFilter(6)">{{$t('message.filterProposalPaid')}}</v-ons-action-sheet-button>
 		</v-ons-action-sheet>
 
 		<v-ons-action-sheet :visible.sync="actionSheet2Visible" cancelable :title="$t('message.paymentRequestFilter')">
 			<v-ons-action-sheet-button v-on:click="setPaymentRequestFilter('all payment requests')">{{$t('message.filterPaymentRequestAll')}}</v-ons-action-sheet-button>
 			<v-ons-action-sheet-button v-on:click="setPaymentRequestFilter('my payment requests')">{{$t('message.filterPaymentRequestMy')}}</v-ons-action-sheet-button>
-			<v-ons-action-sheet-button v-on:click="setPaymentRequestFilter('pending')">{{$t('message.filterPaymentRequestPending')}}</v-ons-action-sheet-button>
-			<v-ons-action-sheet-button v-on:click="setPaymentRequestFilter('accepted')">{{$t('message.filterPaymentRequestAccepted')}}</v-ons-action-sheet-button>
-			<v-ons-action-sheet-button v-on:click="setPaymentRequestFilter('rejected')">{{$t('message.filterPaymentRequestRejected')}}</v-ons-action-sheet-button>
-			<v-ons-action-sheet-button v-on:click="setPaymentRequestFilter('accepted waiting for end of voting period')">{{$t('message.filterPaymentRequestAcceptedWaitingForEndOfVotingPeriod')}}</v-ons-action-sheet-button>
+			<v-ons-action-sheet-button v-on:click="setPaymentRequestFilter(0)">{{$t('message.filterPaymentRequestPending')}}</v-ons-action-sheet-button>
+			<v-ons-action-sheet-button v-on:click="setPaymentRequestFilter(1)">{{$t('message.filterPaymentRequestAccepted')}}</v-ons-action-sheet-button>
+			<v-ons-action-sheet-button v-on:click="setPaymentRequestFilter(2)">{{$t('message.filterPaymentRequestRejected')}}</v-ons-action-sheet-button>
+			<v-ons-action-sheet-button v-on:click="setPaymentRequestFilter(3)">{{$t('message.filterPaymentRequestExpired')}}</v-ons-action-sheet-button>
 		</v-ons-action-sheet>
 
 	    <v-ons-fab position="bottom right" :visible="fabVisible" modifier="mini" v-on:click="push(pages[0].component, 'Create Proposal')">
@@ -170,7 +171,7 @@
 	                  		</ons-row>
                       		<div>
                           		<div class="bg1" style="margin-top:10px;">
-                          			{{capitalize(proposal.status)}}
+                          			<i v-show="proposal.paymentAddress==publicAddress" class="fa fa-heart" style="color:#673AB7"></i>&nbsp;{{capitalize(proposal.status)}}
                           		</div>
                       		</div>
                       		<p class="description word-break">
@@ -180,10 +181,7 @@
 	              		</ons-col>
 	          		</ons-row>
 	          		<ons-row>
-	          		    <ons-col width="20%" style="padding:5px">
-						    <i v-if="proposal.paymentAddress==publicAddress" class="fa fa-heart" style="color:#673AB7"></i>
-	            		</ons-col>
-	            		<ons-col width="40%" style="padding:5px">
+	            		<ons-col width="33%" style="padding:5px">
 	            			<i class="fa fa-thumbs-o-up" style="color:#A4C639"></i>
 						    <span class="voteYes">{{proposal.votesYes}}</span>
 						   	<small v-if="proposal.votesYes" style="float:right"><i class="fa fa-percent" aria-hidden="true"></i>&nbsp;{{getYesVotesProportion(proposal)}}</small>
@@ -191,13 +189,21 @@
 						   		<v-ons-progress-bar v-if="proposal.votesYes" :value="getYesVotesProportion(proposal)" secondary-value="100"></v-ons-progress-bar>
 						   	</div>
 	            		</ons-col>
-	            		<ons-col width="40%" style="padding:5px" modifier="material">
+	            		<ons-col width="33%" style="padding:5px" modifier="material">
 						    <i class="fa fa-thumbs-o-down" style="color:#DD4B39"></i>
 						    <span class="voteNo">{{proposal.votesNo}}</span>
 						    <small v-if="proposal.votesNo" style="float:right"><i class="fa fa-percent" aria-hidden="true"></i>&nbsp;{{getNoVotesProportion(proposal)}}</small>
 						    <div id="negative">
 						    	<v-ons-progress-bar v-if="proposal.votesNo" :value="getNoVotesProportion(proposal)" secondary-value="100"></v-ons-progress-bar>
 						    </div>
+	            		</ons-col>
+	            		<ons-col width="33%" style="padding:5px">
+	            			<i class="fa fa-square-o" style="color:gray"></i>
+						    <span class="voteAbs">{{proposal.votesAbs}}</span>
+						   	<small v-if="proposal.votesYes" style="float:right"><i class="fa fa-percent" aria-hidden="true"></i>&nbsp;{{getAbsVotesProportion(proposal)}}</small>
+						   	<div id="abstain">
+						   		<v-ons-progress-bar v-if="proposal.votesAbs" :value="getAbsVotesProportion(proposal)" secondary-value="100"></v-ons-progress-bar>
+						   	</div>
 	            		</ons-col>
 	        		</ons-row>
 	        		<ons-row v-show="proposal.status=='accepted' && proposal.paymentAddress==publicAddress" style="margin-top:10px;">
@@ -294,8 +300,8 @@ export default {
     actionSheetVisible: false,
     actionSheet2Visible: false,
     createPaymentDialogVisible: false,
-    proposalFilter:'pending',
-    paymentRequestFilter:'pending',
+    proposalFilter:0,
+    paymentRequestFilter:0,
     pages:
     [
     	{
@@ -467,7 +473,7 @@ export default {
       }
       else
       {
-        return _.sortByOrder(proposals.filter(proposal => proposal.status==this.proposalFilter),['id'],['desc']);
+        return _.sortByOrder(proposals.filter(proposal => proposal.state==this.proposalFilter),['id'],['desc']);
       }
     },
     filterPaymentRequest: function(paymentRequests)
@@ -489,7 +495,7 @@ export default {
 					{
 						//pR.push(v);
 					}
-					else if (v.status==vm.paymentRequestFilter)
+					else if (v.state==vm.paymentRequestFilter)
 					{
 						pR.push(v);
 					}
@@ -509,13 +515,18 @@ export default {
     },
     getYesVotesProportion: function (proposal)
 	{
-        var total_votes = proposal.votesYes + proposal.votesNo;
+        var total_votes = proposal.votesYes + proposal.votesNo + proposal.votesAbs;
         return Math.round((proposal.votesYes / total_votes) * 100, 2);
 	},
 	getNoVotesProportion: function (proposal)
 	{
-        var total_votes = proposal.votesYes + proposal.votesNo;
+        var total_votes = proposal.votesYes + proposal.votesNo + proposal.votesAbs;
         return Math.round((proposal.votesNo / total_votes) * 100, 2);
+	},
+	getAbsVotesProportion: function (proposal)
+	{
+        var total_votes = proposal.votesYes + proposal.votesNo + proposal.votesAbs;
+        return Math.round((proposal.votesAbs / total_votes) * 100, 2);
 	},
 	getRequiredVotesProportion: function (proposal)
 	{
@@ -689,6 +700,16 @@ p {
     background-color: #f5f5f5;
 }
 
+#abstain .progress-bar__primary,
+#abstain .progress-bar--material__primary {
+    background-color: gray;
+}
+
+#abstain .progress-bar__secondary,
+#abstain .progress-bar--material__secondary {
+    background-color: #f5f5f5;
+}
+
 .badge
 {
 	background: #7D5AB5;
@@ -731,6 +752,11 @@ p {
 .voteNo
 {
 	color:#DD4B39;
+	font-size:10pt;
+}
+.voteAbs
+{
+	color:gray;
 	font-size:10pt;
 }
 </style>

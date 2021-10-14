@@ -14,17 +14,17 @@
 			</div>
         	<div class="asset-card-content">
 	        	<div class="card-title">
-	        		Public
+	        		{{$t('message.public')}}
 	        	</div>
 	        	<div class="card-sub-title">
 	        		<span v-if="!hideBalance&&config.Balance">
                 		 NAV {{formatBalance(config.Balance.nav.confirmed)}} / {{getAssetFiatValue(config.Balance.nav.confirmed)}} {{config.currency.symbol}}
-                		<span v-if="config.Balance.nav.pending!=0">
-                			(Pending : {{formatBalance(config.Balance.nav.pending)}})
-                		</span>
                 	</span>
                 	<span v-if="hideBalance">*****</span>
                 	<span v-if="!hideBalance&&!config.Balance">{{$t('message.loading')}}</span>
+	        	</div>
+	        	<div class="card-sub-title" v-if="config.Balance&&config.Balance.nav.pending!=0">
+	        		{{$t('message.pending')}} : {{formatBalance(config.Balance.nav.pending)}}
 	        	</div>
         	</div>
         </div>
@@ -35,17 +35,17 @@
 			</div>
         	<div class="asset-card-content">
 	        	<div class="card-title">
-	        		Private
+	        		{{$t('message.private')}}
 	        	</div>
 	        	<div class="card-sub-title">
 					<span v-if="!hideBalance&&config.Balance">
                 		xNAV {{formatBalance(config.Balance.xnav.confirmed)}} / {{getAssetFiatValue(config.Balance.xnav.confirmed)}} {{config.currency.symbol}}
-                		<span v-if="config.Balance.xnav.pending!=0">
-                			(Pending : {{formatBalance(config.Balance.xnav.pending)}})
-                		</span>
                 	</span>
                 	<span v-if="hideBalance">*****</span>
                 	<span v-if="!hideBalance&&!config.Balance">{{$t('message.loading')}}</span>
+	        	</div>
+	        	<div class="card-sub-title" v-if="config.Balance&&config.Balance.xnav.pending!=0">
+	        		{{$t('message.pending')}} : {{formatBalance(config.Balance.xnav.pending)}}
 	        	</div>
         	</div>
         </div>
@@ -56,17 +56,17 @@
 			</div>
         	<div class="asset-card-content">
 	        	<div class="card-title">
-	        		Cold Staking
+	        		{{$t('message.staking')}}
 	        	</div>
 	        	<div class="card-sub-title">
 					<span v-if="!hideBalance&&config.Balance">
                 		NAV {{formatBalance(config.Balance.staked.confirmed)}} / {{getAssetFiatValue(config.Balance.staked.confirmed)}} {{config.currency.symbol}}
-                		<span v-if="config.Balance.staked.pending!=0">
-                			(Pending : {{formatBalance(config.Balance.staked.pending)}})
-                		</span>
                 	</span>
                 	<span v-if="hideBalance">*****</span>
                 	<span v-if="!hideBalance&&!config.Balance">{{$t('message.loading')}}</span>
+	        	</div>
+	        	<div class="card-sub-title" v-if="config.Balance&&config.Balance.staked.pending!=0">
+	        		{{$t('message.pending')}} : {{formatBalance(config.Balance.staked.pending)}}
 	        	</div>
         	</div>
         </div>
@@ -87,7 +87,7 @@
             <v-ons-list-item modifier="nodivider" v-if="config.sync_progress!=100">
                 <div class="left">
                     <span class="notification notification--material">
-						<small>The wallet is currently syncing, the balances won't be accurate.</small>
+						<small>{{$t('message.walletSyncProgressInfo')}}</small>
 					</span>
                 </div>
             </v-ons-list-item>
