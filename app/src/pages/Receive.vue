@@ -171,7 +171,7 @@ export default
 		},
 		maxPage()
 		{
-			return Math.round(this.$store.state.config.txs.length/this.pageSize);
+			return Math.ceil(this.$store.state.config.txs.length/this.pageSize);
 		},
 		paginatedTxs()
 		{

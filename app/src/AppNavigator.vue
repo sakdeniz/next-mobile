@@ -498,9 +498,13 @@ created: function ()
 				}
 				else
 				{
-					this.walletBackedup=true;
-					this.walletBackupConfirmed=true;
-					this.createDatabase(true);
+					this.busy=true;
+					setTimeout(() => 
+					{
+						this.walletBackedup=true;
+						this.walletBackupConfirmed=true;
+						this.createDatabase(true);
+					}, 300);
 				}
 			}
 		},
@@ -621,7 +625,6 @@ created: function ()
 		createDatabase: function (bImport)
 		{
 			var code;
-			this.busy=true;
 			if (bImport) code=new Mnemonic(this.mnemonics); else code=new Mnemonic(Mnemonic.Words.ENGLISH);
 			this.mnemonics=code;
 			var xpriv=code.toHDPrivateKey();
@@ -657,6 +660,7 @@ created: function ()
 			window.db=low(window.adapter);
 			if (db.has('addr').value())
 			{
+				this.busy=true;
 				this.walletUnlocked=true;
 				this.addr=JSON.stringify(window.db.get('addr'));
 				this.initNavcoinJS(window.db.get('mnemonics').value())
