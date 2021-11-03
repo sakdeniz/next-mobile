@@ -43,7 +43,7 @@ export default {
     proposalTitle:'',
     proposalRequestedAmount:'',
     proposalAddress:'',
-    strdzeel_v:2,
+    strdzeel_v:42,
     strdzeel_d:''
     };
   },

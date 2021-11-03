@@ -387,7 +387,7 @@ export default {
 				var script = new bitcore.Script()
 				.add('OP_RETURN')
 				.add('OP_CFUND')
-				var strdzeel='{\"h\":\"'+vm.paymentRequestProposal.hash+'\",\"n\":'+sb.toSatoshi(vm.paymentRequestAmount)+',\"s\":\"'+signature.toString()+'\",\"r\":\"'+randomString+'\",\"i\":\"'+vm.paymentRequestId+'\",\"v\":2}';
+				var strdzeel='{\"h\":\"'+vm.paymentRequestProposal.hash+'\",\"n\":'+sb.toSatoshi(vm.paymentRequestAmount)+',\"s\":\"'+signature.toString()+'\",\"r\":\"'+randomString+'\",\"i\":\"'+vm.paymentRequestId+'\",\"v\":26}';
 				console.log("strdzeel:"+strdzeel);
 				var tx=new bitcore.Transaction()
 				.from(utxo)
