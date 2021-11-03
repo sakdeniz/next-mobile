@@ -7,6 +7,9 @@
       </div>
       <div class="content">
         <div class="center" style="margin-top:20px">
+            v{{strdzeel_v}}
+        </div>
+        <div class="center" style="margin-top:20px">
             <v-ons-input :placeholder="$t('message.createProposalDescription')" float type="text" v-model="proposalTitle" style="width:100%" autofocus></v-ons-input>
         </div>
         <div class="center" style="margin-top:30px">

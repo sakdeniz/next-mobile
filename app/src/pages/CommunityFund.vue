@@ -11,6 +11,9 @@
 		    	<div class="title">
 					{{$t('message.createPaymentRequest')}}
 				</div>
+		        <div class="center" style="margin-top:20px">
+		            v{{strdzeel_v}}
+		        </div>
 		    	<div class="center" style="margin-top:20px">
 	            	<v-ons-input :placeholder="$t('message.createPaymentRequestDescription')" float type="text" v-model="paymentRequestId" style="width:100%"></v-ons-input>
 	        	</div>
@@ -302,6 +305,7 @@ export default {
     createPaymentDialogVisible: false,
     proposalFilter:0,
     paymentRequestFilter:0,
+    strdzeel_v:26,
     pages:
     [
     	{
@@ -387,7 +391,7 @@ export default {
 				var script = new bitcore.Script()
 				.add('OP_RETURN')
 				.add('OP_CFUND')
-				var strdzeel='{\"h\":\"'+vm.paymentRequestProposal.hash+'\",\"n\":'+sb.toSatoshi(vm.paymentRequestAmount)+',\"s\":\"'+signature.toString()+'\",\"r\":\"'+randomString+'\",\"i\":\"'+vm.paymentRequestId+'\",\"v\":26}';
+				var strdzeel='{\"h\":\"'+vm.paymentRequestProposal.hash+'\",\"n\":'+sb.toSatoshi(vm.paymentRequestAmount)+',\"s\":\"'+signature.toString()+'\",\"r\":\"'+randomString+'\",\"i\":\"'+vm.paymentRequestId+'\",\"v\":'+vm.strdzeel_v+'}';
 				console.log("strdzeel:"+strdzeel);
 				var tx=new bitcore.Transaction()
 				.from(utxo)
