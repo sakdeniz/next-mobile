@@ -109,10 +109,13 @@
 							<v-ons-icon v-if="tx.amount<0" style="color:#cc6600" icon="ion-md-arrow-round-up" class="list-item__icon"></v-ons-icon>
 						</div>
 						<div class="center">
-							<span style="color:#cc6600" v-if="tx.amount<0">{{formatBalance(tx.amount)}}</span>
-							<span style="color:#669900" v-if="tx.amount>0">+{{formatBalance(tx.amount)}}</span>
+			    	         <span class="list-item__title">
+			    	         	<span style="color:#cc6600" v-if="tx.amount<0"><small>{{formatBalance(tx.amount)}}</small></span>
+								<span style="color:#669900" v-if="tx.amount>0">+<small>{{formatBalance(tx.amount)}}</small></span>
+							</span>
+					    	<span class="list-item__subtitle"><small>{{(tx.confirmed?"Confirmed":"Not Confirmed")}}</small></span>
 						</div>
-						<div class="right">{{formatDate(tx.timestamp)}}</div>
+						<div class="right"><small>{{formatDate(tx.timestamp)}}</small></div>
 					</v-ons-list-item>
 				</v-ons-list>
 			</div>
@@ -223,7 +226,7 @@ export default
 		},
 		formatDate: n =>
 		{
-			if (n) return moment.unix(n).format('DD/MM/YYYY HH:mm:ss'); else return "";
+			if (n) return moment.unix(n).format('DD.MM.YY HH:mm:ss'); else return "";
 		},
 		push(page, key)
 		{
