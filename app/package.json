@@ -34,7 +34,7 @@
     "lodash": "^3.10.1",
     "lowdb": "^1.0.0",
     "metamask-onboarding": "^0.1.1",
-    "navcoin-js": "^1.0.11",
+    "navcoin-js": "git+https://github.com/aguycalled/navcoin-js.git",
     "nedb-async": "^0.1.6",
     "net": "^1.0.2",
     "onsenui": "^2.10.2",
@@ -53,7 +53,6 @@
     "xcode": "^2.0.0"
   },
   "devDependencies": {
-    "@aguycalled/bitcore-lib": "^0.15.9",
     "@babel/cli": "^7.14.8",
     "@babel/core": "^7.15.0",
     "@babel/node": "^7.14.9",
@@ -62,6 +61,7 @@
     "babel-loader": "^8.2.2",
     "bitcoin-core": "^2.0.0",
     "bitcoinjs-lib": "^3.3.2",
+    "bitcore-lib": "git+https://github.com/aguycalled/bitcore-lib.git",
     "bitcore-message": "git+https://github.com/aguycalled/bitcore-message.git",
     "bitcore-mnemonic": "git+https://github.com/aguycalled/bitcore-mnemonic.git",
     "clean-webpack-plugin": "^3.0.0",

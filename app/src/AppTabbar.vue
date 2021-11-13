@@ -3,7 +3,7 @@
     <custom-toolbar :style="swipeTheme" modifier="white-content">
       <span class="logo-text">{{title}}</span>
       <v-ons-toolbar-button slot="right" modifier="white-content" @click="$store.commit('splitter/toggle');">
-        <v-ons-icon icon="ion-navicon, material:md-menu"></v-ons-icon>
+        <v-ons-icon icon="ion-ios-menu, material:md-menu"></v-ons-icon>
       </v-ons-toolbar-button>
     </custom-toolbar>
 
@@ -119,7 +119,8 @@ export default {
       }
     },
     title() {
-      return this.md ? 'NEXT' : this.tabs[this.index].title || this.tabs[this.index].label;
+      return "NEXT";
+      //return this.md ? 'NEXT' : this.tabs[this.index].title || this.tabs[this.index].label;
     },
     swipeTheme() {
       return this.md && {
