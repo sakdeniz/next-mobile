@@ -84,7 +84,7 @@
                 </div>
             </v-ons-list-item>
 
-            <v-ons-list-item modifier="nodivider" v-if="config.sync_progress!=100">
+            <v-ons-list-item modifier="nodivider" v-show="config.sync_progress!=100">
                 <div class="left">
                     <span class="notification notification--material">
 						<small>{{$t('message.walletSyncProgressInfo')}}</small>
@@ -92,7 +92,7 @@
                 </div>
             </v-ons-list-item>
 
-            <v-ons-list-item modifier="nodivider" v-if="config.sync_progress!=100">
+            <v-ons-list-item modifier="nodivider" v-show="config.sync_progress!=100">
                 <div class="center">
                     <span class="list-item__title">
 						{{config.sync_status}}
@@ -102,7 +102,20 @@
 					</span>
                 </div>
             </v-ons-list-item>
-
+            <v-ons-list-item modifier="nodivider" v-show="config.sync_progress==100">
+                <div class="left">
+					<span class="list-item__subtitle">
+						<i class="ion-ios-flash"></i>&nbsp;{{config.current_node}}
+					</span>
+                </div>
+                <div class="center">
+                </div>
+                <div class="right">
+                	<span class="list-item__subtitle">
+						<i class="ion-ios-hammer"></i>&nbsp;{{config.block_height}}
+					</span>
+                </div>
+            </v-ons-list-item>
         </v-ons-list>
     	<v-ons-card style="margin:0px;margin-top:1px;padding-top:0px;padding-left:0px;padding-right:0px;background: #ffffff">
 			<div style="clear:both">

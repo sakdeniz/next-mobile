@@ -65,6 +65,7 @@ export default {
       {
       	address:"",
       	private_address:"",
+      	block_height:"",
       	sync_status:"",
       	sync_progress:"",
       	Balance:null,
@@ -97,6 +98,10 @@ export default {
       	setPrivateAddress(state,address)
         {
 			state.private_address=address;
+        },
+      	setBlockHeight(state,height)
+        {
+			state.block_height=height;
         },
       	setTXHistory(state,txs)
         {

@@ -602,6 +602,10 @@ created: function ()
 					this.$store.commit('config/setSyncProgress', progress);
 					this.$store.commit('config/setSyncStatus', vm.$t('message.walletSyncProgress') + " (%"+progress+") " + pending + "/" + total);
 				});
+				wallet.on('new_block', async (height) => 
+				{
+					this.$store.commit('config/setBlockHeight',height);
+				});
 				wallet.on('new_tx', async (list) =>
 				{
 					//console.log(`Received transaction ${JSON.stringify(list)}`)
