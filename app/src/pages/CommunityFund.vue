@@ -67,19 +67,19 @@
         			<ons-row>
             			<ons-col width="33%">
                 			<center>
-                    			<img src="images/cfu-dual-vote.svg" style="width:75%;height:auto;">
+                    			<img src="images/cfu-dual-vote.png" style="width:75%;height:auto;">
                     			<br/><small class="purple">{{$t('message.communityFundDualVoteConsensus')}}</small>
                 			</center>
             			</ons-col>
             			<ons-col width="33%">
                 			<center>
-                    			<img src="images/cfu-anyone.svg" style="width:75%;height:auto;">
+                    			<img src="images/cfu-anyone.png" style="width:75%;height:auto;">
                     			<br/><small class="purple">{{$t('message.communityFundOpenToAnyone')}}</small>
                 			</center>
             			</ons-col>
             			<ons-col width="33%">
                 			<center>
-                    			<img src="images/cfu-decentralised-fund.svg" style="width:75%;height:auto;">
+                    			<img src="images/cfu-decentralised-fund.png" style="width:75%;height:auto;">
                     			<br/><small class="purple">{{$t('message.communityFundNoCentralizedFund')}}</small>
                 			</center>
             			</ons-col>

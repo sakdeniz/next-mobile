@@ -10,7 +10,7 @@
         
         <div class="asset-card asset-card-nav">
 			<div class="asset-card-icon">
-				<img style="width:40px;height:auto;" src="images/nav-logo-border.svg">
+				<img style="width:40px;height:auto;" src="images/nav-logo-border.png">
 			</div>
         	<div class="asset-card-content">
 	        	<div class="card-title">
@@ -31,7 +31,7 @@
 
         <div class="asset-card asset-card-xnav">
 			<div class="asset-card-icon">
-				<img style="width:40px;height:auto;" src="images/xnav-logo-border.svg">
+				<img style="width:40px;height:auto;" src="images/xnav-logo-border.png">
 			</div>
         	<div class="asset-card-content">
 	        	<div class="card-title">

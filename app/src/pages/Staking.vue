@@ -11,7 +11,7 @@
 			</div>
 			<div class="content">
 				<center>
-					<img src="images/cold_staking.svg" style="width:128px;height:auto;">
+					<img src="images/cold_staking.png" style="width:128px;height:auto;">
 				</center>
 				<div v-html="$t('message.stakingIntroduction')"></div>
 				<div v-if="config.Balance">

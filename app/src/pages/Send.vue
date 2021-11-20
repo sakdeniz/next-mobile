@@ -20,7 +20,7 @@
 			<div class="content">
 				<div class="center" style="margin-top:20px">
 					<center>
-						<img src="images/transfer.svg" style="width:128px;height:auto;">
+						<img src="images/transfer.png" style="width:128px;height:auto;">
 					</center>
 				</div>
 				<ons-list>

@@ -11,7 +11,7 @@
 			</div>
 			<div class="content" style="clear:both;">
 				<center>
-					<img src="images/wallet.svg" style="width:128px;height:auto;">
+					<img src="images/wallet.png" style="width:128px;height:auto;">
 				</center>
 				<div class="center" style="margin-bottom:15px;">
 					<v-ons-segment :index.sync="segmentIndex" style="width:100%">
@@ -48,7 +48,7 @@
 				<v-ons-list>
 					<v-ons-list-item>
 						<div class="left">
-							<img style="width:24px;height:auto;" src="images/nav-logo-border.svg">
+							<img style="width:24px;height:auto;" src="images/nav-logo-border.png">
 						</div>
 						<div class="center">
 							{{$t('message.publicTransaction')}}
@@ -59,7 +59,7 @@
 					</v-ons-list-item>
 					<v-ons-list-item>
 						<div class="left">
-							<img style="width:24px;height:auto;" src="images/xnav-logo-border.svg">
+							<img style="width:24px;height:auto;" src="images/xnav-logo-border.png">
 						</div>
 						<div class="center">
 							{{$t('message.privateTransaction')}}
@@ -102,8 +102,8 @@
 					<v-ons-list-header>{{$t('message.transactionHistory')}}</v-ons-list-header>
 					<v-ons-list-item v-for="(tx,i) in paginatedTxs">
 						<div class="left">
-							<img v-show="tx.type=='nav'" style="width:32px;height:auto;" src="images/nav-logo-no-border.svg">
-							<img v-show="tx.type=='xnav'" style="width:32px;height:auto;" src="images/xnav-logo-no-border.svg">
+							<img v-show="tx.type=='nav'" style="width:32px;height:auto;" src="images/nav-logo-no-border.png">
+							<img v-show="tx.type=='xnav'" style="width:32px;height:auto;" src="images/xnav-logo-no-border.png">
 							<v-ons-icon v-show="tx.type=='cold_staking'" style="margin-left: 5px;width:19px;height:auto;" icon="ion-ios-snow" class="list-item__icon"></v-ons-icon>
 							<v-ons-icon v-if="tx.amount>0" style="color:#669900" icon="ion-md-arrow-round-down" class="list-item__icon"></v-ons-icon>
 							<v-ons-icon v-if="tx.amount<0" style="color:#cc6600" icon="ion-md-arrow-round-up" class="list-item__icon"></v-ons-icon>
