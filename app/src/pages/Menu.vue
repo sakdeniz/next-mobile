@@ -44,45 +44,45 @@ export default {
       links: [
         {
           title: vm.$t('message.navcoinWebsite'),
-          icon: 'ion-document-text',
+          icon: 'ion-ios-open',
           url: 'https://www.navcoin.org'
         },
         {
           title: vm.$t('message.nextWalletWebsite'),
-          icon: 'ion-document-text',
+          icon: 'ion-ios-open',
           url: 'https://www.nextwallet.org'
         },
         {
           title: 'Github',
-          icon: 'ion-social-github',
+          icon: 'ion-logo-github',
           url: 'https://github.com/sakdeniz/next'
         },
         {
           title: 'Twitter',
-          icon: 'ion-social-twitter',
+          icon: 'ion-logo-twitter',
           url: 'https://twitter.com/nextwallet'
         }
       ],
       access: [
         {
           title: vm.$t('message.receive'),
-          icon: 'ion-archive,ion-archive'
+          icon: 'ion-ios-wallet,ion-ios-wallet'
         },
         {
           title: vm.$t('message.send'),
-          icon: 'ion-paper-airplane,ion-paper-airplane'
+          icon: 'ion-ios-send,ion-ios-send'
         },
         {
           title: vm.$t('message.staking'),
-          icon: 'ion-social-buffer, ion-social-buffer'
+          icon: 'ion-ios-snow, ion-ios-snow'
         },
         {
           title: vm.$t('message.communityFund'),
-          icon: 'ion-chatbubbles, ion-chatbubbles'
+          icon: 'ion-md-chatboxes, ion-md-chatboxes'
         },
         {
           title: vm.$t('message.settings'),
-          icon: 'ion-gear-a, ion-gear-a'
+          icon: 'ion-ios-cog, ion-ios-cog'
         }
       ]
     };
