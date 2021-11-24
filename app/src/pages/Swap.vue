@@ -36,7 +36,7 @@
 					</ons-list-item>
 				</ons-list>
 				<div class="center" style="margin-top:30px">
-					<v-ons-input :placeholder="$t('message.swapAmount')" float type="number" v-model="amount" style="width:100%"></v-ons-input>
+					<v-ons-input :placeholder="$t('message.swapAmount')" float type="number" v-model="amount" inputmode="decimal" style="width:100%"></v-ons-input>
 				</div>
 				<div class="center" style="margin-top:40px">
 					<v-ons-button :disabled="!amount" v-on:click="swap()"><i class="ion-ios-repeat"></i>&nbsp;{{$t('message.btnSwap')}}</v-ons-button>

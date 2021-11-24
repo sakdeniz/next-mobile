@@ -46,7 +46,7 @@
 					<v-ons-input :placeholder="$t('message.sendAddress')" float type="text" v-model="address" style="width:100%"></v-ons-input>
 				</div>
 				<div class="center" style="margin-top:30px">
-					<v-ons-input :placeholder="$t('message.sendAmount')" float type="number" v-model="amount" inputmode="numeric" style="width:100%"></v-ons-input>
+					<v-ons-input :placeholder="$t('message.sendAmount')" float type="number" v-model="amount" inputmode="decimal" style="width:100%"></v-ons-input>
 				</div>
 				<div class="center" style="margin-top:40px">
 					<v-ons-button :disabled="!address || !amount" v-on:click="send()">{{$t('message.sendSubmit')}}</v-ons-button>

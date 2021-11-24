@@ -90,10 +90,14 @@ export default {
 		{
 			QRScanner.getStatus(function(status)
 			{
+				console.log("Getting QRSanner status...");
+				console.log(status);
 				if (status.scanning)
 				{
+					console.log("Trying to cancel scan...");
 					QRScanner.cancelScan(function(status)
 					{
+						console.log(status);
 					});
 		  		}
 		  	});
