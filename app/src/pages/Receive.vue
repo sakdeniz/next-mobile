@@ -91,7 +91,7 @@
 						</div>
 					</v-ons-list-item>
 				</v-ons-list>
-				<div style="float:right">
+				<div style="float:right" v-show="$store.state.config.txs.length>0">
 					<center>
 						<v-ons-button :disabled="currentPage==1" @click="prev"><i class="ion-ios-arrow-round-back"></i></v-ons-button>
 						<span>{{currentPage}} / {{maxPage}}</span>
