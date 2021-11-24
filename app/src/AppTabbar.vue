@@ -99,6 +99,11 @@ export default {
 					{
 						console.log(status);
 					});
+					console.log("Trying to hide scanner...");
+					QRScanner.hide(function(status)
+					{
+						console.log(status);
+					});
 		  		}
 		  	});
 	  	}

@@ -112,8 +112,14 @@ export default
 						{
 							vm.address=text.split(":")[1];
 						}
+						console.log("Trying to cancel scan...");
 						QRScanner.cancelScan(function(status)
 						{
+						});
+						console.log("Trying to hide scanner...");
+						QRScanner.hide(function(status)
+						{
+							console.log(status);
 						});
 						$("#page-send").show();
 					}
