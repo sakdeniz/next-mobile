@@ -345,17 +345,13 @@ created: function ()
 			{
 				if (vm.closeConfirmActive) return;
 				vm.closeConfirmActive=true;
-				console.log("Getting QRSanner status...");
+				console.log("Getting QRScanner status...");
 				QRScanner.getStatus(function(status)
 				{
 					if (status.scanning)
 					{
-						console.log("Trying to cancel scan...");
-						QRScanner.cancelScan(function(status)
-						{
-						});
-						console.log("Trying to hide scanner...");
-						QRScanner.hide(function(status)
+						console.log("Destroying QRScanner...");
+						QRScanner.destroy(function(status)
 						{
 							console.log(status);
 						});
