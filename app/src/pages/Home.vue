@@ -204,7 +204,7 @@
 			<p>{{$t('daysBehind')}} : {{status.days_behind}}</p>
 		</v-ons-card>
 
-		<v-ons-card style="margin:0px;margin-top:20px;background: #ffffff">
+		<v-ons-card style="margin:0px;margin-top:20px;background: #ffffff" v-if="proposals">
 			<div class="title">
 				<i class="ion-ios-star"></i>&nbsp;{{$t('message.featuredProposals')}}
 			</div>

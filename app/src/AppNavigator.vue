@@ -253,7 +253,7 @@ const Mnemonic = require('bitcore-mnemonic');
 var ENCRYPTION_KEY;
 window.config={ headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, responseType: 'text' }
 window.apiURL='https://navcommunity.net/api/lw/';
-window.network='mainnet';
+window.network='testnet';
 console.log("Zap Wallet : " + zapwallettxes);
 if (localStorage.getItem("ZapWallet")) localStorage.setItem("ZapWallet",false);
 function encrypt (text)
@@ -295,7 +295,7 @@ data()
 		shutUp: this.md,
 		step:0,
 		segmentIndex: 0,
-		password:"",
+		password:"123456",
 		password_again:"",
 		walletExist:false,
 		languageSelected:false,
