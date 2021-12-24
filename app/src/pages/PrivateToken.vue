@@ -76,11 +76,11 @@
 			</div>
 			<div class="center" style="margin-top:40px">
 				<v-ons-select style="width: 100%" v-model="mint_token_id">
-					<option v-bind:value="item.id" v-for="(item,index) in tokens.filter(item => item.version==0)">{{item.name}}</option>
+					<option v-bind:value="item.id" v-for="(item,index) in config.privateTokens.filter(item => item.version==0)">{{item.name}}</option>
 				</v-ons-select>
 			</div>
 			<div class="center" style="margin-top:40px">
-				<v-ons-input :placeholder="$t('message.tokenDestination')" type="text" class="form-control" style="width:100%;" v-bind:value="config.private_address" v-model="mint_token_destination"/>
+				<v-ons-input :placeholder="$t('message.tokenDestination')" type="text" class="form-control" style="width:100%;" v-model="mint_token_destination"/>
 			</div>
 			<div class="center" style="margin-top:40px">
 				<v-ons-input :placeholder="$t('message.tokenAmount')" type="number" class="form-control" style="width:100%;" v-model="mint_token_amount" float/>
@@ -106,26 +106,11 @@ export default {
 		return {
 			modalVisible:false,
 			segmentIndex: 0,
-			name:'bNAV',
-			symbol:'BNAV',
-			max_supply: "100000000",
-			tokens:[
-				{
-		            version: 0,
-		            id: "cf8a85405a557e1cdd81f2d67ff81bf77cbadc54f58899928e1b7f4f5255636a",
-		            name: "S Token",
-		            token_code: "SNAV",
-	        	},
-	        	{
-		            version: 0,
-		            id: "ee20c2b79bf82a4a2b0a3e3281c7c9b0bc9afe3508da4ffadd5fd05aaaa1ec21",
-		            name: "bNAV",
-		            token_code: "BNAV",
-		            current_supply: "0.00",
-	        	}
-        	],
+			name:'',
+			symbol:'',
+			max_supply: "",
 			mint_token_id:'',
-			mint_token_destination:'xNVjENRW4YGo1R89i8QZ9zhN8CbWm1wuaHGUotfsKoyMpumNkozVryvC69vSZXtzA6yXT1vhQgCmuAtr5mMwrB5QD7yys8PGyPFYnPjvntFYmokXkZV88jFTDLV71HjXUoUcLrZo1y2',
+			mint_token_destination:'',
 			mint_token_amount:""
 		}
 	},
@@ -133,8 +118,12 @@ export default {
 	{
 		...mapState({
 			config: state => state.config,
-		})
-
+			privateTokens: state => state.privateTokens,
+		}),
+	},
+	updated : function()
+	{
+		this.mint_token_destination=this.config.private_address;
 	},
 	methods:
 	{
@@ -213,10 +202,17 @@ export default {
 							console.log("Submitting transaction...");
 							wallet.SendTransaction(response.tx).then(function (response)
 							{
-								console.log(response);
 								vm.modalVisible=false;
-								//response.hashes[0]
-								vm.$ons.notification.alert(vm.$t('message.mintTokenSuccess'),{title:vm.$t('message.mintToken')});
+								if (response.error)
+								{
+									console.log(response.error);
+									console.log(response.hashes[0]);
+									vm.$ons.notification.alert(response.error,{title:vm.$t('message.mintToken')});
+								}
+								else
+								{
+									vm.$ons.notification.alert(vm.$t('message.mintTokenSuccess'),{title:vm.$t('message.mintToken')});
+								}
 							}).
 							catch((e) =>
 							{

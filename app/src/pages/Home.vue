@@ -24,7 +24,7 @@
                 	<span v-if="!hideBalance&&!config.Balance">{{$t('message.loading')}}</span>
 	        	</div>
 	        	<div class="card-sub-title" v-if="config.Balance&&config.Balance.nav.pending!=0">
-	        		{{$t('message.pending')}} : {{formatBalance(config.Balance.nav.pending)}}
+	        		{{$t('message.pending')}} : NAV {{formatBalance(config.Balance.nav.pending)}}
 	        	</div>
         	</div>
         </div>
@@ -45,7 +45,7 @@
                 	<span v-if="!hideBalance&&!config.Balance">{{$t('message.loading')}}</span>
 	        	</div>
 	        	<div class="card-sub-title" v-if="config.Balance&&config.Balance.xnav.pending!=0">
-	        		{{$t('message.pending')}} : {{formatBalance(config.Balance.xnav.pending)}}
+	        		{{$t('message.pending')}} : xNAV {{formatBalance(config.Balance.xnav.pending)}}
 	        	</div>
         	</div>
         </div>
@@ -66,7 +66,7 @@
                 	<span v-if="!hideBalance&&!config.Balance">{{$t('message.loading')}}</span>
 	        	</div>
 	        	<div class="card-sub-title" v-if="config.Balance&&config.Balance.staked.pending!=0">
-	        		{{$t('message.pending')}} : {{formatBalance(config.Balance.staked.pending)}}
+	        		{{$t('message.pending')}} : NAV {{formatBalance(config.Balance.staked.pending)}}
 	        	</div>
         	</div>
         </div>

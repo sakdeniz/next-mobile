@@ -579,9 +579,13 @@ created: function ()
 						this.$store.commit('config/setSyncProgress', 100);
 						this.$store.commit('config/setBalance', value);
 						this.$store.commit('config/setSyncStatus', vm.$t('message.walletSyncFinished'));
-						window.wallet.GetHistory().then((value) =>
+						wallet.GetHistory().then((value) =>
 						{
 							this.$store.commit('config/setTXHistory', value);
+						});
+						wallet.GetMyTokens().then((value) =>
+						{
+							this.$store.commit('config/setPrivateTokens', value);
 						});
 					});
 				});

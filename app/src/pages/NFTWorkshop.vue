@@ -58,6 +58,9 @@
 					<small>{{$t('message.createNFTInfo')}}</small>
 				</p>
 			</div>
+			<div class="center" style="margin-top:20px;margin-bottom:20px;">
+				<small>{{$t('message.validFileFormatsCollection')}}</small>
+			</div>
 			<label class="custom-file-upload">
 				<input type="file" ref="doc" @change="readFile()" />
 				 <i class="ion-ios-filing"></i>&nbsp;{{$t('message.chooseFile')}}
@@ -93,9 +96,23 @@
 					<small>{{$t('message.mintNFTInfo')}}</small>
 				</p>
 			</div>
+			<div class="center" style="margin-top:20px;margin-bottom:20px;">
+				<small>{{$t('message.validFileFormatsNFT')}}</small>
+			</div>
+			<label class="custom-file-upload">
+				<input type="file" ref="doc_nft" @change="readNFTFile()" />
+				 <i class="ion-ios-filing"></i>&nbsp;{{$t('message.chooseNFTFile')}}
+			</label>
+			<div style="margin-top:15px;">
+				<v-ons-button :disabled="!uploadNFTEnabled" v-on:click="addNFTFile"><i class="fa fa-cloud-upload"></i>&nbsp;{{$t('message.uploadNFTFileToIPFS')}}</v-ons-button>
+			</div>
+			<div style="margin-top:15px;" v-show="uploadSuccess">
+				<img style="width:100%;height:auto" :src="nftFileUrl"/>
+				<a :href="nftFileUrl">{{nftFileUrl}}</a>
+			</div>
 			<div class="center" style="margin-top:40px">
 				<v-ons-select style="width: 100%" v-model="mint_nft_token_id">
-					<option v-bind:value="item.id" v-for="(item,index) in tokens.filter(item => item.version==1)">{{item.name}}</option>
+					<option v-bind:value="item.id" v-for="(item,index) in config.privateTokens.filter(item => item.version==1)">{{item.name}}</option>
 				</v-ons-select>
 			</div>
 			<div class="center" style="margin-top:40px">
@@ -140,34 +157,35 @@ export default {
 	{
 		return {
 			file:"",
+			nftFile:"",
 			uploadEnabled:false,
+			uploadNFTEnabled:false,
 			uploadSuccess:false,
+			uploadNFTSuccess:false,
 			url:"",
+			nftFileUrl:"",
 			modalVisible:false,
 			segmentIndex: 0,
-			name:'NFT X',
+			name:'',
 			scheme:'',
-			max_supply: "100",
-			tokens:[
-				{
-		            version: 1,
-		            id: "bfd447e4869c0067ac621cf0866f37b0518ee226ed4f140f486e18e6b95b7c71",
-		            name: "NFT X",
-		            supply: 10000000000,
-	        	}
-        	],
+			nft_scheme:'',
+			max_supply: "",
 			mint_nft_token_id:'',
 			mint_nft_id:'',
 			mint_nft_scheme:'',
-			mint_nft_destination:'xNVjENRW4YGo1R89i8QZ9zhN8CbWm1wuaHGUotfsKoyMpumNkozVryvC69vSZXtzA6yXT1vhQgCmuAtr5mMwrB5QD7yys8PGyPFYnPjvntFYmokXkZV88jFTDLV71HjXUoUcLrZo1y2',
+			mint_nft_destination:'',
 		};
 	},
 	computed:
 	{
 		...mapState({
 			config: state => state.config,
+			privateTokens: state => state.privateTokens,
 		})
-
+	},
+	updated : function()
+	{
+		this.mint_nft_destination=this.config.private_address;
 	},
 	methods:
 	{
@@ -247,10 +265,17 @@ export default {
 							console.log("Submitting transaction...");
 							wallet.SendTransaction(response.tx).then(function (response)
 							{
-								console.log(response);
 								vm.modalVisible=false;
-								//response.hashes[0]
-								vm.$ons.notification.alert(vm.$t('message.mintNFTSuccess'),{title:vm.$t('message.mintNFT')});
+								if (response.error)
+								{
+									console.log(response.error);
+									console.log(response.hashes[0]);
+									vm.$ons.notification.alert(response.error,{title:vm.$t('message.mintNFT')});
+								}
+								else
+								{
+									vm.$ons.notification.alert(vm.$t('message.mintNFTSuccess'),{title:vm.$t('message.mintNFT')});
+								}
 							}).
 							catch((e) =>
 							{
@@ -300,7 +325,12 @@ export default {
 			let f=this.$refs.doc.files[0];
 			console.log(f.name);
 			console.log(f);
-			if (f.name.includes(".jpg")||f.name.includes(".jpeg")||f.name.includes(".png")||f.name.includes(".gif"))
+			if (
+				f.name.includes(".jpg")
+				||f.name.includes(".jpeg")
+				||f.name.includes(".png")
+				||f.name.includes(".gif")
+			)
 			{
 				console.log("Image file selected.");
 				this.file = this.$refs.doc.files[0];
@@ -316,6 +346,112 @@ export default {
 			{
 				console.log("Unsupported file type.");
 				vm.$ons.notification.alert("Unsupported file type.",{title:"Error"});
+			}
+		},
+		addNFTFile: function()
+		{
+			let vm=this;
+			let formData = new FormData();
+			formData.append('file', this.$refs.doc_nft.files[0]);
+			let ext=this.$refs.doc_nft.files[0].name.split('.').pop();
+			axios.post('https://ipfs.nextwallet.org/add.php',formData,{headers:{'Content-Type':'multipart/form-data'}}).then(function(response)
+			{
+				if (response.data.success)
+				{
+					vm.uploadNFTSuccess=true;
+					vm.nftFileUrl=response.data.url+response.data.cid;
+					console.log("Success!");
+					console.log("URL:"+response.data.url);
+					console.log("CID:"+response.data.cid);
+					console.log("Extension :" + ext);
+					let type=null;
+					switch(ext) {
+					  case "gif":
+					    type="image/gif";
+					    break;
+					  case "jpg":
+					    type="image/jpeg";
+					    break;
+					  case "jpeg":
+					    type="image/jpeg";
+					    break;
+					  case "webp":
+					    type="image/webp";
+					    break;
+					  case "svg":
+					    type="image/svg";
+					    break;
+					  case "webp":
+					    type="image/webp";
+					    break;
+					  case "wav":
+					    type="audio/wav";
+					    break;
+					  case "ogg":
+					    type="audio/ogg";
+					    break;
+					  case "mp3":
+					    type="audio/mp3";
+					    break;
+					  case "webm":
+					    type="video/webm";
+					    break;
+					  case "mp4":
+					    type="video/mp4";
+					    break;
+					  default:
+					    type="undefined";
+					}
+					console.log("Mime type : " + type);
+					vm.mint_nft_scheme="{'resource':'"+response.data.url+response.data.cid+"'}";
+				}
+				else
+				{
+					console.log("Failed!");
+					console.log("Reason:"+response.data.message);
+				}
+			})
+			.catch(function()
+			{
+				console.log("Failed!");
+			});
+		},
+		readNFTFile: function()
+		{
+			const reader = new FileReader();
+			let f=this.$refs.doc_nft.files[0];
+			console.log(f.name);
+			console.log(f);
+			let ext=f.name.split('.').pop();
+			console.log(ext);
+			if (
+				ext.includes("gif")
+				||ext.includes("jpg")
+				||ext.includes("jpeg")
+				||ext.includes("png")
+				||ext.includes("svg")
+				||ext.includes("webp")
+				||ext.includes("wav")
+				||ext.includes("ogg")
+				||ext.includes("mp3")
+				||ext.includes("webm")
+				||ext.includes("mp4")
+			)
+			{
+				console.log("NFT file selected.");
+				this.nftFile = this.$refs.doc_nft.files[0];
+				this.uploadNFTEnabled=true;
+				reader.onload = (res) =>
+				{
+					//console.log(res.target.result);
+				};
+				reader.onerror = (err) => console.log(err);
+				reader.readAsText(this.$refs.doc_nft.files[0]);
+			}
+			else
+			{
+				console.log("Unsupported file type for your NFT.");
+				vm.$ons.notification.alert("Unsupported file type for your NFT.",{title:"Error"});
 			}
 		}
 	}
