@@ -146,10 +146,12 @@ export default {
 			console.log(this.name);
 			console.log(this.symbol);
 			console.log(this.max_supply);
-			let vm=this;
 			console.log("Creating transaction...");
+			let vm=this;
+			vm.modalVisible=true;
 			wallet.CreateToken(this.name,this.symbol,this.max_supply*1e8).then(function (response)
 			{
+				vm.modalVisible=false;
 				console.log(response);
 				if (response.tx)
 				{
@@ -164,7 +166,6 @@ export default {
 							{
 								console.log(response);
 								vm.modalVisible=false;
-								//response.hashes[0]
 								vm.$ons.notification.alert(vm.$t('message.createTokenSuccess'),{title:vm.$t('message.createToken')});
 							}).
 							catch((e) =>
@@ -173,11 +174,16 @@ export default {
 								vm.$ons.notification.alert(vm.$t('message.createTokenFailed')+"<br/><br/>"+e.message,{title:vm.$t('message.createToken')});
 							});
 						}
+						else
+						{
+							vm.modalVisible=false;
+						}
 					});
 				}
 			})
 			.catch((e) =>
 			{
+				vm.modalVisible=false;
 				vm.$ons.notification.alert(e.message,{title:vm.$t('message.createToken')});
 			});
 		},
@@ -188,8 +194,10 @@ export default {
 			console.log(this.mint_token_amount);
 			console.log("Minting token...");
 			let vm=this;
+			vm.modalVisible=true;
 			wallet.MintToken(this.mint_token_id, this.mint_token_destination, this.mint_token_amount*1e8).then(function (response)
 			{
+				vm.modalVisible=false;
 				console.log(response);
 				if (response.tx)
 				{
@@ -220,12 +228,16 @@ export default {
 								vm.$ons.notification.alert(vm.$t('message.mintTokenFailed')+"<br/><br/>"+e.message,{title:vm.$t('message.mintToken')});
 							});
 						}
+						else
+						{
+							vm.modalVisible=false;
+						}
 					});
 				}
 			})
 			.catch((e) =>
 			{
-				console.log(e);
+				vm.modalVisible=false;
 				vm.$ons.notification.alert(e.message,{title:vm.$t('message.mintToken')});
 			});
 		},
