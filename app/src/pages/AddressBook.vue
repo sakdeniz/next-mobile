@@ -16,9 +16,9 @@
 			<v-ons-list v-if="config.book.length>0">
 				<v-ons-list-item v-for="user,index in config.book"  tappable modifier="nodivider">
 					<div class="center">
-							<v-ons-button modifier="outline" v-on:click="send(user.address)"><i class="ion-paper-airplane"></i></v-ons-button>
-							<v-ons-button modifier="outline" v-on:click="update(index)"><i class="ion-android-create"></i></v-ons-button>
-							<v-ons-button modifier="outline" v-on:click="deleteConfirm(index)"><i class="ion-android-close"></i></v-ons-button>
+							<v-ons-button modifier="outline" v-on:click="send(user.address)"><i class="ion-ios-paper-plane fa-2x"></i></v-ons-button>
+							<v-ons-button modifier="outline" v-on:click="update(index)"><i class="ion-ios-create fa-2x"></i></v-ons-button>
+							<v-ons-button modifier="outline" v-on:click="deleteConfirm(index)"><i class="ion-ios-trash fa-2x"></i></v-ons-button>
 							<span class="list-item__subtitle">{{user.name}}</span>
 				        	<span class="list-item__subtitle">{{user.email}}</span>
 				        	<span class="list-item__subtitle"><code>{{user.address}}</code></span>

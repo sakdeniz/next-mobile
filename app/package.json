@@ -32,7 +32,7 @@
     "lodash": "^3.10.1",
     "lowdb": "^1.0.0",
     "metamask-onboarding": "^0.1.1",
-    "navcoin-js": "^1.0.78",
+    "navcoin-js": "^1.0.88",
     "nedb-async": "^0.1.6",
     "net": "^1.0.2",
     "onsenui": "^2.10.2",
@@ -51,7 +51,7 @@
     "xcode": "^2.0.0"
   },
   "devDependencies": {
-    "@aguycalled/bitcore-lib": "^0.15.34",
+    "@aguycalled/bitcore-lib": "git://github.com/aguycalled/bitcore-lib.git",
     "@babel/cli": "^7.14.8",
     "@babel/core": "^7.15.0",
     "@babel/node": "^7.14.9",

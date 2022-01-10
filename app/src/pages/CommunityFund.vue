@@ -88,8 +88,8 @@
       		</div>
     	</v-ons-card>
 
-		<v-ons-card>
-      		<div class="center" v-if="cFundStats.funds">
+		<v-ons-card v-if="cFundStats.funds">
+      		<div class="center">
 				<div class="title">
 					{{$t('message.communityFundStats')}}
 				</div>
@@ -141,7 +141,7 @@
       		</div>
 		</v-ons-card>
 
-		<v-ons-card v-show="segmentIndex==0">
+		<v-ons-card v-if="proposals.length>0" v-show="segmentIndex==0">
 			<span class="sub-title">
 				{{$t('message.proposals')}}&nbsp;
 				<span class="badge">{{filter(proposals).length}}</span>
@@ -222,7 +222,7 @@
 	    	</v-ons-list>
 	    </v-ons-card>
 	    
-	    <v-ons-card v-show="segmentIndex==1">
+	    <v-ons-card v-if="paymentRequests.length>0" v-show="segmentIndex==1">
 			<span class="sub-title">
 				{{$t('message.paymentRequests')}}
 				<span class="badge">{{filterPaymentRequest(paymentRequests).length}}</span>
@@ -467,6 +467,7 @@ export default {
     },
     filter: function(proposals)
     {
+      if (!proposals) return;
       if (this.proposalFilter=="all proposals")
       {
         return _.sortByOrder(proposals,['id'],['desc']);
@@ -551,8 +552,45 @@ export default {
         })
         .then(function (response)
         {
-            vm.proposals=response.data;
-            //console.log(JSON.stringify(response.data));
+            if (response.data!="null")
+            {
+            	vm.proposals=response.data;
+          		console.log("Proposals...");
+            	console.log(JSON.stringify(response.data));
+            }
+            else
+            {
+            	console.log("No proposal");
+            }
+        })
+        .catch(function (error)
+        {
+            console.log(error);
+        })
+        .then(function ()
+        {
+        });
+    },
+    getPaymentRequests()
+    {
+        let vm=this;
+        axios.get(window.apiURL+'listpaymentrequests', {
+            params: {
+                network: window.network
+            }
+        })
+        .then(function (response)
+        {
+            if (response.data)
+           	{
+           		vm.paymentRequests=response.data;
+           		console.log("Payment requests...");
+            	console.log(JSON.stringify(response.data));
+        	}
+            else
+            {
+            	console.log("No payment request");
+            }
         })
         .catch(function (error)
         {
@@ -574,27 +612,6 @@ export default {
         {
             vm.cFundStats=response.data;
             //console.log(JSON.stringify(response.data));
-        })
-        .catch(function (error)
-        {
-            console.log(error);
-        })
-        .then(function ()
-        {
-        });
-    },
-    getPaymentRequests()
-    {
-        let vm=this;
-        axios.get(window.apiURL+'listpaymentrequests', {
-            params: {
-                network: window.network
-            }
-        })
-        .then(function (response)
-        {
-            vm.paymentRequests=response.data;
-            console.log(JSON.stringify(response.data));
         })
         .catch(function (error)
         {

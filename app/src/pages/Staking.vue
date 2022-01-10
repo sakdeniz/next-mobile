@@ -50,10 +50,12 @@
 			</div>
 		</v-ons-card>
 		<v-ons-card>
-			<div class="title">
-				{{$t('message.coldStakingFAQTitle')}}
+			<div class="content">
+				<div class="title">
+					{{$t('message.coldStakingFAQTitle')}}
+				</div>
+				<div v-html="$t('message.coldStakingFAQ')"></div>
 			</div>
-			<div v-html="$t('message.coldStakingFAQ')"></div>
 		</v-ons-card>
 	</v-ons-page>
 </template>

@@ -11,204 +11,244 @@
 					<button>{{$t('message.availableNFTs')}}</button>
 					<button>{{$t('message.createNFT')}}</button>
 					<button>{{$t('message.mintNFT')}}</button>
+					<button>{{$t('message.sendNFT')}}</button>
 				</v-ons-segment>
 			</div>
 		</v-ons-toolbar>
 		<v-ons-card v-show="segmentIndex==0">
-			<div class="center" style="margin-top:20px">
-				<center>
-					<img src="images/nft.png" style="width:64px;height:auto;">
-				</center>
-			</div>
-			<div class="center" v-show="segmentIndex==0" style="margin-top:20px;margin-bottom:20px;">
-				<v-ons-segment :index.sync="segmentIndexSub" style="width:100%">
-					<button>{{$t('message.NFTBrowse')}}</button>
-					<button>{{$t('message.NFTInspect')}}</button>
-				</v-ons-segment>
-			</div>
-			<v-ons-list v-if="segmentIndexSub==0 && config.Balance && Object.keys(config.Balance.nfts).length>0">
-				<v-ons-list-item expandable :expanded.sync="item.isExpanded" v-for="(item,index) in config.Balance.nfts" v-if="parseJSON(item.scheme).version==1">
-					<img src="images/nft2.png" style="width:32px;height:auto;margin-right:10px;"><b>{{item.name}}</b>
-					<div class="expandable-content">
-						<div class="left" style="width:25%;float:left;">
-							<img class="list-item__thumbnail" style="width:100%;height:auto" :src="parseJSON(item.scheme).image">
-						</div>
-						<div class="center" style="width:75%;float:right;">
-							<div style="margin-left:15px">
-								<div class="list-item__subtitle">
-									{{parseJSON(item.scheme).name}}
-								</div>
-								<div class="list-item__subtitle">
-									{{parseJSON(item.scheme).description}}
-								</div>
-								<div class="list-item__subtitle">
-									<i class="ion-ios-open"></i>&nbsp;<a target="_blank" :href="parseJSON(item.scheme).external_url">{{parseJSON(item.scheme).external_url}}</a>
+			<div class="content">
+				<div class="center" style="margin-top:20px">
+					<center>
+						<img src="images/nft.png" style="width:64px;height:auto;">
+					</center>
+				</div>
+				<div class="center" v-show="segmentIndex==0" style="margin-top:20px;margin-bottom:20px;">
+					<v-ons-segment :index.sync="segmentIndexSub" style="width:100%">
+						<button>{{$t('message.NFTBrowse')}}</button>
+						<button>{{$t('message.NFTInspect')}}</button>
+					</v-ons-segment>
+				</div>
+				<v-ons-list v-if="segmentIndexSub==0 && config.Balance && Object.keys(config.Balance.nfts).length>0">
+					<v-ons-list-item expandable :expanded.sync="item.isExpanded" v-for="(item,index) in config.Balance.nfts" v-if="parseJSON(item.scheme).version==1">
+						<img src="images/nft2.png" style="width:32px;height:auto;margin-right:10px;"><b>{{item.name}}</b>
+						<div class="expandable-content">
+							<div class="left" style="width:25%;float:left;">
+								<img class="list-item__thumbnail" style="width:100%;height:auto" :src="parseJSON(item.scheme).image">
+							</div>
+							<div class="center" style="width:75%;float:right;">
+								<div style="margin-left:15px">
+									<div class="list-item__subtitle">
+										{{parseJSON(item.scheme).name}}
+									</div>
+									<div class="list-item__subtitle">
+										{{parseJSON(item.scheme).description}}
+									</div>
+									<div class="list-item__subtitle">
+										<i class="ion-ios-open"></i>&nbsp;<a target="_blank" :href="parseJSON(item.scheme).external_url">{{parseJSON(item.scheme).external_url}}</a>
+									</div>
 								</div>
 							</div>
+							<div style="clear:both"></div>
+							<v-ons-list v-if="item.confirmed && Object.keys(item.confirmed).length>0">
+								<v-ons-list-header style="margin-top:15px;">NFTs ({{Object.keys(item.confirmed).length}})</v-ons-list-header>
+								<v-ons-list-item v-for="(item2,index) in item.confirmed">
+									<div class="left">
+										<i v-if="parseJSON(item2).attributes.content_type.split('/')[0]=='audio'" class="ion-ios-musical-notes fa-2x"></i>
+										<i v-if="parseJSON(item2).attributes.content_type.split('/')[0]=='video'" class="ion-ios-videocam fa-2x"></i>
+										<img v-else onerror="this.style.display='none'" class="list-item__thumbnail" :src="parseJSON(item2).image">
+									</div>
+									<div class="center">
+										<span class="list-item__subtitle">
+											{{parseJSON(item2).name}}
+										</span>
+										<span class="list-item__subtitle">
+											{{parseJSON(item2).description}}
+										</span>
+										<!--<span class="list-item__subtitle">
+											{{parseJSON(item2).attributes.content_type.split("/")[0]}}
+										</span>!-->
+										<span class="list-item__subtitle">
+											<i class="ion-ios-open"></i>&nbsp;<a target="_blank" :href="parseJSON(item2).external_url">{{parseJSON(item2).external_url}}</a>
+										</span>
+										<span class="list-item__subtitle" style="margin-top:5px;" v-if="parseJSON(item2).attributes.content_type.split('/')[0]=='audio'">
+											<audio controls style="width:100%">
+												<source :src="parseJSON(item2).image" type="audio/ogg">
+												<source :src="parseJSON(item2).image" type="audio/mpeg">
+												Your browser does not support the audio element.
+											</audio>
+										</span>
+										<span class="list-item__subtitle" style="margin-top:5px;" v-if="parseJSON(item2).attributes.content_type.split('/')[0]=='video'">
+											<video onplay="this.webkitEnterFullscreen();" controls playsinline style="width:100%">
+												<source :src="parseJSON(item2).image" type="video/mp4">
+												<source :src="parseJSON(item2).image" type="video/ogg">
+												Your browser does not support the audio element.
+											</video>
+										</span>
+									</div>
+								</v-ons-list-item>
+							</v-ons-list>
 						</div>
-						<div style="clear:both"></div>
-						<v-ons-list v-if="item.confirmed && Object.keys(item.confirmed).length>0">
-							<v-ons-list-header style="margin-top:15px;">NFTs ({{Object.keys(item.confirmed).length}})</v-ons-list-header>
-							<v-ons-list-item v-for="(item2,index) in item.confirmed">
-								<div class="left">
-									<i v-if="parseJSON(item2).attributes.content_type.split('/')[0]=='audio'" class="ion-ios-musical-notes fa-2x"></i>
-									<i v-if="parseJSON(item2).attributes.content_type.split('/')[0]=='video'" class="ion-ios-videocam fa-2x"></i>
-									<img v-else onerror="this.style.display='none'" class="list-item__thumbnail" :src="parseJSON(item2).image">
-								</div>
-								<div class="center">
-									<span class="list-item__subtitle">
-										{{parseJSON(item2).name}}
-									</span>
-									<span class="list-item__subtitle">
-										{{parseJSON(item2).description}}
-									</span>
-									<!--<span class="list-item__subtitle">
-										{{parseJSON(item2).attributes.content_type.split("/")[0]}}
-									</span>!-->
-									<span class="list-item__subtitle">
-										<i class="ion-ios-open"></i>&nbsp;<a target="_blank" :href="parseJSON(item2).external_url">{{parseJSON(item2).external_url}}</a>
-									</span>
-									<span class="list-item__subtitle" style="margin-top:5px;" v-if="parseJSON(item2).attributes.content_type.split('/')[0]=='audio'">
-										<audio controls style="width:100%">
-											<source :src="parseJSON(item2).image" type="audio/ogg">
-											<source :src="parseJSON(item2).image" type="audio/mpeg">
-											Your browser does not support the audio element.
-										</audio>
-									</span>
-									<span class="list-item__subtitle" style="margin-top:5px;" v-if="parseJSON(item2).attributes.content_type.split('/')[0]=='video'">
-										<video onplay="this.webkitEnterFullscreen();" controls playsinline style="width:100%">
-											<source :src="parseJSON(item2).image" type="video/mp4">
-											<source :src="parseJSON(item2).image" type="video/ogg">
-											Your browser does not support the audio element.
-										</video>
-									</span>
-								</div>
-							</v-ons-list-item>
-						</v-ons-list>
-					</div>
-				</v-ons-list-item>
-			</v-ons-list>
-			<v-ons-list v-if="segmentIndexSub==1 && config.Balance && Object.keys(config.Balance.nfts).length>0">
-				<v-ons-list-item expandable :expanded.sync="item.isExpanded" v-for="(item,index) in config.Balance.nfts">
-					<img src="images/nft2.png" style="width:32px;height:auto;margin-right:10px;"><b>{{item.name}}</b>
-					<div class="expandable-content">
-						<div>{{$t('message.nftName')}} : {{item.name}}</div>
-						<div>{{$t('message.nftMaxSupply')}} : {{formatBalance(item.supply)}}</div>
-						<h3>{{$t('message.nftScheme')}}</h3>
-						<code style="width:300px">{{item.scheme}}</code>
-						<h3>{{$t('message.mintedNFTs')}} ({{Object.keys(item.confirmed).length}})</h3>
-						<v-ons-list v-if="item.confirmed && Object.keys(item.confirmed).length>0">
-							<v-ons-list-item v-for="(item2,index) in item.confirmed">
-								<div class="center">
-									<img src="images/file.png" style="width:32px;height:auto;margin-right:10px;">NFT ID : {{index}}
-									<code style="width:300px">{{item2}}</code>
-								</div>
-							</v-ons-list-item>
-						</v-ons-list>
-					</div>
-				</v-ons-list-item>
-			</v-ons-list>
-			<div v-if="config.Balance && !Object.keys(config.Balance.nfts).length>0">
-				<p>
-					<small>{{$t('message.noPrivateTokenAvailable')}}</small>
-				</p>
-				<v-ons-button v-on:click="segmentIndex=1">{{$t('message.btnCreateNewToken')}}</v-ons-button>
+					</v-ons-list-item>
+				</v-ons-list>
+				<v-ons-list v-if="segmentIndexSub==1 && config.Balance && Object.keys(config.Balance.nfts).length>0">
+					<v-ons-list-item expandable :expanded.sync="item.isExpanded" v-for="(item,index) in config.Balance.nfts">
+						<img src="images/nft2.png" style="width:32px;height:auto;margin-right:10px;"><b>{{item.name}}</b>
+						<div class="expandable-content">
+							<div>{{$t('message.nftName')}} : {{item.name}}</div>
+							<div>{{$t('message.nftMaxSupply')}} : {{formatBalance(item.supply)}}</div>
+							<h3>{{$t('message.nftScheme')}}</h3>
+							<code style="width:300px">{{item.scheme}}</code>
+							<h3>{{$t('message.mintedNFTs')}} ({{Object.keys(item.confirmed).length}})</h3>
+							<v-ons-list v-if="item.confirmed && Object.keys(item.confirmed).length>0">
+								<v-ons-list-item v-for="(item2,index) in item.confirmed">
+									<div class="center">
+										<img src="images/file.png" style="width:32px;height:auto;margin-right:10px;">NFT ID : {{index}}
+										<code style="width:300px">{{item2}}</code>
+									</div>
+								</v-ons-list-item>
+							</v-ons-list>
+						</div>
+					</v-ons-list-item>
+				</v-ons-list>
+				<div v-if="config.Balance && !Object.keys(config.Balance.nfts).length>0">
+					<p>
+						<small>{{$t('message.noPrivateTokenAvailable')}}</small>
+					</p>
+					<v-ons-button v-on:click="segmentIndex=1">{{$t('message.btnCreateNewToken')}}</v-ons-button>
+				</div>
 			</div>
 		</v-ons-card>
 		<v-ons-card v-show="segmentIndex==1">
-			<div class="center" style="margin-top:20px">
-				<center>
-					<img src="images/nft3.png" style="width:64px;height:auto;">
-				</center>
-			</div>
-			<div class="center" style="margin-top:20px">
-				<p>
-					<small>{{$t('message.createNFTInfo')}}</small>
-				</p>
-			</div>
-			<div class="center" style="margin-top:20px;margin-bottom:20px;">
-				<small>{{$t('message.validFileFormatsCollection')}}</small>
-			</div>
-			<label class="custom-file-upload">
-				<input type="file" ref="doc" @change="readFile()" />
-				 <i class="ion-ios-filing"></i>&nbsp;{{$t('message.chooseFile')}}
-			</label>
-			<div style="margin-top:15px;">
-				<v-ons-button :disabled="!uploadEnabled" v-on:click="addFile"><i class="fa fa-cloud-upload"></i>&nbsp;{{$t('message.uploadFileToIPFS')}}</v-ons-button>
-			</div>
-			<div style="margin-top:15px;" v-show="uploadSuccess">
-				<img style="width:100%;height:auto" :src="url"/>
-				<a target="_blank" :href="url">{{url}}</a>
-			</div>
-			<div class="center" style="margin-top:40px">
-				<v-ons-input :placeholder="$t('message.nftCollectionName')" type="text" class="form-control" style="width:100%;" v-model="name"/>
-			</div>
-			<div class="center" style="margin-top:40px">
-				<v-ons-input :placeholder="$t('message.nftCollectionDescription')" type="text" class="form-control" style="width:100%;" v-model="description"/>
-			</div>
-			<div class="center" style="margin-top:40px">
-				<v-ons-input :placeholder="$t('message.nftCollectionExternalURL')" type="text" class="form-control" style="width:100%;" v-model="external_url"/>
-			</div>
-			<div class="center" style="margin-top:40px">
-				<v-ons-input :placeholder="$t('message.nftCollectionScheme')" type="text" class="form-control" style="width:100%;" v-model="scheme"/>
-			</div>
-			<div class="center" style="margin-top:40px">
-				<v-ons-input :placeholder="$t('message.nftMaxSupply')" type="number" class="form-control" style="width:100%;" v-model="max_supply" float/>
-			</div>
-			<div class="center" style="margin-top:40px">
-				<v-ons-button v-on:click='createNFT' :disabled="!name || !scheme || !max_supply"><i class="ion-ios-color-wand"></i>&nbsp;{{$t('message.btnCreateNFT')}}</v-ons-button>
+			<div class="content">
+				<div class="center" style="margin-top:20px">
+					<center>
+						<img src="images/nft3.png" style="width:64px;height:auto;">
+					</center>
+				</div>
+				<div class="center" style="margin-top:20px">
+					<p>
+						<small>{{$t('message.createNFTInfo')}}</small>
+					</p>
+				</div>
+				<div class="center" style="margin-top:20px;margin-bottom:20px;">
+					<small>{{$t('message.validFileFormatsCollection')}}</small>
+				</div>
+				<label class="custom-file-upload">
+					<input type="file" ref="doc" @change="readFile()" />
+					 <i class="ion-ios-filing"></i>&nbsp;{{$t('message.chooseFile')}}
+				</label>
+				<div style="margin-top:15px;">
+					<v-ons-button :disabled="!uploadEnabled" v-on:click="addFile"><i class="fa fa-cloud-upload"></i>&nbsp;{{$t('message.uploadFileToIPFS')}}</v-ons-button>
+				</div>
+				<div style="margin-top:15px;" v-show="uploadSuccess">
+					<img style="width:100%;height:auto" :src="url"/>
+					<a target="_blank" :href="url">{{url}}</a>
+				</div>
+				<div class="center" style="margin-top:40px">
+					<v-ons-input :placeholder="$t('message.nftCollectionName')" type="text" class="form-control" style="width:100%;" v-model="name"/>
+				</div>
+				<div class="center" style="margin-top:40px">
+					<v-ons-input :placeholder="$t('message.nftCollectionDescription')" type="text" class="form-control" style="width:100%;" v-model="description"/>
+				</div>
+				<div class="center" style="margin-top:40px">
+					<v-ons-input :placeholder="$t('message.nftCollectionExternalURL')" type="text" class="form-control" style="width:100%;" v-model="external_url"/>
+				</div>
+				<div class="center" style="margin-top:40px">
+					<v-ons-input :placeholder="$t('message.nftCollectionScheme')" type="text" class="form-control" style="width:100%;" v-model="scheme"/>
+				</div>
+				<div class="center" style="margin-top:40px">
+					<v-ons-input :placeholder="$t('message.nftMaxSupply')" type="number" class="form-control" style="width:100%;" v-model="max_supply" float/>
+				</div>
+				<div class="center" style="margin-top:40px">
+					<v-ons-button v-on:click='createNFT' :disabled="!name || !scheme || !max_supply"><i class="ion-ios-color-wand"></i>&nbsp;{{$t('message.btnCreateNFT')}}</v-ons-button>
+				</div>
 			</div>
 		</v-ons-card>
 		<v-ons-card v-show="segmentIndex==2">
-			<div class="center" style="margin-top:20px">
-				<center>
-					<img src="images/nft_mint.png" style="width:64px;height:auto;">
-				</center>
+			<div class="content">
+				<div class="center" style="margin-top:20px">
+					<center>
+						<img src="images/nft_mint.png" style="width:64px;height:auto;">
+					</center>
+				</div>
+				<div class="center" style="margin-top:20px">
+					<p>
+						<small>{{$t('message.mintNFTInfo')}}</small>
+					</p>
+				</div>
+				<div class="center" style="margin-top:20px;margin-bottom:20px;">
+					<small>{{$t('message.validFileFormatsNFT')}}</small>
+				</div>
+				<label class="custom-file-upload">
+					<input type="file" ref="doc_nft" @change="readNFTFile()" />
+					 <i class="ion-ios-filing"></i>&nbsp;{{$t('message.chooseNFTFile')}}
+				</label>
+				<div style="margin-top:15px;">
+					<v-ons-button :disabled="!uploadNFTEnabled" v-on:click="addNFTFile"><i class="fa fa-cloud-upload"></i>&nbsp;{{$t('message.uploadNFTFileToIPFS')}}</v-ons-button>
+				</div>
+				<div style="margin-top:15px;" v-show="uploadNFTSuccess">
+					<img style="width:100%;height:auto" :src="nftFileUrl"/>
+					<a target="_blank" :href="nftFileUrl">{{nftFileUrl}}</a>
+				</div>
+				<div class="center" style="margin-top:40px">
+					<v-ons-select style="width: 100%" v-model="mint_nft_token_id">
+						<option v-bind:value="item.id" v-for="(item,index) in config.privateTokens.filter(item => item.version==1)">{{item.name}}</option>
+					</v-ons-select>
+				</div>
+				<div class="center" style="margin-top:40px">
+					<v-ons-input :placeholder="$t('message.mintNFTDestination')" type="text" class="form-control" style="width:100%;" v-bind:value="config.private_address" v-model="mint_nft_destination"/>
+				</div>
+				<div class="center" style="margin-top:40px">
+					<v-ons-input :placeholder="$t('message.mintNFTID')" type="number" class="form-control" style="width:100%;" v-model="mint_nft_id" float/>
+				</div>
+				<div class="center" style="margin-top:40px">
+					<v-ons-input :placeholder="$t('message.nftName')" type="text" class="form-control" style="width:100%;" v-model="nft_name"/>
+				</div>
+				<div class="center" style="margin-top:40px">
+					<v-ons-input :placeholder="$t('message.nftDescription')" type="text" class="form-control" style="width:100%;" v-model="nft_description"/>
+				</div>
+				<div class="center" style="margin-top:40px">
+					<v-ons-input :placeholder="$t('message.nftExternalURL')" type="text" class="form-control" style="width:100%;" v-model="nft_external_url"/>
+				</div>
+				<div class="center" style="margin-top:40px">
+					<v-ons-input :placeholder="$t('message.mintNFTScheme')" type="text" class="form-control" style="width:100%;" v-model="mint_nft_scheme"/>
+				</div>
+				<div class="center" style="margin-top:40px">
+					<v-ons-button v-on:click='mintNFT' :disabled="!mint_nft_id || !mint_nft_destination || !mint_nft_scheme"><i class="ion-ios-hammer"></i>&nbsp;{{$t('message.btnMintNFT')}}</v-ons-button>
+				</div>
 			</div>
-			<div class="center" style="margin-top:20px">
-				<p>
-					<small>{{$t('message.mintNFTInfo')}}</small>
-				</p>
-			</div>
-			<div class="center" style="margin-top:20px;margin-bottom:20px;">
-				<small>{{$t('message.validFileFormatsNFT')}}</small>
-			</div>
-			<label class="custom-file-upload">
-				<input type="file" ref="doc_nft" @change="readNFTFile()" />
-				 <i class="ion-ios-filing"></i>&nbsp;{{$t('message.chooseNFTFile')}}
-			</label>
-			<div style="margin-top:15px;">
-				<v-ons-button :disabled="!uploadNFTEnabled" v-on:click="addNFTFile"><i class="fa fa-cloud-upload"></i>&nbsp;{{$t('message.uploadNFTFileToIPFS')}}</v-ons-button>
-			</div>
-			<div style="margin-top:15px;" v-show="uploadNFTSuccess">
-				<img style="width:100%;height:auto" :src="nftFileUrl"/>
-				<a target="_blank" :href="nftFileUrl">{{nftFileUrl}}</a>
-			</div>
-			<div class="center" style="margin-top:40px">
-				<v-ons-select style="width: 100%" v-model="mint_nft_token_id">
-					<option v-bind:value="item.id" v-for="(item,index) in config.privateTokens.filter(item => item.version==1)">{{item.name}}</option>
-				</v-ons-select>
-			</div>
-			<div class="center" style="margin-top:40px">
-				<v-ons-input :placeholder="$t('message.mintNFTDestination')" type="text" class="form-control" style="width:100%;" v-bind:value="config.private_address" v-model="mint_nft_destination"/>
-			</div>
-			<div class="center" style="margin-top:40px">
-				<v-ons-input :placeholder="$t('message.mintNFTID')" type="number" class="form-control" style="width:100%;" v-model="mint_nft_id" float/>
-			</div>
-			<div class="center" style="margin-top:40px">
-				<v-ons-input :placeholder="$t('message.nftName')" type="text" class="form-control" style="width:100%;" v-model="nft_name"/>
-			</div>
-			<div class="center" style="margin-top:40px">
-				<v-ons-input :placeholder="$t('message.nftDescription')" type="text" class="form-control" style="width:100%;" v-model="nft_description"/>
-			</div>
-			<div class="center" style="margin-top:40px">
-				<v-ons-input :placeholder="$t('message.nftExternalURL')" type="text" class="form-control" style="width:100%;" v-model="nft_external_url"/>
-			</div>
-			<div class="center" style="margin-top:40px">
-				<v-ons-input :placeholder="$t('message.mintNFTScheme')" type="text" class="form-control" style="width:100%;" v-model="mint_nft_scheme"/>
-			</div>
-			<div class="center" style="margin-top:40px">
-				<v-ons-button v-on:click='mintNFT' :disabled="!mint_nft_id || !mint_nft_destination || !mint_nft_scheme"><i class="ion-ios-hammer"></i>&nbsp;{{$t('message.btnMintNFT')}}</v-ons-button>
+		</v-ons-card>
+		<v-ons-card v-show="segmentIndex==3">
+			<div class="content">
+				<div class="center" style="margin-top:20px">
+					<center>
+						<img src="images/nft_send.png" style="width:64px;height:auto;">
+					</center>
+				</div>
+				<div class="center" style="margin-top:20px">
+					<p>
+						<small>{{$t('message.sendNFTInfo')}}</small>
+					</p>
+				</div>
+				<div class="center" style="margin-top:40px">
+					<v-ons-select style="width: 100%" v-model="token" v-if="config.Balance">
+						<option v-bind:value="index" v-for="(item,index) in config.Balance.nfts">{{item.name}}</option>
+					</v-ons-select>
+				</div>
+				<div class="center" style="margin-top:40px">
+					<v-ons-select style="width: 100%" v-model="nft_id" v-if="token">
+						<option v-bind:value="index" v-for="(item,index) in config.Balance.nfts[token].confirmed">{{index}} - {{(parseJSON(item)?parseJSON(item).name:item)}}</option>
+					</v-ons-select>
+				</div>
+				<div class="center" style="margin-top:40px">
+					<v-ons-input :placeholder="$t('message.sendXNAVAddress')" float type="text" v-model="address" style="width:100%"></v-ons-input>
+				</div>
+				<div class="center" style="margin-top:30px">
+					<v-ons-input :placeholder="$t('message.sendMemo')" float type="text" v-model="memo" style="width:100%"></v-ons-input>
+				</div>
+				<div class="center" style="margin-top:40px">
+					<v-ons-button :disabled="!address || !nft_id" v-on:click="send()">{{$t('message.sendSubmit')}}</v-ons-button>
+				</div>
 			</div>
 		</v-ons-card>
 	</v-ons-page>
@@ -269,7 +309,11 @@ export default {
 			mint_nft_id:'',
 			mint_nft_scheme:'',
 			mint_nft_destination:'',
-			version:1
+			version:1,
+			token:'',
+			nft_id:'',
+			address:'',
+			memo:''
 		};
 	},
 	computed:
@@ -305,24 +349,12 @@ export default {
 		{
 			try
 			{
-				console.log(JSON.parse(str));
+				//console.log(JSON.parse(str));
 				return JSON.parse(str);
 			}
 			catch(err)
 			{
-				console.log(err);
-				return {
-					version:"",
-					name:"",
-					description:"",
-					image:"",
-					external_url:"",
-					attributes:
-					{
-						thumbnail_url:"",
-						content_type:""
-					}
-				}
+				return false;
 			}
 		},
 		createNFT: function()
@@ -614,6 +646,67 @@ export default {
 			{
 				console.log("Unsupported file type for your NFT.");
 				vm.$ons.notification.alert("Unsupported file type for your NFT.",{title:"Error"});
+			}
+		},
+		send()
+		{
+			console.log(this.token);
+			console.log(this.nft_id);
+			console.log(this.address);
+			console.log(this.memo);
+			console.log("Sending...");
+			let vm=this;
+			let amount=parseFloat((vm.amount*1e8).toFixed(0));
+			try
+			{
+				vm.modalVisible=true;
+				window.wallet.tokenCreateTransaction(vm.address, 1, vm.memo, undefined, vm.token,vm.nft_id).then(function (tx)
+				{
+					vm.modalVisible=false;
+					vm.$ons.notification.confirm(vm.$t('message.transactionFee') + " : " + sb.toBitcoin(tx.fee) + " xNAV<br/><br/>"+vm.$t('message.sendConfirmQuestion'),{title:vm.$t('message.sendConfirm'),buttonLabels:[vm.$t('message.sendConfirmNo'), vm.$t('message.sendConfirmYes')]})
+					.then((response) =>
+					{
+						if (response)
+						{
+							vm.modalVisible=true;
+							window.wallet.SendTransaction(tx.tx).then(function (result)
+							{
+								if (result.error)
+								{
+									vm.modalVisible=false;
+									vm.$ons.notification.alert(result.error,{title:vm.$t('message.txSubmitError')});
+								}
+								else
+								{
+									vm.modalVisible=false;
+									vm.address=null;
+									vm.amount=null;
+									vm.$ons.notification.toast(vm.$t('message.sendSuccess'), { timeout: 3000, animation: 'fall' });
+								}
+							})
+							.catch((e) =>
+							{
+								vm.modalVisible=false;
+								vm.$ons.notification.alert(e.message,{title:vm.$t('message.send')});
+							});
+						}
+					})
+					.catch((e) =>
+					{
+						vm.modalVisible=false;
+						vm.$ons.notification.alert(e.message,{title:vm.$t('message.send')});
+					});
+				})
+				.catch((e) =>
+				{
+					vm.modalVisible=false;
+					vm.$ons.notification.alert(e.message,{title:vm.$t('message.send')});
+				});
+			}
+			catch(e)
+			{
+				vm.modalVisible=false;
+				vm.$ons.notification.alert(e.message,{title:vm.$t('message.send')});
 			}
 		}
 	}

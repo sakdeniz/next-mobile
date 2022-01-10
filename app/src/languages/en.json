@@ -264,9 +264,10 @@
 		"noServerAvailable":"No server available",
 		"pending":"Pending",
 		"walletSyncProgressInfo":"The wallet is currently syncing, the balances won't be accurate.",
-		"availableTokens":"Private Tokens",
-		"createToken":"Create Token",
-		"mintBurnToken":"Mint/Burn Token",
+		"availableTokens":"Tokens",
+		"createToken":"Create",
+		"mintBurnToken":"Mint/Burn",
+		"sendToken":"Send",
 		"btnMintToken":"Mint",
 		"btnBurnToken":"Burn",
 		"tokenName":"Token Name",
@@ -299,7 +300,7 @@
 		"mintTokenFailed":"There was a problem minting the private token.",
 		"noPrivateTokenAvailable":"You do not have a private token.",
 		"availableNFTs":"Collections",
-		"createNFT":"Create Collection",
+		"createNFT":"Create",
 		"mintNFT":"Mint NFT",
 		"chooseFile":"Choose an image file for your NFT collection",
 		"uploadFileToIPFS":"Upload File to IPFS",
@@ -342,6 +343,12 @@
 		"uploadNFTFileToIPFS":"Upload NFT File to IPFS",
 		"validFileFormatsNFT":"Supported file formats: .gif, .jpg, .jpeg, .png, .svg, .webp, .wav, .ogg, .mp3, .webm, .mp4",
 		"NFTBrowse":"Browse",
-		"NFTInspect":"Inspect"
+		"NFTInspect":"Inspect",
+		"sendMemo":"Memo",
+		"sendXNAVAddress":"XNAV Address",
+		"sendTokenAmount":"Token Amount",
+		"sendTokenInfo":"Please indicate the token you want to send, the xNAV address of the recipient and the amount you want to send. The memo field is optional. If you specify, the recipient will be able to see the memo information.",
+		"sendNFT":"Send",
+		"sendNFTInfo":"Please indicate the NFT you want to send and the xNAV address of the recipient. The memo field is optional. If you specify, the recipient will be able to see the memo information."
    }
 }

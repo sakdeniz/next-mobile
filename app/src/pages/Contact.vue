@@ -13,10 +13,10 @@
             		<v-ons-input :placeholder="$t('message.contactAddress')" float type="text" v-model="contactAddress" style="width:100%"></v-ons-input>
         		</div>
         		<div class="center" style="margin-top:20px">
-            		<v-ons-button v-on:click="scan()"><i class="ion-qr-scanner"></i>&nbsp;{{$t('message.scan')}}</v-ons-button>
+            		<v-ons-button v-on:click="addContact()"><i class="ion-ios-checkmark"></i>&nbsp;{{(update?$t('message.updateContact'):$t('message.addContact'))}}</v-ons-button>
         		</div>
-        		<div class="center" style="margin-top:40px">
-            		<v-ons-button v-on:click="addContact()">{{(update?$t('message.updateContact'):$t('message.addContact'))}}</v-ons-button>
+        		<div class="center" style="margin-top:20px">
+            		<v-ons-button v-on:click="scan()"><i class="ion-ios-qr-scanner"></i>&nbsp;{{$t('message.scan')}}</v-ons-button>
         		</div>
       		</div>
     	</v-ons-card>

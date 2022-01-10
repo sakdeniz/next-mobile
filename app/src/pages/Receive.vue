@@ -109,13 +109,35 @@
 							<v-ons-icon v-if="tx.amount<0" style="color:#cc6600" icon="ion-md-arrow-round-up" class="list-item__icon"></v-ons-icon>
 						</div>
 						<div class="center">
-			    	         <span class="list-item__title">
-			    	         	<span style="color:#cc6600" v-if="tx.amount<0"><small>{{formatBalance(tx.amount)}}</small></span>
-								<span style="color:#669900" v-if="tx.amount>0">+<small>{{formatBalance(tx.amount)}}</small></span>
+							<span class="list-item__title">
+								<span style="color:#cc6600" v-if="tx.amount<0"><small><span v-if="tx.type!='nft'">{{formatBalance(tx.amount)}} {{tx.token_code}} ({{tx.token_name}})</span><span v-else>{{tx.token_name}}</span></small></span>
+								<span style="color:#669900" v-if="tx.amount>0"><small><span v-if="tx.type!='nft'">+{{formatBalance(tx.amount)}} {{tx.token_code}} ({{tx.token_name}})</span><span v-else>{{tx.token_name}}</span></small></span>
 							</span>
-					    	<span class="list-item__subtitle"><small>{{(tx.confirmed?"Confirmed":"Not Confirmed")}}</small></span>
+							<span class="list-item__subtitle">
+								<span class="list-item__subtitle">
+									<span class="notification">{{tx.type.toUpperCase()}}</span>
+								</span>
+								<span class="list-item__subtitle">
+									<small>{{(tx.confirmed?"Confirmed":"Not Confirmed")}}</small>
+								</span>
+								<br/>
+								<div v-if="tx.memos.in.length>0">
+									<div v-for="(item,index) in tx.memos.in" style="margin-top:10px;">
+										<small v-if="item!='' && item!='Change'"><v-ons-icon style="color:#cc6600" icon="ion-md-arrow-round-up" class="list-item__icon"></v-ons-icon>{{item}}</small>
+									</div>
+								</div>
+								<div v-if="tx.memos.out.length>0">
+									<span class="list-item__subtitle" v-for="(item,index) in tx.memos.out" style="margin-top:10px;">
+										<small v-if="item!='' && item!='Change'"><v-ons-icon style="color:#669900" icon="ion-md-arrow-round-down" class="list-item__icon"></v-ons-icon>{{item}}</small>
+									</span>
+								</div>
+							</span>
 						</div>
-						<div class="right"><small>{{formatDate(tx.timestamp)}}</small></div>
+						<div class="right" style="margin: 0px;padding:0px;font-size:10pt;min-width:100px !important;">
+							<small>
+								{{formatDate(tx.timestamp)}}
+							</small>
+						</div>
 					</v-ons-list-item>
 				</v-ons-list>
 			</div>
