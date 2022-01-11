@@ -61,7 +61,7 @@
 			<div class="content">
 				<div class="center" style="margin-top:20px">
 					<center>
-						<img src="images/blocks.png" style="width:64px;height:auto;">
+						<img src="images/plan.png" style="width:64px;height:auto;">
 					</center>
 				</div>
 				<div class="center" style="margin-top:20px">
@@ -84,7 +84,7 @@
 					<v-ons-input :placeholder="$t('message.subDomainValue')" type="text" class="form-control" style="width:100%;" v-model="sub_domain_value" float/>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-button v-on:click='updateName' :disabled="!domain || !sub_domain || !sub_domain_key || !sub_domain_value"><i class="ion-ios-hammer"></i>&nbsp;{{$t('message.btnUpdateName')}}</v-ons-button>
+					<v-ons-button v-on:click='updateName' :disabled="!domain || !sub_domain || !sub_domain_key || !sub_domain_value"><i class="ion-ios-checkmark"></i>&nbsp;{{$t('message.btnUpdateName')}}</v-ons-button>
 				</div>
 			</div>
 		</v-ons-card>	
