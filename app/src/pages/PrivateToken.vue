@@ -28,7 +28,7 @@
 						<div class="expandable-content">
 							<div>{{$t('message.tokenName')}} : {{item.name}}</div>
 							<div>{{$t('message.tokenSymbol')}} : {{item.code}}</div>
-							<div>{{$t('message.tokenMaxSupply')}} : {{formatBalance(item.supply)}} {{item.code}}</div>
+							<div>{{$t('message.tokenMaxSupply')}} : {{numberWithCommas(item.supply)}} {{item.code}}</div>
 							<div v-if="item.confirmed">{{$t('message.tokenBalance')}} : {{formatBalance(item.confirmed)}} {{item.code}}</div>
 							<div v-if="item.pending">{{$t('message.tokenPending')}} : {{formatBalance(item.pending)}} {{item.code}}</div>
 						</div>
@@ -182,6 +182,10 @@ export default {
 			{
 				return "";
 			}
+		},
+		numberWithCommas: n => 
+		{
+    	return n.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 		},
 		createToken: function()
 		{

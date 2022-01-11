@@ -71,6 +71,7 @@ export default {
       	Balance:null,
       	txs:[],
       	privateTokens:[],
+        names:[],
       	lock_wallet_on_deactivate:false,
       	cold_staking_active:false,
       	cold_staking_address:"",
@@ -111,6 +112,10 @@ export default {
       	setPrivateTokens(state,privateTokens)
         {
 			state.privateTokens=privateTokens;
+        },
+        setNames(state,names)
+        {
+      state.names=names;
         },
       	setSyncStatus(state,status)
         {

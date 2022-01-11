@@ -318,7 +318,7 @@ export default {
   },
   created: function ()
   {
-	this.publicAddress=db.get('addr').value()[0].publicAddress;
+		this.publicAddress=db.get('addr').value()[0].publicAddress;
     this.getProposals();
     this.getPaymentRequests();
     this.getcFundStats();

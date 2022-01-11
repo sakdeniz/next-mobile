@@ -27,7 +27,6 @@ import Settings from './pages/Settings.vue';
 import Dex from './pages/Dex.vue';
 import PrivateToken from './pages/PrivateToken.vue';
 import NFTWorkshop from './pages/NFTWorkshop.vue';
-import DotNAV from './pages/DotNAV.vue';
 
 // Just a linear interpolation formula
 const lerp = (x0, x1, t) => parseInt((1 - t) * x0 + t * x1, 10);
@@ -86,12 +85,6 @@ export default {
           label: '',
           icon: this.md ? 'ion-ios-images' : 'ion-ios-images',
           page: NFTWorkshop,
-          theme: purple
-        },
-        {
-          label: '',
-          icon: this.md ? 'ion-ios-globe' : 'ion-ios-globe',
-          page: DotNAV,
           theme: purple
         },
         {

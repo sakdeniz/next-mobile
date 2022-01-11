@@ -587,10 +587,6 @@ created: function ()
 						{
 							this.$store.commit('config/setPrivateTokens', value);
 						});
-						wallet.GetMyNames().then((value) =>
-						{
-							this.$store.commit('config/setNames', value);
-						});
 					});
 				});
 				wallet.GetBalance().then((value) =>
