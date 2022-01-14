@@ -295,7 +295,7 @@ data()
 		shutUp: this.md,
 		step:0,
 		segmentIndex: 0,
-		password:"123456",
+		password:"",
 		password_again:"",
 		walletExist:false,
 		languageSelected:false,

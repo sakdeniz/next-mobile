@@ -112,9 +112,9 @@
 				</v-ons-list>
 				<div v-if="config.Balance && !Object.keys(config.Balance.nfts).length>0">
 					<p>
-						<small>{{$t('message.noPrivateTokenAvailable')}}</small>
+						<small>{{$t('message.noNFTCollectionAvailable')}}</small>
 					</p>
-					<v-ons-button v-on:click="segmentIndex=1">{{$t('message.btnCreateNewToken')}}</v-ons-button>
+					<v-ons-button v-on:click="segmentIndex=1">{{$t('message.btnCreateNFT')}}</v-ons-button>
 				</div>
 			</div>
 		</v-ons-card>
@@ -145,6 +145,11 @@
 					<a target="_blank" :href="url">{{url}}</a>
 				</div>
 				<div class="center" style="margin-top:40px">
+					<v-ons-select style="width: 100%" v-model="category">
+						<option v-bind:value="item.id" v-for="(item,index) in categories">{{item.name}}</option>
+					</v-ons-select>
+				</div>
+				<div class="center" style="margin-top:40px">
 					<v-ons-input :placeholder="$t('message.nftCollectionName')" type="text" class="form-control" style="width:100%;" v-model="name"/>
 				</div>
 				<div class="center" style="margin-top:40px">
@@ -160,7 +165,7 @@
 					<v-ons-input :placeholder="$t('message.nftMaxSupply')" type="number" class="form-control" style="width:100%;" v-model="max_supply" float/>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-button v-on:click='createNFT' :disabled="!name || !scheme || !max_supply"><i class="ion-ios-color-wand"></i>&nbsp;{{$t('message.btnCreateNFT')}}</v-ons-button>
+					<v-ons-button v-on:click='createNFT' :disabled="!category || !name || !scheme || !max_supply"><i class="ion-ios-color-wand"></i>&nbsp;{{$t('message.btnCreateNFT')}}</v-ons-button>
 				</div>
 			</div>
 		</v-ons-card>
@@ -283,6 +288,16 @@ export default {
 	data()
 	{
 		return {
+			categories:
+			[
+				{"id":"art",name:"Art"},
+				{"id":"collectibles",name:"Collectibles"},
+				{"id":"music",name:"Music"},
+				{"id":"photography",name:"Photography"},
+				{"id":"sports",name:"Sports"},
+				{"id":"trading_cards",name:"Trading Cards"},
+				{"id":"utility",name:"Utility"}
+			],
 			file:"",
 			file_type_collection:'',
 			nft_file_type_collection:'',
@@ -296,6 +311,7 @@ export default {
 			modalVisible:false,
 			segmentIndex:0,
 			segmentIndexSub:0,
+			category:undefined,
 			name:'',
 			description:'',
 			external_url:'',
@@ -528,6 +544,7 @@ export default {
 		{
 			this.scheme=JSON.stringify({
 				version:this.version,
+				category:this.category,
 				name:this.name,
 				description:this.description,
 				image:this.url,

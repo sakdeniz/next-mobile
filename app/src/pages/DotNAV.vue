@@ -49,11 +49,17 @@
 						<small>{{$t('message.registerNameInfo')}}</small>
 					</p>
 				</div>
-				<div class="center" style="margin-top:40px">
-					<v-ons-input :placeholder="$t('message.name')" type="text" class="form-control" style="width:100%;" v-model="name"/>
+				<div class="center" style="margin-top:20px">
+					<p>
+						<small>{{$t('message.registerNameInfo2')}}</small>
+					</p>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-button v-on:click='registerName' :disabled="!name"><i class="ion-ios-color-wand"></i>&nbsp;{{$t('message.btnRegisterName')}}</v-ons-button>
+					<v-ons-input :on:placeholder="$t('message.name')" type="text" class="form-control" style="width:100%;" v-model="name" v-on:input="IsValidDotNavName()"/>
+					<p v-if="name" v-html="(is_name_valid?'<span style=\'color:#228B22\'><i class=\'ion-ios-checkmark\'></i>&nbsp;Name valid</span>':'<span style=\'color:#DC143C\'><i class=\'ion-ios-close\'></i>&nbsp;Name not valid</span>')"></p>
+				</div>
+				<div class="center" style="margin-top:40px">
+					<v-ons-button v-on:click='registerName' :disabled="!name || !is_name_valid"><i class="ion-ios-color-wand"></i>&nbsp;{{$t('message.btnRegisterName')}}</v-ons-button>
 				</div>
 			</div>
 		</v-ons-card>
@@ -76,15 +82,17 @@
 				</div>
 				<div class="center" style="margin-top:40px">
 					<v-ons-input :placeholder="$t('message.subDomain')" type="text" class="form-control" style="width:100%;" v-model="sub_domain"/>
+					<p v-if="sub_domain" v-html="(is_sub_domain_valid?'<span style=\'color:#228B22\'><i class=\'ion-ios-checkmark\'></i>&nbsp;Name valid</span>':'<span style=\'color:#DC143C\'><i class=\'ion-ios-close\'></i>&nbsp;Name not valid</span>')"></p>
 				</div>
 				<div class="center" style="margin-top:40px">
 					<v-ons-input :placeholder="$t('message.subDomainKey')" type="text" class="form-control" style="width:100%;" v-model="sub_domain_key" float/>
+					<p v-if="sub_domain_key" v-html="(is_sub_domain_key_valid?'<span style=\'color:#228B22\'><i class=\'ion-ios-checkmark\'></i>&nbsp;Key valid</span>':'<span style=\'color:#DC143C\'><i class=\'ion-ios-close\'></i>&nbsp;Key not valid</span>')"></p>
 				</div>
 				<div class="center" style="margin-top:40px">
 					<v-ons-input :placeholder="$t('message.subDomainValue')" type="text" class="form-control" style="width:100%;" v-model="sub_domain_value" float/>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-button v-on:click='updateName' :disabled="!domain || !sub_domain || !sub_domain_key || !sub_domain_value"><i class="ion-ios-checkmark"></i>&nbsp;{{$t('message.btnUpdateName')}}</v-ons-button>
+					<v-ons-button v-on:click='updateName' :disabled="!domain || !sub_domain || !sub_domain_key || !sub_domain_value  || !is_sub_domain_valid || !is_sub_domain_key_valid"><i class="ion-ios-checkmark"></i>&nbsp;{{$t('message.btnUpdateName')}}</v-ons-button>
 				</div>
 			</div>
 		</v-ons-card>
@@ -105,9 +113,12 @@ export default {
 			modalVisible:false,
 			segmentIndex: 0,
 			name:'',
+			is_name_valid:false,
 			domain:'',
 			sub_domain:'',
+			is_sub_domain_valid:false,
 			sub_domain_key:'',
+			is_sub_domain_key_valid:false,
 			sub_domain_value:'',
 		}
 	},
@@ -116,7 +127,22 @@ export default {
 		...mapState({
 			config: state => state.config,
 			names: state => state.names,
-		}),
+		})
+	},
+	watch:
+	{
+		name(value)
+		{
+			this.is_name_valid=wallet.IsValidDotNavName(value);
+		},
+		sub_domain(value)
+		{
+			this.is_sub_domain_valid=wallet.IsValidDotNavKey(value);
+		},
+		sub_domain_key(value)
+		{
+			this.is_sub_domain_key_valid=wallet.IsValidDotNavKey(value);
+		}
 	},
 	methods:
 	{
