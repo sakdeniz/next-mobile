@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@liutianv1/bls-signatures": "^0.0.1",
+    "@mapbox/node-pre-gyp": "^1.0.8",
     "@uniswap/sdk": "^3.0.3",
     "async-mutex": "^0.3.1",
     "axios": "^0.21.1",
@@ -35,6 +36,7 @@
     "onsenui": "^2.10.2",
     "sass-loader": "^10.1.1",
     "satoshi-bitcoin": "^1.0.4",
+    "sqlite3": "^4.2.0",
     "style-loader": "^2.0.0",
     "tls": "0.0.1",
     "vue": "^2.5.3",

@@ -20,20 +20,20 @@
 					<center>
 						<img src="images/dns.png" style="width:64px;height:auto;">
 					</center>
-				<v-ons-list v-if="config.names.length>0">
-					<v-ons-list-item expandable :expanded.sync="item.isExpanded" v-for="(item,index) in config.names">
-						<img src="images/block.png" style="width:32px;height:auto;margin-right:10px;"><b>{{item.name}}</b>
-						<div class="expandable-content">
-							<div>{{$t('message.name')}} : {{item.name}}</div>
-						</div>
-					</v-ons-list-item>
-				</v-ons-list>
-				<div v-else>
-					<p>
-						<small>{{$t('message.noNameAvailable')}}</small>
-					</p>
-					<v-ons-button v-on:click="segmentIndex=1">{{$t('message.btnRegisterName')}}</v-ons-button>
-				</div>					
+					<v-ons-list v-if="config.names.length>0">
+						<v-ons-list-item expandable :expanded.sync="item.isExpanded" v-for="(item,index) in config.names">
+							<img src="images/block.png" style="width:32px;height:auto;margin-right:10px;"><b>{{item.name}}</b>
+							<div class="expandable-content">
+								<div>{{$t('message.name')}} : {{item.name}}</div>
+							</div>
+						</v-ons-list-item>
+					</v-ons-list>
+					<div v-else>
+						<p>
+							<small>{{$t('message.noNameAvailable')}}</small>
+						</p>
+						<v-ons-button v-on:click="segmentIndex=1">{{$t('message.btnRegisterName')}}</v-ons-button>
+					</div>
 				</div>
 			</div>
 		</v-ons-card>
@@ -87,7 +87,7 @@
 					<v-ons-button v-on:click='updateName' :disabled="!domain || !sub_domain || !sub_domain_key || !sub_domain_value"><i class="ion-ios-checkmark"></i>&nbsp;{{$t('message.btnUpdateName')}}</v-ons-button>
 				</div>
 			</div>
-		</v-ons-card>	
+		</v-ons-card>
 	</v-ons-page>
 </template>
 <script type="text/javascript">
