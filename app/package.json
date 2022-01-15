@@ -7,7 +7,7 @@
   "scripts": {
     "lint": "eslint . --ext js,json",
     "lint:fix": "eslint . --fix --ext js,json",
-    "start": "webpack-dev-server --open --hot --host 127.0.0.1 --port 7000",
+    "start": "webpack-dev-server --open --hot --host 192.168.1.100 --port 7000",
     "build": "webpack --mode production --progress && cordova build",
     "test": "yarn lint",
     "deploy": "npm run build && npm run demo:index && gh-pages -d www",
@@ -31,7 +31,7 @@
     "lodash": "^3.10.1",
     "lowdb": "^1.0.0",
     "metamask-onboarding": "^0.1.1",
-    "navcoin-js": "^1.0.88",
+    "navcoin-js": "^1.0.93",
     "net": "^1.0.2",
     "onsenui": "^2.10.2",
     "sass-loader": "^10.1.1",

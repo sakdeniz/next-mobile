@@ -145,7 +145,7 @@
 					<a target="_blank" :href="url">{{url}}</a>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-select style="width: 100%" v-model="category">
+					Category : <v-ons-select style="width: 100%" v-model="category">
 						<option v-bind:value="item.id" v-for="(item,index) in categories">{{item.name}}</option>
 					</v-ons-select>
 				</div>
@@ -196,7 +196,7 @@
 					<a target="_blank" :href="nftFileUrl">{{nftFileUrl}}</a>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-select style="width: 100%" v-model="mint_nft_token_id">
+					Collection : <v-ons-select style="width: 100%" v-model="mint_nft_token_id">
 						<option v-bind:value="item.id" v-for="(item,index) in config.privateTokens.filter(item => item.version==1)">{{item.name}}</option>
 					</v-ons-select>
 				</div>
@@ -236,12 +236,12 @@
 					</p>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-select style="width: 100%" v-model="token" v-if="config.Balance">
+					Collection : <v-ons-select style="width: 100%" v-model="token" v-if="config.Balance">
 						<option v-bind:value="index" v-for="(item,index) in config.Balance.nfts">{{item.name}}</option>
 					</v-ons-select>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-select style="width: 100%" v-model="nft_id" v-if="token">
+					NFT : <v-ons-select style="width: 100%" v-model="nft_id" v-if="token">
 						<option v-bind:value="index" v-for="(item,index) in config.Balance.nfts[token].confirmed">{{index}} - {{(parseJSON(item)?parseJSON(item).name:item)}}</option>
 					</v-ons-select>
 				</div>

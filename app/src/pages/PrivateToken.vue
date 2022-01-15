@@ -81,7 +81,7 @@
 					</p>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-select style="width: 100%" v-model="mint_token_id">
+					Token : <v-ons-select style="width: 100%" v-model="mint_token_id">
 						<option v-bind:value="item.id" v-for="(item,index) in config.privateTokens.filter(item => item.version==0)">{{item.name}}</option>
 					</v-ons-select>
 				</div>
@@ -110,7 +110,7 @@
 					</p>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-select style="width: 100%" v-model="token" v-if="config.Balance">
+					Token : <v-ons-select style="width: 100%" v-model="token" v-if="config.Balance">
 						<option v-bind:value="index" v-for="(item,index) in config.Balance.tokens">{{item.name}} - {{formatBalance(item.confirmed)}} {{item.code}}</option>
 					</v-ons-select>
 				</div>
@@ -183,9 +183,15 @@ export default {
 				return "";
 			}
 		},
-		numberWithCommas: n => 
+		numberWithCommas: (num,sep,dec,u) => 
 		{
-    	return n.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+			sep=sep||',';
+			u=u||'\\d';
+			if(typeof num!='string')
+			{
+				num=String(num);if(dec&&dec!='.')num=num.replace('.',dec);
+			}
+			return num.replace(RegExp('\\'+(dec||'.')+u+'+|'+u+'(?=(?:'+u+'{3})+(?!'+u+'))','g'),function(a){return a.length==1?a+sep:a})
 		},
 		createToken: function()
 		{

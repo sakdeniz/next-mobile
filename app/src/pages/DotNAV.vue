@@ -55,7 +55,7 @@
 					</p>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-input :on:placeholder="$t('message.name')" type="text" class="form-control" style="width:100%;" v-model="name" v-on:input="IsValidDotNavName()"/>
+					<v-ons-input :placeholder="$t('message.name')" type="text" class="form-control" style="width:100%;" v-model="name" v-on:input="IsValidDotNavName()"/>
 					<p v-if="name" v-html="(is_name_valid?'<span style=\'color:#228B22\'><i class=\'ion-ios-checkmark\'></i>&nbsp;Name valid</span>':'<span style=\'color:#DC143C\'><i class=\'ion-ios-close\'></i>&nbsp;Name not valid</span>')"></p>
 				</div>
 				<div class="center" style="margin-top:40px">
@@ -76,7 +76,7 @@
 					</p>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-select style="width: 100%" v-model="domain">
+					Name : <v-ons-select style="width: 100%" v-model="domain">
 						<option v-bind:value="item.name" v-for="(item,index) in config.names">{{item.name}}</option>
 					</v-ons-select>
 				</div>
