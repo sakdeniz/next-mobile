@@ -27,7 +27,7 @@ export default
 			njs:null,
 		};
 	},
-	mounted()
+	created()
 	{
 		this.njs=njs;
 	}
