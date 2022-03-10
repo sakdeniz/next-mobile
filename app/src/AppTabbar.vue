@@ -25,9 +25,6 @@ import Staking from './pages/Staking.vue';
 import CommunityFund from './pages/CommunityFund.vue';
 import Settings from './pages/Settings.vue';
 import Dex from './pages/Dex.vue';
-import PrivateToken from './pages/PrivateToken.vue';
-import NFTWorkshop from './pages/NFTWorkshop.vue';
-import DotNAV from './pages/DotNAV.vue';
 
 // Just a linear interpolation formula
 const lerp = (x0, x1, t) => parseInt((1 - t) * x0 + t * x1, 10);
@@ -48,19 +45,19 @@ export default {
       tabs: [
         {
           label: '',
-          icon: this.md ? 'ion-md-wallet' : 'ion-md-wallet',
+          icon: this.md ? 'ion-ios-wallet' : 'ion-ios-wallet',
           page: Home,
           theme: purple
         },
         {
           label: '',
-          icon: this.md ? 'ion-md-swap' : 'ion-md-swap',
+          icon: this.md ? 'ion-ios-swap' : 'ion-ios-swap',
           page: Receive,
           theme: purple
         },
         {
           label: '',
-          icon: this.md ? 'ion-md-paper-plane' : 'ion-md-paper-plane',
+          icon: this.md ? 'ion-ios-send' : 'ion-ios-send',
           page: Send,
           theme: purple
         },
@@ -74,24 +71,6 @@ export default {
           label: '',
           icon: this.md ? 'ion-md-chatboxes' : 'ion-md-chatboxes',
           page: CommunityFund,
-          theme: purple
-        },
-        {
-          label: '',
-          icon: this.md ? 'ion-ios-hammer' : 'ion-ios-hammer',
-          page: PrivateToken,
-          theme: purple
-        },
-        {
-          label: '',
-          icon: this.md ? 'ion-ios-images' : 'ion-ios-images',
-          page: NFTWorkshop,
-          theme: purple
-        },
-        {
-          label: '',
-          icon: this.md ? 'ion-ios-globe' : 'ion-ios-globe',
-          page: DotNAV,
           theme: purple
         },
         {

@@ -1,20 +1,19 @@
 <template id="main">
 	<v-ons-page>
+		<custom-toolbar v-bind="toolbarInfo"></custom-toolbar>
 		<v-ons-modal :visible="modalVisible" @click="modalVisible = false">
 			<p style="text-align: center">
 				{{$t('message.pleaseWait')}} <v-ons-icon icon="fa-spinner" spin></v-ons-icon>
 			</p>
 		</v-ons-modal>
-		<v-ons-toolbar modifier="transparent">
-			<div class="center">
-				<v-ons-segment :index.sync="segmentIndex" style="width:100%">
-					<button>{{$t('message.availableNFTs')}}</button>
-					<button>{{$t('message.createNFT')}}</button>
-					<button>{{$t('message.mintNFT')}}</button>
-					<button>{{$t('message.sendNFT')}}</button>
-				</v-ons-segment>
-			</div>
-		</v-ons-toolbar>
+		<div class="center" style="margin-top:20px;">
+			<v-ons-segment :index.sync="segmentIndex" style="width:100%">
+				<button>{{$t('message.availableNFTs')}}</button>
+				<button>{{$t('message.createNFT')}}</button>
+				<button>{{$t('message.mintNFT')}}</button>
+				<button>{{$t('message.sendNFT')}}</button>
+			</v-ons-segment>
+		</div>
 		<v-ons-card v-show="segmentIndex==0">
 			<div class="content">
 				<div class="center" style="margin-top:20px">
@@ -44,6 +43,9 @@
 										{{parseJSON(item.scheme).description}}
 									</div>
 									<div class="list-item__subtitle">
+										<code>{{index}}</code>
+									</div>
+									<div class="list-item__subtitle">
 										<i class="ion-ios-open"></i>&nbsp;<a target="_blank" :href="parseJSON(item.scheme).external_url">{{parseJSON(item.scheme).external_url}}</a>
 									</div>
 								</div>
@@ -58,6 +60,9 @@
 										<img v-else onerror="this.style.display='none'" class="list-item__thumbnail" :src="parseJSON(item2).image">
 									</div>
 									<div class="center">
+										<div class="list-item__subtitle">
+											ID : {{index}}
+										</div>
 										<span class="list-item__subtitle">
 											{{parseJSON(item2).name}}
 										</span>
@@ -145,24 +150,24 @@
 					<a target="_blank" :href="url">{{url}}</a>
 				</div>
 				<div class="center" style="margin-top:40px">
-					Category : <v-ons-select style="width: 100%" v-model="category">
+					{{$t('message.category')}} : <v-ons-select float style="width: 100%" v-model="category">
 						<option v-bind:value="item.id" v-for="(item,index) in categories">{{item.name}}</option>
 					</v-ons-select>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-input :placeholder="$t('message.nftCollectionName')" type="text" class="form-control" style="width:100%;" v-model="name"/>
+					<v-ons-input :placeholder="$t('message.nftCollectionName')" float type="text" style="width:100%;" v-model="name"/>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-input :placeholder="$t('message.nftCollectionDescription')" type="text" class="form-control" style="width:100%;" v-model="description"/>
+					<v-ons-input :placeholder="$t('message.nftCollectionDescription')" float type="text" style="width:100%;" v-model="description"/>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-input :placeholder="$t('message.nftCollectionExternalURL')" type="text" class="form-control" style="width:100%;" v-model="external_url"/>
+					<v-ons-input :placeholder="$t('message.nftCollectionExternalURL')" float type="text" style="width:100%;" v-model="external_url"/>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-input :placeholder="$t('message.nftCollectionScheme')" type="text" class="form-control" style="width:100%;" v-model="scheme"/>
+					<v-ons-input :placeholder="$t('message.nftCollectionScheme')" float type="text" style="width:100%;" v-model="scheme"/>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-input :placeholder="$t('message.nftMaxSupply')" type="number" class="form-control" style="width:100%;" v-model="max_supply" float/>
+					<v-ons-input :placeholder="$t('message.nftMaxSupply')" float type="number" style="width:100%;" v-model="max_supply"/>
 				</div>
 				<div class="center" style="margin-top:40px">
 					<v-ons-button v-on:click='createNFT' :disabled="!category || !name || !scheme || !max_supply"><i class="ion-ios-color-wand"></i>&nbsp;{{$t('message.btnCreateNFT')}}</v-ons-button>
@@ -196,27 +201,27 @@
 					<a target="_blank" :href="nftFileUrl">{{nftFileUrl}}</a>
 				</div>
 				<div class="center" style="margin-top:40px">
-					Collection : <v-ons-select style="width: 100%" v-model="mint_nft_token_id">
+					{{$t('message.collection')}} : <v-ons-select float style="width: 100%" v-model="mint_nft_token_id">
 						<option v-bind:value="item.id" v-for="(item,index) in config.privateTokens.filter(item => item.version==1)">{{item.name}}</option>
 					</v-ons-select>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-input :placeholder="$t('message.mintNFTDestination')" type="text" class="form-control" style="width:100%;" v-bind:value="config.private_address" v-model="mint_nft_destination"/>
+					<v-ons-input :placeholder="$t('message.mintNFTDestination')" float type="text" style="width:100%;" v-model="mint_nft_destination"></v-ons-input>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-input :placeholder="$t('message.mintNFTID')" type="number" class="form-control" style="width:100%;" v-model="mint_nft_id" float/>
+					<v-ons-input :placeholder="$t('message.mintNFTID')"float  type="number" style="width:100%;" v-model="mint_nft_id" float></v-ons-input>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-input :placeholder="$t('message.nftName')" type="text" class="form-control" style="width:100%;" v-model="nft_name"/>
+					<v-ons-input :placeholder="$t('message.nftName')" float type="text" style="width:100%;" v-model="nft_name"></v-ons-input>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-input :placeholder="$t('message.nftDescription')" type="text" class="form-control" style="width:100%;" v-model="nft_description"/>
+					<v-ons-input :placeholder="$t('message.nftDescription')" float type="text" style="width:100%;" v-model="nft_description"></v-ons-input>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-input :placeholder="$t('message.nftExternalURL')" type="text" class="form-control" style="width:100%;" v-model="nft_external_url"/>
+					<v-ons-input :placeholder="$t('message.nftExternalURL')" float type="text" style="width:100%;" v-model="nft_external_url"></v-ons-input>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-input :placeholder="$t('message.mintNFTScheme')" type="text" class="form-control" style="width:100%;" v-model="mint_nft_scheme"/>
+					<v-ons-input :placeholder="$t('message.mintNFTScheme')" float type="text" style="width:100%;" v-model="mint_nft_scheme"></v-ons-input>
 				</div>
 				<div class="center" style="margin-top:40px">
 					<v-ons-button v-on:click='mintNFT' :disabled="!mint_nft_id || !mint_nft_destination || !mint_nft_scheme"><i class="ion-ios-hammer"></i>&nbsp;{{$t('message.btnMintNFT')}}</v-ons-button>
@@ -236,12 +241,12 @@
 					</p>
 				</div>
 				<div class="center" style="margin-top:40px">
-					Collection : <v-ons-select style="width: 100%" v-model="token" v-if="config.Balance">
+					{{$t('message.collection')}} : <v-ons-select float style="width: 100%" v-model="token" v-if="config.Balance">
 						<option v-bind:value="index" v-for="(item,index) in config.Balance.nfts">{{item.name}}</option>
 					</v-ons-select>
 				</div>
 				<div class="center" style="margin-top:40px">
-					NFT : <v-ons-select style="width: 100%" v-model="nft_id" v-if="token">
+					{{$t('message.nft')}} : <v-ons-select float style="width: 100%" v-model="nft_id" v-if="token">
 						<option v-bind:value="index" v-for="(item,index) in config.Balance.nfts[token].confirmed">{{index}} - {{(parseJSON(item)?parseJSON(item).name:item)}}</option>
 					</v-ons-select>
 				</div>
@@ -288,6 +293,11 @@ export default {
 	data()
 	{
 		return {
+			toolbarInfo:
+			{
+				backLabel: 'Home',
+				title: "NFT Workshop",
+			},
 			categories:
 			[
 				{"id":"art",name:"Art"},
@@ -324,7 +334,7 @@ export default {
 			mint_nft_token_id:'',
 			mint_nft_id:'',
 			mint_nft_scheme:'',
-			mint_nft_destination:'',
+			mint_nft_destination:undefined,
 			version:1,
 			token:'',
 			nft_id:'',
@@ -341,7 +351,7 @@ export default {
 	},
 	updated:function()
 	{
-		this.mint_nft_destination=this.config.private_address;
+		if (this.mint_nft_destination==undefined) this.mint_nft_destination=this.config.private_address;
 		this.getNFTCollectionScheme();
 		this.getNFTScheme();
 	},

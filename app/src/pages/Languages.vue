@@ -19,29 +19,29 @@ export default {
 	{
 		return {
 			languages:config.languages,
-			selectedLanguage: ''
-    	};
+			selectedLanguage:''
+		};
 	},
 	computed:
-  	{
-  		config()
-  		{
-    		return this.$store.state.config;
-  		}
-  	},
+	{
+		config()
+		{
+			return this.$store.state.config;
+		}
+	},
 	created: function ()
 	{
 		this.selectedLanguage=this.config.language.code;
 	},
 	methods:
 	{
-	    setLanguage(language)
-	    {
-	    	this.selectedLanguage=language.code;
+		setLanguage(language)
+		{
+			this.selectedLanguage=language.code;
 			this.$store.commit('config/setLanguage', language)
 			this.$i18n.locale=language.code;
 			this.$store.commit('navigator/pop');
-	    }
+		}
 	}
 };
 </script>

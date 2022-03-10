@@ -1,10 +1,14 @@
 <template>
 	<v-ons-page>
-  		<custom-toolbar v-bind="toolbarInfo"></custom-toolbar>
-    	<v-ons-card>
-			<div class="center" style="margin-top:20px">
-            	<v-ons-input float type="text" v-model="message" :placeholder="$t('message.signMessage')" style="width:100%"></v-ons-input>
-        	</div>
+		<custom-toolbar v-bind="toolbarInfo"></custom-toolbar>
+		<v-ons-card>
+			<div style="margin-top:20px">
+				{{$t('message.publicKey')}}
+				<pre>{{config.public_address}}</pre>
+			</div>
+			<div class="center" style="margin-top:50px">
+				<v-ons-input float type="text" v-model="message" :placeholder="$t('message.signMessage')" style="width:100%"></v-ons-input>
+			</div>
 			<div style="margin-top:20px">
 				<v-ons-button @click="signMessage()">{{$t('message.sign')}}</v-ons-button>
 				<v-ons-button v-show="signedMessage" v-on:click="doCopy()"><i class="fa fa-clipboard"></i>&nbsp;{{$t('message.copy')}}</v-ons-button>
@@ -14,23 +18,33 @@
 					{{signedMessage}}
 				</code>
 			</div>
-  		</v-ons-card>
+		</v-ons-card>
 	</v-ons-page>
 </template>
 <script>
 import bitcore from 'bitcore-lib';
 import message from 'bitcore-message';
+import { mapGetters,mapActions,mapState} from 'vuex';
 export default {
-  data() {
-    return {
-    	message:'',
-    	signedMessage:''
-    };
-  },
-  methods: {
-    	signMessage()
-    	{
-    		if (!this.message)
+	data()
+	{
+		return {
+			message:'',
+			signedMessage:''
+		};
+	},
+	computed:
+	{
+		...mapState({
+			config: state => state.config,
+		}),
+	},
+	methods:
+	{
+		signMessage()
+		{
+			let vm=this;
+			if (!this.message)
 			{
 				vm.$ons.notification.toast(vm.$t('message.enterSignMessage'), {timeout: 1000, animation: 'fall' });
 			}
@@ -38,28 +52,31 @@ export default {
 			{
 				try
 				{
-					var privateKey=bitcore.PrivateKey.fromWIF(window.db.get('addr').value()[0].privateKey.toString());
-					var message=new bitcore.Message(this.message);
-					var signature=message.sign(privateKey);
-					this.signedMessage=signature.toString();
+					wallet.NavGetPrivateKeys("",this.config.public_address).then(function (e)
+					{
+						var privateKey=bitcore.PrivateKey.fromWIF(e[0].privateKey);
+						var message=new bitcore.Message(vm.message);
+						var signature=message.sign(privateKey);
+						vm.signedMessage=signature.toString();
+					});
 				}
 				catch (err)
 				{
 					vm.$ons.notification.toast(err.message, {timeout: 1000, animation: 'fall' });
 				}
 			}
-    	},
-    	doCopy: function ()
-    	{
-	        this.$copyText(this.signedMessage).then(function (e)
-	        {
-	            vm.$ons.notification.toast(vm.$t('message.clipboardSuccess'), { timeout: 1000, animation: 'fall' });
-	        },
-	        function (e)
-	        {
-	            vm.$ons.notification.toast(vm.$t('message.clipboardFailed'), { timeout: 1000, animation: 'fall' });
-	        })
-    	}
+		},
+		doCopy: function ()
+		{
+			this.$copyText(this.signedMessage).then(function (e)
+			{
+				vm.$ons.notification.toast(vm.$t('message.clipboardSuccess'), { timeout: 1000, animation: 'fall' });
+			},
+			function (e)
+			{
+				vm.$ons.notification.toast(vm.$t('message.clipboardFailed'), { timeout: 1000, animation: 'fall' });
+			})
+		}
 	}
 };
 </script>

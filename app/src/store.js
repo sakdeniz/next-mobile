@@ -64,11 +64,26 @@ export default {
       state:
       {
       	address:"",
-      	private_address:"",
+      	public_address:undefined,
+      	private_address:undefined,
       	block_height:"",
       	sync_status:"",
       	sync_progress:"",
       	Balance:null,
+        addresses:{
+        	spending:
+        	{
+        		public:
+        		{
+        		},
+        		private:
+        		{
+        		}
+        	},
+        	staking:
+        	{
+        	}
+        },
       	txs:[],
       	privateTokens:[],
         names:[],
@@ -76,8 +91,11 @@ export default {
       	cold_staking_active:false,
       	cold_staking_address:"",
         language:{},
+        wallet_type:{},
+        network:{},
         currency:{},
         book:[],
+        projects:[],
         languages:[
 			{name:'English',code:'en'},
 			{name:'Español',code:'es'},
@@ -90,12 +108,26 @@ export default {
 			//{name:'Português',code:'pr'},
 			{name:'Türkçe',code:'tr'},
 			//{name:'中國',code:'jp'}
+			],
+        wallet_types:[
+			{name:'Next Wallet',code:'next'},
+			{name:'Navcoin Core',code:'navcoin-core'},
+			{name:'NavCash',code:'navcash'},
+			{name:'NavPay',code:'navpay'}
+			],
+        networks:[
+			{name:'Mainnet',code:'mainnet'},
+			{name:'Testnet',code:'testnet'}
 			]
       },
       mutations: {
       	setAddress(state,address)
         {
 			state.address=address;
+        },
+      	setPublicAddress(state,address)
+        {
+			state.public_address=address;
         },
       	setPrivateAddress(state,address)
         {
@@ -104,6 +136,10 @@ export default {
       	setBlockHeight(state,height)
         {
 			state.block_height=height;
+        },
+      	setAllAddresses(state,addresses)
+        {
+			state.addresses=addresses;
         },
       	setTXHistory(state,txs)
         {
@@ -115,7 +151,7 @@ export default {
         },
         setNames(state,names)
         {
-      state.names=names;
+      		state.names=names;
         },
       	setSyncStatus(state,status)
         {
@@ -153,6 +189,16 @@ export default {
 			state.language=language;
 			localStorage.setItem("config", JSON.stringify(this.state.config));
         },
+        setWalletType(state,wallet_type)
+        {
+			state.wallet_type=wallet_type;
+			localStorage.setItem("config", JSON.stringify(this.state.config));
+        },
+        setNetwork(state,network)
+        {
+			state.network=network;
+			localStorage.setItem("config", JSON.stringify(this.state.config));
+        },
         setCurrency(state,currency)
         {
 			state.currency=currency;
@@ -177,6 +223,21 @@ export default {
         {
         	state.book.splice(contact.id,1,{name: contact.name,email: contact.email,address: contact.address});
          	localStorage.setItem("config", JSON.stringify(this.state.config));
+        },
+        addProject(state,project)
+        {
+        	state.projects.push(project);
+         	localStorage.setItem("config", JSON.stringify(this.state.config));
+        },
+        removeProject(state,id)
+        {
+        	state.projects.splice(id,1);
+         	localStorage.setItem("config", JSON.stringify(this.state.config));
+        },
+        setProjects(state,projects)
+        {
+			state.projects=projects;
+			localStorage.setItem("config", JSON.stringify(this.state.config));
         }
       }
     }

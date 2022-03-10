@@ -29,23 +29,14 @@
 	    </v-ons-dialog>
 
 		<v-ons-action-sheet :visible.sync="actionSheetVisible" cancelable :title="$t('message.proposalFilter')">
-			<v-ons-action-sheet-button v-on:click="setProposalFilter('all proposals')">{{$t('message.filterProposalAll')}}</v-ons-action-sheet-button>
-			<v-ons-action-sheet-button v-on:click="setProposalFilter('my proposals')">{{$t('message.filterProposalMy')}}</v-ons-action-sheet-button>
+			<!--<v-ons-action-sheet-button v-on:click="setProposalFilter('all proposals')">{{$t('message.filterProposalAll')}}</v-ons-action-sheet-button>!-->
+			<!--<v-ons-action-sheet-button v-on:click="setProposalFilter('my proposals')">{{$t('message.filterProposalMy')}}</v-ons-action-sheet-button>!-->
 			<v-ons-action-sheet-button v-on:click="setProposalFilter(0)">{{$t('message.filterProposalPending')}}</v-ons-action-sheet-button>
 			<v-ons-action-sheet-button v-on:click="setProposalFilter(1)">{{$t('message.filterProposalAccepted')}}</v-ons-action-sheet-button>
 			<v-ons-action-sheet-button v-on:click="setProposalFilter(2)">{{$t('message.filterProposalRejected')}}</v-ons-action-sheet-button>
 			<v-ons-action-sheet-button v-on:click="setProposalFilter(3)">{{$t('message.filterProposalExpired')}}</v-ons-action-sheet-button>
 			<v-ons-action-sheet-button v-on:click="setProposalFilter(16)">{{$t('message.filterProposalAcceptedExpired')}}</v-ons-action-sheet-button>
 			<v-ons-action-sheet-button v-on:click="setProposalFilter(6)">{{$t('message.filterProposalPaid')}}</v-ons-action-sheet-button>
-		</v-ons-action-sheet>
-
-		<v-ons-action-sheet :visible.sync="actionSheet2Visible" cancelable :title="$t('message.paymentRequestFilter')">
-			<v-ons-action-sheet-button v-on:click="setPaymentRequestFilter('all payment requests')">{{$t('message.filterPaymentRequestAll')}}</v-ons-action-sheet-button>
-			<v-ons-action-sheet-button v-on:click="setPaymentRequestFilter('my payment requests')">{{$t('message.filterPaymentRequestMy')}}</v-ons-action-sheet-button>
-			<v-ons-action-sheet-button v-on:click="setPaymentRequestFilter(0)">{{$t('message.filterPaymentRequestPending')}}</v-ons-action-sheet-button>
-			<v-ons-action-sheet-button v-on:click="setPaymentRequestFilter(1)">{{$t('message.filterPaymentRequestAccepted')}}</v-ons-action-sheet-button>
-			<v-ons-action-sheet-button v-on:click="setPaymentRequestFilter(2)">{{$t('message.filterPaymentRequestRejected')}}</v-ons-action-sheet-button>
-			<v-ons-action-sheet-button v-on:click="setPaymentRequestFilter(3)">{{$t('message.filterPaymentRequestExpired')}}</v-ons-action-sheet-button>
 		</v-ons-action-sheet>
 
 	    <v-ons-fab position="bottom right" :visible="fabVisible" modifier="mini" v-on:click="push(pages[0].component, 'Create Proposal')">
@@ -131,27 +122,17 @@
       			</table>
       		</div>
       	</v-ons-card>
-		
 		<v-ons-card>
-      		<div class="center">
-        		<v-ons-segment :index.sync="segmentIndex" style="width:100%">
-          			<button>{{$t('message.proposals')}}</button>
-          			<button>{{$t('message.paymentRequests')}}</button>
-        		</v-ons-segment>
-      		</div>
-		</v-ons-card>
-
-		<v-ons-card v-if="proposals.length>0" v-show="segmentIndex==0">
 			<span class="sub-title">
 				{{$t('message.proposals')}}&nbsp;
-				<span class="badge">{{filter(proposals).length}}</span>
+				<span class="badge">{{proposals.length}}</span>
 			</span>
 			<div style="margin-top:5px;">{{capitalize(proposalFilter)}}</div>
 			<v-ons-list style="margin-top:10px;">
 				<v-ons-button @click="actionSheetVisible = true" style="float:right;">
 		  			<i class="fa fa-filter"></i>&nbsp;{{$t('message.filter')}}
 				</v-ons-button>
-	       		<v-ons-list-item v-for="proposal in filter(proposals)" :key="proposal.hash">
+	       		<v-ons-list-item v-for="proposal in proposals.filter(item => item.state==proposalFilter)" :key="proposal.hash">
 	            	<ons-row>
 	              		<ons-col width="20%">
 	                    	<img style="width:100%;height:auto;" v-if="proposal.image" :src="proposal.image">
@@ -172,11 +153,15 @@
 	                          		</div>
 	                  			</ons-col>
 	                  		</ons-row>
-                      		<div>
-                          		<div class="bg1" style="margin-top:10px;">
-                          			<i v-show="proposal.paymentAddress==publicAddress" class="fa fa-heart" style="color:#673AB7"></i>&nbsp;{{capitalize(proposal.status)}}
-                          		</div>
-                      		</div>
+	                  		<ons-row>
+	                  			<ons-col vertical-align="center" width="50%" class="bg1">
+	                  				<i v-show="proposal.paymentAddress==publicAddress" class="fa fa-heart" style="color:#673AB7"></i>&nbsp;{{capitalize(proposal.status)}}
+	                  			</ons-col>
+	                  			<ons-col vertical-align="center" width="50%" class="bg1">
+	                  				<span class="notification" v-show="proposal.super_proposal">Super Proposal</span>
+	                  				<span v-show="!proposal.super_proposal">&nbsp;</span>
+	                  			</ons-col>
+	                  		</ons-row>
                       		<p class="description word-break">
                           		{{proposal.description}}
                       		</p>
@@ -221,61 +206,6 @@
 	      		</v-ons-list-item>
 	    	</v-ons-list>
 	    </v-ons-card>
-	    
-	    <v-ons-card v-if="paymentRequests.length>0" v-show="segmentIndex==1">
-			<span class="sub-title">
-				{{$t('message.paymentRequests')}}
-				<span class="badge">{{filterPaymentRequest(paymentRequests).length}}</span>
-			</span>
-			<div style="margin-top:5px;">{{capitalize(paymentRequestFilter)}}</div>
-			<div style="float:right;margin-top:5px;">
-				<v-ons-button @click="actionSheet2Visible = true">
-		  			<i class="fa fa-filter"></i>&nbsp;{{$t('message.filter')}}
-				</v-ons-button>
-			</div>
-			<v-ons-list style="margin-top:10px;clear:both">
-				<v-ons-list-item v-for="paymentRequest in filterPaymentRequest(paymentRequests)" :key="paymentRequests.hash">
-					<div class="center">
-
-						<ons-row>
-							<ons-col width="50%">
-								{{formatNumber(paymentRequest.requestedAmount.slice(0, -3))}} NAV
-							</ons-col>
-							<ons-col width="50%" style="text-align:right">
-								{{capitalize(paymentRequest.status)}}
-							</ons-col>
-						</ons-row>
-
-						<ons-row>
-							<ons-col width="100%">
-							<p class="description word-break">
-								{{paymentRequest.description}}
-							</p>
-							</ons-col>
-						</ons-row>
-
-						<ons-row>
-			            	<ons-col width="50%" style="padding:5px" modifier="material">
-							    <i class="fa fa-thumbs-o-up" style="color:#A4C639"></i>
-							    <span class="voteYes">{{paymentRequest.votesYes}}</span>
-							    <small v-if="paymentRequest.votesYes" style="float:right"><i class="fa fa-percent" aria-hidden="true"></i>&nbsp;{{getYesVotesProportion(paymentRequest)}}</small>
-							    <div id="positive">
-							    	<v-ons-progress-bar v-if="paymentRequest.votesYes" :value="getYesVotesProportion(paymentRequest)" secondary-value="100"></v-ons-progress-bar>
-							    </div>
-		            		</ons-col>
-			            	<ons-col width="50%" style="padding:5px" modifier="material">
-							    <i class="fa fa-thumbs-o-down" style="color:#DD4B39"></i>
-							    <span class="voteNo">{{paymentRequest.votesNo}}</span>
-							    <small v-if="paymentRequest.votesNo" style="float:right"><i class="fa fa-percent" aria-hidden="true"></i>&nbsp;{{getNoVotesProportion(paymentRequest)}}</small>
-							    <div id="negative">
-							    	<v-ons-progress-bar v-if="paymentRequest.votesNo" :value="getNoVotesProportion(paymentRequest)" secondary-value="100"></v-ons-progress-bar>
-							    </div>
-		            		</ons-col>
-		        		</ons-row>
-					</div>
-				</v-ons-list-item>
-		  	</v-ons-list>
-		</v-ons-card>
 	</v-ons-page>
 </template>
 
@@ -319,9 +249,10 @@ export default {
   created: function ()
   {
 		this.publicAddress=db.get('addr').value()[0].publicAddress;
-    this.getProposals();
-    this.getPaymentRequests();
-    this.getcFundStats();
+  },
+  updated: function ()
+  {
+		this.getProposals();
   },
   methods: {
 	formatBalance: n =>
@@ -340,7 +271,6 @@ export default {
     loadItem(done)
     {
         this.getProposals();
-        this.getPaymentRequests();
         setTimeout(() =>
         {
             this.items = [...this.items, this.items.length + 1];
@@ -352,18 +282,6 @@ export default {
     	this.paymentRequestProposal=proposal;
 		this.createPaymentDialogVisible=true;
     },
-    getPaymentRequests: function (paymentRequests)
-	{
-		var pR=[];
-		jQuery.each(paymentRequests, function(key, value)
-		{
-			if (value.length>0)
-			{
-				pR.push(value[0]); 
-			}
-		});
-		return pR;
-	},
     createPaymentRequest:function()
     {
     	let vm=this;
@@ -465,50 +383,6 @@ export default {
       this.paymentRequestFilter=filter;
       this.actionSheet2Visible=false;
     },
-    filter: function(proposals)
-    {
-      if (!proposals) return;
-      if (this.proposalFilter=="all proposals")
-      {
-        return _.sortByOrder(proposals,['id'],['desc']);
-      }
-      else if (this.proposalFilter=="my proposals")
-      {
-      	return _.sortByOrder(proposals.filter(proposal => proposal.paymentAddress==this.publicAddress),['id'],['desc']);
-      }
-      else
-      {
-        return _.sortByOrder(proposals.filter(proposal => proposal.state==this.proposalFilter),['id'],['desc']);
-      }
-    },
-    filterPaymentRequest: function(paymentRequests)
-    {
-    	let vm=this;
-		var pR=[];
-		jQuery.each(paymentRequests, function(key, value)
-		{
-			if (value.length>0)
-			{
-				jQuery.each(value, function(k, v)
-				{
-					console.log(v);
-					if (vm.paymentRequestFilter=="all payment requests")
-					{
-						pR.push(v);
-					}
-					else if (vm.paymentRequestFilter=="my payment requests")
-					{
-						//pR.push(v);
-					}
-					else if (v.state==vm.paymentRequestFilter)
-					{
-						pR.push(v);
-					}
-				});
-			}
-		});
-		return pR;
-    },
     capitalize: function (s) 
     {
         if (typeof s !== 'string') return ''
@@ -544,61 +418,11 @@ export default {
 	},
     getProposals()
     {
-        let vm=this;
-        axios.get(window.apiURL+'listproposals', {
-            params: {
-                network: window.network
-            }
-        })
-        .then(function (response)
-        {
-            if (response.data!="null")
-            {
-            	vm.proposals=response.data;
-          		console.log("Proposals...");
-            	console.log(JSON.stringify(response.data));
-            }
-            else
-            {
-            	console.log("No proposal");
-            }
-        })
-        .catch(function (error)
-        {
-            console.log(error);
-        })
-        .then(function ()
-        {
-        });
-    },
-    getPaymentRequests()
-    {
-        let vm=this;
-        axios.get(window.apiURL+'listpaymentrequests', {
-            params: {
-                network: window.network
-            }
-        })
-        .then(function (response)
-        {
-            if (response.data)
-           	{
-           		vm.paymentRequests=response.data;
-           		console.log("Payment requests...");
-            	console.log(JSON.stringify(response.data));
-        	}
-            else
-            {
-            	console.log("No payment request");
-            }
-        })
-        .catch(function (error)
-        {
-            console.log(error);
-        })
-        .then(function ()
-        {
-        });
+    	let vm=this;
+    	if (vm.proposals.length<1)
+    	{
+    		vm.proposals=Object.values(wallet.GetProposals());
+    	}
     },
     getcFundStats()
     {
@@ -761,6 +585,7 @@ p {
 	color:#787878;
 	padding-left:0px;
 	padding-right:10px;
+	padding-top:10px;
 	padding-bottom:10px;
 	font-size:10pt;
 	border-bottom: 1px solid #F3F3F3;

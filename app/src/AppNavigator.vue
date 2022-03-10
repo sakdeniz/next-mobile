@@ -25,7 +25,7 @@
 			<div class="wrapper">
 				<center>
 					<div class="welcome_logo">
-						NEXT
+						<i class="ion-ios-globe"></i>
 					</div>
 					<h3 class="title">
 						{{$t('message.selectLanguage')}}
@@ -115,14 +115,68 @@
 				  </center>
 			</div>
 		</div>
-		<div class="main" v-show="termsAccepted">
+		<div class="main" v-show="!walletExist && languageSelected && termsAccepted && !walletTypeSelected">
+			<div class="wrapper">
+				<center>
+					<div class="welcome_logo">
+						<i class="ion-ios-wallet"></i>
+					</div>
+					<h3 class="title">
+						{{$t('message.selectWalletType')}}
+					</h3>
+				</center>
+				<v-ons-list>
+					<v-ons-list-item v-for="(item, $index) in config.wallet_types" :key="item.code" tappable v-on:click="setWalletType(item)">
+						<div class="left">
+							<span class="ion-md-checkmark" v-show="item.code==selectedWalletType"></span>
+						</div>
+						<div class="center">
+							{{item.name}}
+						</div>
+					</v-ons-list-item>
+					<div style="margin-top:30px;">
+						<center>
+							<v-ons-button v-on:click="walletTypeSelected=true">{{$t('message.continue')}}</v-ons-button>
+						</center>
+					</div>
+				</v-ons-list>
+			</div>
+		</div>
+		<div class="main" v-show="!walletExist && languageSelected && termsAccepted && walletTypeSelected && !networkSelected">
+			<div class="wrapper">
+				<center>
+					<div class="welcome_logo">
+						<i class="ion-ios-git-network"></i>
+					</div>
+					<h3 class="title">
+						{{$t('message.selectNetworkType')}}
+					</h3>
+				</center>
+				<v-ons-list>
+					<v-ons-list-item v-for="(item, $index) in config.networks" :key="item.code" tappable v-on:click="setNetwork(item)">
+						<div class="left">
+							<span class="ion-md-checkmark" v-show="item.code==selectedNetwork"></span>
+						</div>
+						<div class="center">
+							{{item.name}}
+						</div>
+					</v-ons-list-item>
+					<div style="margin-top:30px;">
+						<center>
+							<v-ons-button v-on:click="networkSelected=true">{{$t('message.continue')}}</v-ons-button>
+						</center>
+					</div>
+				</v-ons-list>
+			</div>
+		</div>
+		<div class="main" v-show="(termsAccepted && walletTypeSelected && networkSelected)||walletExist">
 			<div class="wrapper">
 				<center>
 					<div class="welcome_logo">NEXT</div>
 					<div v-show="walletExist && walletUnlocked && termsAccepted && walletBackedup && !walletBackupConfirmed">
 						<div style="margin-bottom:15px;padding:10px;">
 							<p>
-								We want to make sure you back up the seed words for your safety. Please confirm by clicking the words that make up your seed phrases in order.
+								{{$t('message.infoConfirm')}}
 							</p>
 						</div>
 						<div>
@@ -188,6 +242,9 @@
 							</v-ons-segment>
 							<div v-show="segmentIndex==0">
 								<div class="center">
+									<v-ons-input type="text" :placeholder="$t('message.walletName')" v-model="wallet_name" float style="width:100%"></v-ons-input>
+								</div>
+								<div class="center" style="margin-top:30px;">
 									<v-ons-input type="password" :placeholder="$t('message.password')" v-model="password" float style="width:100%"></v-ons-input>
 								</div>
 								<br/>
@@ -200,9 +257,12 @@
 							</div>
 							<div v-show="segmentIndex==1">
 								<div class="center" style="margin-bottom:30px;">
+									<v-ons-input type="text" :placeholder="$t('message.walletName')" v-model="wallet_name" float style="width:100%"></v-ons-input>
+								</div>
+								<div class="center" style="margin-bottom:30px;">
 									<v-ons-input type="text" :placeholder="$t('message.mnemonics')" v-model="mnemonics" float style="width:100%"></v-ons-input>
 								</div>
-								<div class="center" style="margin-top:30px;margin-bottom:30px;">
+								<div class="center" style="margin-top:30px;">
 									<v-ons-input type="password" :placeholder="$t('message.password')" v-model="password" float style="width:100%"></v-ons-input>
 								</div>
 								<div class="center" style="margin-top:30px;margin-bottom:15px;">
@@ -220,9 +280,33 @@
 						</div>
 						<div class="content" style="margin-bottom:15px;">
 							<div class="center">
+								<!--<h4 class="title">
+									{{$t('message.selectWallet')}}
+								</h4>!-->
+								<v-ons-list style="width:80%" v-if="wallets">
+									<v-ons-list-item v-for="(wallet, $index) in wallets" tappable v-on:click="setActiveWallet(wallet)">
+										<div class="left">
+											<i class="ion-ios-wallet fa-2x"></i>
+										</div>
+										<div class="center">
+											<span class="list-item__title">{{wallet.name}}</span>
+											<span class="list-item__subtitle">{{wallet.type}} ({{wallet.network}})</span>
+										</div>
+										<div class="right">
+											<span class="ion-md-checkmark" v-show="wallet.name+'_'+wallet.type+'_'+wallet.network==active_wallet_name"></span>
+										</div>
+									</v-ons-list-item>
+								</v-ons-list>
+							</div>
+						</div>
+						<div class="content" style="margin-top: 30px;margin-bottom:15px;">
+							<div class="center">
 								<v-ons-input placeholder="Password" type="password" float v-model="password"></v-ons-input>
 							</div>
-							<v-ons-button style="margin-top: 30px" v-on:click="unlockWallet()">{{$t('message.btnUnlock')}}</v-ons-button>
+							<v-ons-button style="margin-top: 30px" v-on:click="unlockWallet()"><i class="ion-ios-unlock"></i>&nbsp;{{$t('message.btnUnlock')}}</v-ons-button>
+						</div>
+						<div class="content" style="margin-top: 30px;margin-bottom:15px;">
+							<v-ons-button style="margin-top: 30px" v-on:click="createNewWallet()"><i class="ion-ios-add"></i>&nbsp;{{$t('message.btnCreateNewWallet')}}</v-ons-button>
 						</div>
 					</div>
 				</center>
@@ -238,11 +322,9 @@
 </template>
 <script>
 const njs = require('navcoin-js');
-const walletFile = 'wallet.db'; // File name of the wallet database
 const password = undefined; // Password used to encrypt and open the wallet database
 const spendingPassword = undefined; // Password used to send transactions
 const mnemonic = ""; // Mnemonic to import
-const type = "next"; // Wallet type next or navcoin-js-v1
 const zapwallettxes = (localStorage.getItem("ZapWallet")=="true"?true:false); // Should the wallet be cleared of its history?
 const log = true; // Log to console
 const IV_LENGTH = 16; // For AES, this is always 16
@@ -253,7 +335,6 @@ const Mnemonic = require('bitcore-mnemonic');
 var ENCRYPTION_KEY;
 window.config={ headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, responseType: 'text' }
 window.apiURL='https://navcommunity.net/api/lw/';
-window.network='testnet';
 console.log("Zap Wallet : " + zapwallettxes);
 if (localStorage.getItem("ZapWallet")) localStorage.setItem("ZapWallet",false);
 function encrypt (text)
@@ -291,14 +372,21 @@ data()
 {
 	return {
 		selectedLanguage: 'en',
+		selectedWalletType: 'next',
+		selectedNetwork: 'mainnet',
 		busy:false,
 		shutUp: this.md,
 		step:0,
 		segmentIndex: 0,
+		wallet_name:'',
 		password:"",
 		password_again:"",
+		active_wallet_already_exist:false,
+		active_wallet_name:"",
 		walletExist:false,
 		languageSelected:false,
+		walletTypeSelected:false,
+		networkSelected:false,
 		walletUnlocked:false,
 		walletBackedup:false,
 		walletBackupConfirmed:false,
@@ -306,7 +394,7 @@ data()
 		bCarousel:false,
 		mnemonics:'',
 		closeConfirmActive:false,
-		addr:{},
+		wallets:[],
 		wordArray:[],
 		wordArrayConfirm:[],
 		carouselIndex: 0,
@@ -337,6 +425,22 @@ computed: {
 created: function ()
 {
 	let vm=this;
+	njs.wallet.WalletFile.ListWallets().then((wallets) =>
+	{
+		console.log("Listing wallets...");
+		let i=0;
+		wallets.forEach((wallet) =>
+		{
+			if (wallet)
+			{
+				i++;
+				let arr=wallet.split("_");
+				vm.wallets.push({name: arr[0],type: arr[1],network: arr[2]})
+				console.log(i + "->" + wallet);
+			}
+		});
+		if (i==1) vm.setActiveWallet(vm.wallets[0]);
+	});
 	if (typeof(QRScanner) != "undefined")
 	{
 		this.$ons.ready(() => {
@@ -379,16 +483,23 @@ created: function ()
 	}
 	if (!localStorage.getItem("config"))
 	{
-		localStorage.setItem("config",'{"language":{"name":"English","code":"en"},"currency":{"symbol":"USD","code":"USD"},"book":[]}');
+		localStorage.setItem("config",'{"language":{"name":"English","code":"en"},"wallet_type":{"name":"NEXT","code":"next"},"network":{"name":"Mainnet","code":"mainnet"},"currency":{"symbol":"USD","code":"USD"},"book":[],"projects":[]}');
 	}
 	var config=JSON.parse(localStorage.getItem("config"));
 	this.$store.commit('config/setLockWalletOnDeactivate', config.lock_wallet_on_deactivate);
 	this.$store.commit('config/setColdStakingActive', config.cold_staking_active);
 	this.$store.commit('config/setColdStakingAddress', config.cold_staking_address);
 	this.$store.commit('config/setBook', config.book);
+	if (config.projects) this.$store.commit('config/setProjects', config.projects);
 	this.$store.commit('config/setLanguage', {name:config.language.name,code:config.language.code})
 	this.$store.commit('config/setCurrency', {symbol:config.currency.symbol,code:config.currency.code})
+	this.$store.commit('config/setWalletType', {name:config.wallet_type.name,code:config.wallet_type.code})
+	this.$store.commit('config/setNetwork', {name:config.network.name,code:config.network.code})
 	this.$i18n.locale=config.language.code;
+	console.log("Language : " + this.$store.state.config.language.name + " (" + this.$store.state.config.language.code + ")");
+	console.log("Wallet Type : " + this.$store.state.config.wallet_type.name + " (" + this.$store.state.config.wallet_type.code + ")");
+	console.log("Network : " + this.$store.state.config.network.name + " (" + this.$store.state.config.network.code + ")");
+	window.network=this.$store.state.config.network.code;
 	if (window.network=="mainnet")
 	{
 		bitcore.Networks.defaultNetwork = bitcore.Networks.livenet;
@@ -436,11 +547,45 @@ created: function ()
 			$("#page1").show();
 			$("#page2").show();
 		},
+		createNewWallet()
+		{
+			this.active_wallet_already_exist=false;
+			this.languageSelected=true;
+			this.walletExist=false;
+			this.walletBackedup=false;
+			this.walletBackupConfirmed=false;
+		},
 		setLanguage(language)
 		{
 			this.selectedLanguage=language.code;
 			this.$store.commit('config/setLanguage', language)
 			this.$i18n.locale=language.code;
+			this.$store.commit('navigator/pop');
+		},
+		setWalletType(wallet_type)
+		{
+			this.selectedWalletType=wallet_type.code;
+			this.$store.commit('config/setWalletType', wallet_type)
+			this.$store.commit('navigator/pop');
+		},
+		setActiveWallet(wallet)
+		{
+			this.active_wallet_already_exist=true;
+			this.active_wallet_name=wallet.name+"_"+wallet.type+"_"+wallet.network;
+		},
+		setNetwork(network)
+		{
+			window.network=network.code;
+			if (window.network=="mainnet")
+			{
+				bitcore.Networks.defaultNetwork = bitcore.Networks.livenet;
+			}
+			else
+			{
+				bitcore.Networks.defaultNetwork = bitcore.Networks.testnet;
+			}
+			this.selectedNetwork=network.code;
+			this.$store.commit('config/setNetwork', network)
 			this.$store.commit('navigator/pop');
 		},
 		acceptTerms: function ()
@@ -513,6 +658,10 @@ created: function ()
 		},
 		createWallet: function ()
 		{
+			if (!this.wallet_name)
+			{
+				this.$ons.notification.toast(vm.$t('message.errorPleaseSpecifyWalletName'), { timeout: 1000, animation: 'fall' });
+			}
 			if (!this.password)
 			{
 				this.$ons.notification.toast(vm.$t('message.errorPleaseSpecifyPassword'), { timeout: 1000, animation: 'fall' });
@@ -532,15 +681,39 @@ created: function ()
 		},
 		initNavcoinJS: function (mnemonic)
 		{
-			njs.wallet.WalletFile.ListWallets().then((value) =>
-			{
-				console.log("NavcoinJS wallet file found : " + value);
-			});
+			let vm=this;
 			this.$store.commit('config/setSyncStatus', vm.$t('message.walletLoading'));
-			console.log("Wallet loading...");
+			console.log("Wallet ("+vm.$store.state.config.wallet_type.code+") loading on "+vm.$store.state.config.network.name+" ("+vm.$store.state.config.network.code+")"+"...");
 			njs.wallet.Init().then(async () =>
 			{
-				const wallet = new njs.wallet.WalletFile({file: walletFile, network:window.network,mnemonic: mnemonic, type: "next", password: password, spendingPassword: spendingPassword, zapwallettxes: zapwallettxes, log: log})
+				let wallet=undefined;
+				if (vm.active_wallet_already_exist)
+				{
+					console.log("Loading existing wallet : " + vm.active_wallet_name);
+					wallet=new njs.wallet.WalletFile(
+					{
+						file:vm.active_wallet_name,
+						zapwallettxes:zapwallettxes,
+						log:log
+					})
+				}
+				else
+				{
+					console.log("Loading new wallet : " + vm.active_wallet_name);
+					console.log("Type : " + vm.$store.state.config.wallet_type.code);
+					console.log("Network : " + vm.$store.state.config.network.code);
+					wallet=new njs.wallet.WalletFile(
+					{
+						file:vm.active_wallet_name,
+						network:vm.$store.state.config.network.code,
+						mnemonic:mnemonic,
+						type: vm.$store.state.config.wallet_type.code,
+						password:password,
+						spendingPassword:spendingPassword,
+						zapwallettxes:zapwallettxes,
+						log:log
+					})
+				}
 				window.wallet=wallet;
 				wallet.on('new_mnemonic', (mnemonic) => console.log(`wallet created with mnemonic ${mnemonic} - please back it up!`));
 				wallet.on('loaded', async () =>
@@ -549,6 +722,7 @@ created: function ()
 					console.log('Wallet loaded.');
 					wallet.NavReceivingAddresses(true).then((value) =>
 					{
+						this.$store.commit('config/setPublicAddress', value[0].address);
 						console.log("NAV receiving address : " + value[0].address);
 					});
 					wallet.xNavReceivingAddresses(false).then((value) =>
@@ -575,10 +749,13 @@ created: function ()
 					wallet.GetBalance().then((value) =>
 					{
 						console.log("Wallet balance");
-						console.log(value);
 						this.$store.commit('config/setSyncProgress', 100);
 						this.$store.commit('config/setBalance', value);
 						this.$store.commit('config/setSyncStatus', vm.$t('message.walletSyncFinished'));
+						wallet.GetAllAddresses().then((value) =>
+						{
+							this.$store.commit('config/setAllAddresses', value);
+						});
 						wallet.GetHistory().then((value) =>
 						{
 							this.$store.commit('config/setTXHistory', value);
@@ -619,22 +796,11 @@ created: function ()
 				});
 				wallet.on('new_tx', async (list) =>
 				{
-					//console.log(`Received transaction ${JSON.stringify(list)}`)
-					//console.log(`Balance ${JSON.stringify(await wallet.GetBalance())}`)
-					//this.$store.commit('config/setSyncStatus', vm.$t('message.walletNewTransaction'));
-					/*wallet.GetBalance().then((value) =>
-					{
-						this.$store.commit('config/setBalance', value);
-					});*/
 				});
 				wallet.on('remove_tx', async (txid) => 
 				{
-					//this.$store.commit('config/setSyncStatus', vm.$t('message.walletRemoveTransaction'));
-					console.log(`Removed tx transaction ${txid}`)
 				});
 				await wallet.Load();
-				//console.log(`Last block: ${await wallet.GetTip()}`);
-				//console.log(`Balance ${JSON.stringify(await wallet.GetBalance())}`)
 			});
 		},
 		createDatabase: function (bImport)
@@ -654,7 +820,8 @@ created: function ()
 			window.adapter=new LocalStorage('db', {serialize: (data) => encrypt(JSON.stringify(data)),deserialize: (data) => JSON.parse(decrypt(data))});
 			window.db=low(window.adapter);
 			window.db.defaults({addr:[],mnemonics:code.toString(),count:0}).write();
-			window.db.get('addr').push({publicAddress: address.toString(),privateKey: privateKey.toWIF(),xpriv: xpriv.toString()}).write();
+			window.db.get('addr').push({publicAddress: address.toString()}).write();
+			this.active_wallet_name=this.wallet_name + "_" + this.$store.state.config.wallet_type.code + "_" + this.$store.state.config.network.code;
 			this.walletExist=true;
 			this.walletUnlocked=true;
 			this.initNavcoinJS(code.toString());
@@ -669,6 +836,11 @@ created: function ()
 		},
 		unlockWallet: function ()
 		{
+			if (!this.active_wallet_name)
+			{
+				this.$ons.notification.toast(vm.$t('message.chooseWallet'), { timeout: 2000, animation: 'fall' });
+				return;
+			}
 			ENCRYPTION_KEY=crypto.createHash('md5').update(this.password).digest("hex");
 			window.ENCRYPTION_KEY=ENCRYPTION_KEY;
 			window.adapter=new LocalStorage('db', {serialize: (data) => encrypt(JSON.stringify(data)),deserialize: (data) => JSON.parse(decrypt(data))});
@@ -677,7 +849,6 @@ created: function ()
 			{
 				this.busy=true;
 				this.walletUnlocked=true;
-				this.addr=JSON.stringify(window.db.get('addr'));
 				this.initNavcoinJS(window.db.get('mnemonics').value())
 			}
 			else

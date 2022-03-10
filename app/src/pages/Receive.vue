@@ -23,24 +23,20 @@
 					<v-ons-button style="float:right;margin-bottom:15px;" v-on:click="doCopy(publicAddress)">
 						<i class="fa fa-clipboard"></i>&nbsp;{{$t('message.copy')}}
 					</v-ons-button>
-					<div style="clear: both">
-						<center>
-							{{publicAddress}}
-						</center>
-					</div>
+					<v-ons-select style="width:100%" v-model="publicAddress">
+						<option v-bind:value="name" v-for="(value, name, index) in config.addresses.spending.public">{{name}}</option>
+					</v-ons-select>
 					<center>
 						<div v-html="qrcode_nav"></div>
 					</center>
 				</div>
 				<div v-show="segmentIndex==1">
-					<v-ons-button style="float:right;margin-bottom:15px;" v-on:click="doCopy(config.private_address)">
+					<v-ons-button style="float:right;margin-bottom:15px;" v-on:click="doCopy(privateAddress)">
 						<i class="fa fa-clipboard"></i>&nbsp;{{$t('message.copy')}}
 					</v-ons-button>
-					<div style="clear: both">
-						<center>
-							{{config.private_address}}
-						</center>
-					</div>
+					<v-ons-select style="width:100%" v-model="privateAddress">
+						<option v-bind:value="name" v-for="(value, name, index) in config.addresses.spending.private">{{name}}</option>
+					</v-ons-select>
 					<center>
 						<div v-html="qrcode_xnav"></div>
 					</center>
@@ -110,8 +106,8 @@
 						</div>
 						<div class="center">
 							<span class="list-item__title">
-								<span style="color:#cc6600" v-if="tx.amount<0"><small><span v-if="tx.type!='nft'">{{formatBalance(tx.amount)}} {{tx.token_code}} ({{tx.token_name}})</span><span v-else>{{tx.token_name}}</span></small></span>
-								<span style="color:#669900" v-if="tx.amount>0"><small><span v-if="tx.type!='nft'">+{{formatBalance(tx.amount)}} {{tx.token_code}} ({{tx.token_name}})</span><span v-else>{{tx.token_name}}</span></small></span>
+								<span style="color:#cc6600" v-if="tx.amount<0"><small><span v-if="tx.type!='nft'">{{formatBalance(tx.amount)}} {{tx.token_code}} {{(tx.token_name?"("+tx.token_name+")":"")}}</span><span v-else>{{tx.token_name}}</span></small></span>
+								<span style="color:#669900" v-if="tx.amount>0"><small><span v-if="tx.type!='nft'">+{{formatBalance(tx.amount)}} {{tx.token_code}} {{(tx.token_name?"("+tx.token_name+")":"")}}</span><span v-else>{{tx.token_name}}</span></small></span>
 							</span>
 							<span class="list-item__subtitle">
 								<span class="list-item__subtitle">
@@ -121,16 +117,18 @@
 									<small>{{(tx.confirmed?"Confirmed":"Not Confirmed")}}</small>
 								</span>
 								<br/>
-								<div v-if="tx.memos.in.length>0">
-									<div v-for="(item,index) in tx.memos.in" style="margin-top:10px;">
-										<small v-if="item!='' && item!='Change'"><v-ons-icon style="color:#cc6600" icon="ion-md-arrow-round-up" class="list-item__icon"></v-ons-icon>{{item}}</small>
+								<template v-if="tx.memos">
+									<div v-if="tx.memos.in.length>0">
+										<div v-for="(item,index) in tx.memos.in" style="margin-top:10px;">
+											<small v-if="item!='' && item!='Change'"><v-ons-icon style="color:#cc6600" icon="ion-md-arrow-round-up" class="list-item__icon"></v-ons-icon>{{item}}</small>
+										</div>
 									</div>
-								</div>
-								<div v-if="tx.memos.out.length>0">
-									<span class="list-item__subtitle" v-for="(item,index) in tx.memos.out" style="margin-top:10px;">
-										<small v-if="item!='' && item!='Change'"><v-ons-icon style="color:#669900" icon="ion-md-arrow-round-down" class="list-item__icon"></v-ons-icon>{{item}}</small>
-									</span>
-								</div>
+									<div v-if="tx.memos.out.length>0">
+										<span class="list-item__subtitle" v-for="(item,index) in tx.memos.out" style="margin-top:10px;">
+											<small v-if="item!='' && item!='Change'"><v-ons-icon style="color:#669900" icon="ion-md-arrow-round-down" class="list-item__icon"></v-ons-icon>{{item}}</small>
+										</span>
+									</div>
+								</template>
 							</span>
 						</div>
 						<div class="right" style="margin: 0px;padding:0px;font-size:10pt;min-width:100px !important;">
@@ -159,27 +157,23 @@ export default
 			state: 'initial',
 			items: [1, 2, 3],
 			segmentIndex: 0,
-			publicAddress:'',
-			privateAddress:'',
-			balanceInfo:'',
+			publicAddress:undefined,
+			privateAddress:undefined,
 			qrcode_nav:'',
 			qrcode_xnav:'',
 			prefix:"navcoin:",
 			txs:[],
 			isExpanded:false,
-			navcoinjs_txs:[],
 			pageSize: 10,
 			currentPage:1
 		};
 	},
-	created: function ()
-	{
-	},
 	updated: function()
 	{
-		this.publicAddress=db.get('addr').value()[0].publicAddress;
+		if (this.publicAddress==undefined) this.publicAddress=this.config.public_address;
+		if (this.privateAddress==undefined) this.privateAddress=this.config.private_address;
 		this.qrcode_nav=new QRCode(this.prefix+this.publicAddress).svg();
-		this.qrcode_xnav=new QRCode(this.prefix+this.$store.state.config.private_address).svg();
+		this.qrcode_xnav=new QRCode(this.prefix+this.privateAddress).svg();
 	},
 	computed:
 	{
@@ -267,27 +261,3 @@ export default
 	}
 };
 </script>
-<style>
-.intro {
-  text-align: left;
-  padding: 0 22px;
-  margin-top: 20px;
-  font-size: 14px;
-  line-height: 1.4;
-  color: rgba(0, 0, 0, .54);
-}
-
-ons-card {
-  cursor: pointer;
-  color: #333;
-}
-
-.card__title, .card--material__title {
-  font-size: 20px;
-}
-.notification
-{
-	font-size:8pt;
-	background-color: #673ab7;
-}
-</style>

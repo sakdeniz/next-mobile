@@ -8,20 +8,29 @@
 			<a href="https://www.nextwallet.org">https://www.nextwallet.org</a>
 			<p>
 				<h5>navcoin-js</h5>
-				Build 1.0.12
+				Build {{njs.version}}
 			</p>
 			<p>
 				<h5>bitcore-lib</h5>
-				Build 0.15.12
+				Build {{njs.wallet.bitcore.version}}
 			</p>
 		</v-ons-card>
 	</v-ons-page>
 </template>
 <script>
-export default {
-  data() {
-    return {};
-  },
+const njs = require('navcoin-js');
+export default
+{
+	data()
+	{
+		return {
+			njs:null,
+		};
+	},
+	mounted()
+	{
+		this.njs=njs;
+	}
 };
 </script>
 <style>

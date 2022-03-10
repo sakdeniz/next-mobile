@@ -1,7 +1,7 @@
 <template>
 	<v-ons-page>
-  		<custom-toolbar v-bind="toolbarInfo"></custom-toolbar>
-    	<v-ons-card>
+		<custom-toolbar v-bind="toolbarInfo"></custom-toolbar>
+		<v-ons-card>
 			{{$t('message.help')}}
 			<v-ons-list>
 				<v-ons-list-item tappable modifier="nodivider" v-on:click="loadLink('https://discordapp.com/invite/y4Vu9jw')">
@@ -37,20 +37,21 @@
 					</div>
 				</v-ons-list-item>
 			</v-ons-list>
-  		</v-ons-card>
+		</v-ons-card>
 	</v-ons-page>
 </template>
-
 <script>
-export default {
-  data() {
-    return {
-    };
-  },
-  methods: {
-    loadLink(url) {
-      window.open(url, '_blank');
-    }
-  },
+export default
+{
+	data()
+	{
+		return{};
+	},
+	methods:
+	{
+		loadLink(url) {
+			window.open(url, '_blank');
+		}
+	}
 };
 </script>

@@ -1,20 +1,19 @@
 <template>
 	<v-ons-page>
+		<custom-toolbar v-bind="toolbarInfo"></custom-toolbar>
 		<v-ons-modal :visible="modalVisible" @click="modalVisible = false">
 			<p style="text-align: center">
 				{{$t('message.pleaseWait')}} <v-ons-icon icon="fa-spinner" spin></v-ons-icon>
 			</p>
 		</v-ons-modal>
-		<v-ons-toolbar modifier="transparent">
-			<div class="center">
-				<v-ons-segment :index.sync="segmentIndex" style="width:100%">
-					<button>{{$t('message.availableTokens')}}</button>
-					<button>{{$t('message.createToken')}}</button>
-					<button>{{$t('message.mintBurnToken')}}</button>
-					<button>{{$t('message.sendToken')}}</button>
-				</v-ons-segment>
-			</div>
-		</v-ons-toolbar>
+		<div class="center" style="margin-top:20px;">
+			<v-ons-segment :index.sync="segmentIndex" style="width:100%">
+				<button>{{$t('message.availableTokens')}}</button>
+				<button>{{$t('message.createToken')}}</button>
+				<button>{{$t('message.mintBurnToken')}}</button>
+				<button>{{$t('message.sendToken')}}</button>
+			</v-ons-segment>
+		</div>
 		<v-ons-card v-show="segmentIndex==0">
 			<div class="content">
 				<div class="center" style="margin-top:20px">
@@ -55,13 +54,13 @@
 					</p>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-input :placeholder="$t('message.tokenName')" type="text" class="form-control" style="width:100%;" v-model="name"/>
+					<v-ons-input :placeholder="$t('message.tokenName')" float type="text" class="form-control" style="width:100%;" v-model="name"></v-ons-input>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-input :placeholder="$t('message.tokenSymbol')" type="text" class="form-control" style="width:100%;" v-model="symbol"/>
+					<v-ons-input :placeholder="$t('message.tokenSymbol')" float type="text" class="form-control" style="width:100%;" v-model="symbol"></v-ons-input>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-input :placeholder="$t('message.tokenMaxSupply')" type="number" class="form-control" style="width:100%;" v-model="max_supply" float/>
+					<v-ons-input :placeholder="$t('message.tokenMaxSupply')" float type="number" class="form-control" style="width:100%;" v-model="max_supply"></v-ons-input>
 				</div>
 				<div class="center" style="margin-top:40px">
 					<v-ons-button v-on:click='createToken' :disabled="!name || !symbol || !max_supply"><i class="ion-ios-color-wand"></i>&nbsp;{{$t('message.btnCreateToken')}}</v-ons-button>
@@ -81,15 +80,15 @@
 					</p>
 				</div>
 				<div class="center" style="margin-top:40px">
-					Token : <v-ons-select style="width: 100%" v-model="mint_token_id">
+					{{$t('message.token')}} : <v-ons-select float style="width: 100%" v-model="mint_token_id">
 						<option v-bind:value="item.id" v-for="(item,index) in config.privateTokens.filter(item => item.version==0)">{{item.name}}</option>
 					</v-ons-select>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-input :placeholder="$t('message.tokenDestination')" type="text" class="form-control" style="width:100%;" v-model="mint_token_destination"/>
+					<v-ons-input :placeholder="$t('message.tokenDestination')" float type="text" style="width:100%;" v-model="mint_token_destination"></v-ons-input>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-input :placeholder="$t('message.tokenAmount')" type="number" class="form-control" style="width:100%;" v-model="mint_token_amount" float/>
+					<v-ons-input :placeholder="$t('message.tokenAmount')" float type="number"style="width:100%;" v-model="mint_token_amount"></v-ons-input>
 				</div>
 				<div class="center" style="margin-top:40px">
 					<v-ons-button v-on:click='mintToken' :disabled="!mint_token_id || !mint_token_destination || !mint_token_amount"><i class="ion-ios-hammer"></i>&nbsp;{{$t('message.btnMintToken')}}</v-ons-button>
@@ -110,7 +109,7 @@
 					</p>
 				</div>
 				<div class="center" style="margin-top:40px">
-					Token : <v-ons-select style="width: 100%" v-model="token" v-if="config.Balance">
+					{{$t('message.token')}} : <v-ons-select float style="width: 100%" v-model="token" v-if="config.Balance">
 						<option v-bind:value="index" v-for="(item,index) in config.Balance.tokens">{{item.name}} - {{formatBalance(item.confirmed)}} {{item.code}}</option>
 					</v-ons-select>
 				</div>
@@ -142,13 +141,18 @@ export default {
 	data: function ()
 	{
 		return {
+			toolbarInfo:
+			{
+				backLabel: 'Home',
+				title: "Private Tokens",
+			},
 			modalVisible:false,
 			segmentIndex: 0,
 			name:'',
 			symbol:'',
 			max_supply: '',
 			mint_token_id:'',
-			mint_token_destination:'',
+			mint_token_destination:undefined,
 			mint_token_amount:'',
 			token:'',
 			address:'',
@@ -165,7 +169,7 @@ export default {
 	},
 	updated : function()
 	{
-		this.mint_token_destination=this.config.private_address;
+		if (this.mint_token_destination==undefined) this.mint_token_destination=this.config.private_address;
 	},
 	methods:
 	{
@@ -183,7 +187,7 @@ export default {
 				return "";
 			}
 		},
-		numberWithCommas: (num,sep,dec,u) => 
+		numberWithCommas: (num,sep,dec,u) =>
 		{
 			sep=sep||',';
 			u=u||'\\d';

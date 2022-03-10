@@ -82,7 +82,7 @@ export default {
 				vm.$ons.notification.toast(vm.$t('message.swapMissingAmount'), { timeout: 3000, animation: 'fall' });
 				return;
 			}
-			const publicAddress=db.get('addr').value()[0].publicAddress;
+			const publicAddress=this.$store.state.config.public_address;
 			const privateAddress=this.$store.state.config.private_address;
 			let amount=parseFloat((vm.amount*1e8).toFixed(0));
 			if (vm.isPrivateToPublic)

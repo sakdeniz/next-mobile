@@ -1,19 +1,18 @@
 <template>
 	<v-ons-page>
+		<custom-toolbar v-bind="toolbarInfo"></custom-toolbar>
 		<v-ons-modal :visible="modalVisible" @click="modalVisible = false">
 			<p style="text-align: center">
 				{{$t('message.pleaseWait')}} <v-ons-icon icon="fa-spinner" spin></v-ons-icon>
 			</p>
 		</v-ons-modal>
-		<v-ons-toolbar modifier="transparent">
-			<div class="center">
-				<v-ons-segment :index.sync="segmentIndex" style="width:100%">
-					<button>{{$t('message.availableNames')}}</button>
-					<button>{{$t('message.registerName')}}</button>
-					<button>{{$t('message.updateName')}}</button>
-				</v-ons-segment>
-			</div>
-		</v-ons-toolbar>
+		<div class="center" style="margin-top:20px;">
+			<v-ons-segment :index.sync="segmentIndex" style="width:100%">
+				<button>{{$t('message.availableNames')}}</button>
+				<button>{{$t('message.registerName')}}</button>
+				<button>{{$t('message.updateName')}}</button>
+			</v-ons-segment>
+		</div>
 		<v-ons-card v-show="segmentIndex==0">
 			<div class="content">
 				<div class="center" style="margin-top:20px">
@@ -22,7 +21,7 @@
 					</center>
 					<v-ons-list v-if="config.names.length>0">
 						<v-ons-list-item expandable :expanded.sync="item.isExpanded" v-for="(item,index) in config.names">
-							<img src="images/block.png" style="width:32px;height:auto;margin-right:10px;"><b>{{item.name}}</b>
+							<img src="images/globe.png" style="width:32px;height:auto;margin-right:10px;"><b>{{item.name}}</b>
 							<div class="expandable-content">
 								<div>{{$t('message.name')}} : {{item.name}}</div>
 							</div>
@@ -55,7 +54,7 @@
 					</p>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-input :placeholder="$t('message.name')" type="text" class="form-control" style="width:100%;" v-model="name" v-on:input="IsValidDotNavName()"/>
+					<v-ons-input :placeholder="$t('message.name')" type="text" float style="width:100%;" v-model="name"></v-ons-input>
 					<p v-if="name" v-html="(is_name_valid?'<span style=\'color:#228B22\'><i class=\'ion-ios-checkmark\'></i>&nbsp;Name valid</span>':'<span style=\'color:#DC143C\'><i class=\'ion-ios-close\'></i>&nbsp;Name not valid</span>')"></p>
 				</div>
 				<div class="center" style="margin-top:40px">
@@ -63,7 +62,7 @@
 				</div>
 			</div>
 		</v-ons-card>
-			<v-ons-card v-show="segmentIndex==2">
+		<v-ons-card v-show="segmentIndex==2">
 			<div class="content">
 				<div class="center" style="margin-top:20px">
 					<center>
@@ -81,15 +80,15 @@
 					</v-ons-select>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-input :placeholder="$t('message.subDomain')" type="text" class="form-control" style="width:100%;" v-model="sub_domain"/>
+					<v-ons-input :placeholder="$t('message.subDomain')" float type="text" style="width:100%;" v-model="sub_domain"></v-ons-input>
 					<p v-if="sub_domain" v-html="(is_sub_domain_valid?'<span style=\'color:#228B22\'><i class=\'ion-ios-checkmark\'></i>&nbsp;Name valid</span>':'<span style=\'color:#DC143C\'><i class=\'ion-ios-close\'></i>&nbsp;Name not valid</span>')"></p>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-input :placeholder="$t('message.subDomainKey')" type="text" class="form-control" style="width:100%;" v-model="sub_domain_key" float/>
+					<v-ons-input :placeholder="$t('message.subDomainKey')" float type="text" style="width:100%;" v-model="sub_domain_key"></v-ons-input>
 					<p v-if="sub_domain_key" v-html="(is_sub_domain_key_valid?'<span style=\'color:#228B22\'><i class=\'ion-ios-checkmark\'></i>&nbsp;Key valid</span>':'<span style=\'color:#DC143C\'><i class=\'ion-ios-close\'></i>&nbsp;Key not valid</span>')"></p>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-input :placeholder="$t('message.subDomainValue')" type="text" class="form-control" style="width:100%;" v-model="sub_domain_value" float/>
+					<v-ons-input :placeholder="$t('message.subDomainValue')" float type="text" style="width:100%;" v-model="sub_domain_value"></v-ons-input>
 				</div>
 				<div class="center" style="margin-top:40px">
 					<v-ons-button v-on:click='updateName' :disabled="!domain || !sub_domain || !sub_domain_key || !sub_domain_value  || !is_sub_domain_valid || !is_sub_domain_key_valid"><i class="ion-ios-checkmark"></i>&nbsp;{{$t('message.btnUpdateName')}}</v-ons-button>
@@ -110,6 +109,11 @@ export default {
 	data: function ()
 	{
 		return {
+			toolbarInfo:
+			{
+				backLabel: 'Home',
+				title: "dotNAV",
+			},
 			modalVisible:false,
 			segmentIndex: 0,
 			name:'',
