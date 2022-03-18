@@ -687,7 +687,7 @@ export default {
 			try
 			{
 				vm.modalVisible=true;
-				window.wallet.tokenCreateTransaction(vm.address, 1, vm.memo, undefined, vm.token,vm.nft_id).then(function (tx)
+				wallet.tokenCreateTransaction(vm.address, 1, vm.memo, undefined, vm.token,vm.nft_id).then(function (tx)
 				{
 					vm.modalVisible=false;
 					vm.$ons.notification.confirm(vm.$t('message.transactionFee') + " : " + sb.toBitcoin(tx.fee) + " xNAV<br/><br/>"+vm.$t('message.sendConfirmQuestion'),{title:vm.$t('message.sendConfirm'),buttonLabels:[vm.$t('message.sendConfirmNo'), vm.$t('message.sendConfirmYes')]})
@@ -696,7 +696,7 @@ export default {
 						if (response)
 						{
 							vm.modalVisible=true;
-							window.wallet.SendTransaction(tx.tx).then(function (result)
+							wallet.SendTransaction(tx.tx).then(function (result)
 							{
 								if (result.error)
 								{

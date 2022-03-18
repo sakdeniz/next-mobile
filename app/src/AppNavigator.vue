@@ -1,5 +1,5 @@
 <template>
-	<v-ons-page v-if="!walletExist || !walletUnlocked || !walletBackedup || !walletBackupConfirmed" >
+	<v-ons-page v-if="!walletLoginSuccess||!walletUnlocked" style="background: #FFFFFF !important;">
 		<v-ons-carousel fullscreen swipeable auto-scroll overscrollable :index.sync="carouselIndex" :auto-scroll-ratio="0.1" v-show="bCarousel">
 			<v-ons-carousel-item v-for="(itm) in carouselItems" class="carousel-item">
 				<div class="title-1">
@@ -42,13 +42,14 @@
 					</v-ons-list-item>
 					<div style="margin-top:30px;">
 						<center>
+							<v-ons-button v-on:click="bCarousel=true"><i class="ion-ios-arrow-back"></i>&nbsp;{{$t('message.back')}}</v-ons-button>
 							<v-ons-button v-on:click="languageSelected=true">{{$t('message.continue')}}</v-ons-button>
 						</center>
 					</div>
 				</v-ons-list>
 			</div>
 		</div>
-		<div v-show="!walletExist && !walletUnlocked && !termsAccepted && languageSelected">
+		<div v-show="!walletExist && !walletLoginSuccess && !walletUnlocked && !termsAccepted && languageSelected">
 			<div class="terms">
 				<div class="welcome_logo">
 					NEXT
@@ -112,6 +113,8 @@
 				  </p>
 				  <center>
 				  	<v-ons-button style="margin-top: 30px" v-on:click="acceptTerms()">{{$t('message.acceptTerms')}}</v-ons-button>
+				  	<br/><br/>
+				  	<v-ons-button v-on:click="languageSelected=false"><i class="ion-ios-arrow-back"></i>&nbsp;{{$t('message.back')}}</v-ons-button>
 				  </center>
 			</div>
 		</div>
@@ -136,6 +139,7 @@
 					</v-ons-list-item>
 					<div style="margin-top:30px;">
 						<center>
+							<v-ons-button v-on:click="termsAccepted=false"><i class="ion-ios-arrow-back"></i>&nbsp;{{$t('message.back')}}</v-ons-button>
 							<v-ons-button v-on:click="walletTypeSelected=true">{{$t('message.continue')}}</v-ons-button>
 						</center>
 					</div>
@@ -163,6 +167,7 @@
 					</v-ons-list-item>
 					<div style="margin-top:30px;">
 						<center>
+							<v-ons-button v-on:click="walletTypeSelected=false"><i class="ion-ios-arrow-back"></i>&nbsp;{{$t('message.back')}}</v-ons-button>
 							<v-ons-button v-on:click="networkSelected=true">{{$t('message.continue')}}</v-ons-button>
 						</center>
 					</div>
@@ -172,8 +177,8 @@
 		<div class="main" v-show="(termsAccepted && walletTypeSelected && networkSelected)||walletExist">
 			<div class="wrapper">
 				<center>
-					<div class="welcome_logo">NEXT</div>
 					<div v-show="walletExist && walletUnlocked && termsAccepted && walletBackedup && !walletBackupConfirmed">
+						<div class="welcome_logo">NEXT</div>
 						<div style="margin-bottom:15px;padding:10px;">
 							<p>
 								{{$t('message.infoConfirm')}}
@@ -272,10 +277,13 @@
 								<v-ons-button v-show="!busy" style="margin: 6px 0" v-on:click="importWallet()">{{$t('message.importWallet')}}</v-ons-button>
 								<v-ons-progress-circular indeterminate v-show="busy"></v-ons-progress-circular>
 							</div>
+							<div style="margin-top: 30px;">
+								<v-ons-button v-on:click="networkSelected=false"><i class="ion-ios-arrow-back"></i>&nbsp;{{$t('message.back')}}</v-ons-button>
+							</div>
 						</div>
 					</div>
-					<div v-show="walletExist && !walletUnlocked">
-						<div class="title" style="margin-bottom:30px;">
+					<div v-show="walletExist && !walletLoginSuccess && !walletUnlocked">
+						<div class="title" style="margin-bottom:30px;" v-if="wallets.length>0">
 							{{$t('message.unlock')}}
 						</div>
 						<div class="content" style="margin-bottom:15px;">
@@ -283,8 +291,8 @@
 								<!--<h4 class="title">
 									{{$t('message.selectWallet')}}
 								</h4>!-->
-								<v-ons-list style="width:80%" v-if="wallets">
-									<v-ons-list-item v-for="(wallet, $index) in wallets" tappable v-on:click="setActiveWallet(wallet)">
+								<v-ons-list style="width:80%" v-if="wallets.length>0">
+									<v-ons-list-item v-for="(wallet, $index) in wallets" tappable @click="setActiveWallet(wallet)">
 										<div class="left">
 											<i class="ion-ios-wallet fa-2x"></i>
 										</div>
@@ -297,9 +305,12 @@
 										</div>
 									</v-ons-list-item>
 								</v-ons-list>
+								<div v-else>
+									No wallet found.
+								</div>
 							</div>
 						</div>
-						<div class="content" style="margin-top: 30px;margin-bottom:15px;">
+						<div class="content" style="margin-top: 30px;margin-bottom:15px;" v-if="wallets.length>0">
 							<div class="center">
 								<v-ons-input placeholder="Password" type="password" float v-model="password"></v-ons-input>
 							</div>
@@ -307,6 +318,12 @@
 						</div>
 						<div class="content" style="margin-top: 30px;margin-bottom:15px;">
 							<v-ons-button style="margin-top: 30px" v-on:click="createNewWallet()"><i class="ion-ios-add"></i>&nbsp;{{$t('message.btnCreateNewWallet')}}</v-ons-button>
+						</div>
+					</div>
+					<div v-show="walletExist && walletLoginSuccess && !walletUnlocked">
+						<div class="title">
+							<h3>{{$t('message.walletLoading')}}</h3>
+							<v-ons-progress-circular indeterminate></v-ons-progress-circular>
 						</div>
 					</div>
 				</center>
@@ -387,6 +404,7 @@ data()
 		languageSelected:false,
 		walletTypeSelected:false,
 		networkSelected:false,
+		walletLoginSuccess:false,
 		walletUnlocked:false,
 		walletBackedup:false,
 		walletBackupConfirmed:false,
@@ -534,6 +552,7 @@ created: function ()
 			{
 				console.log("Wallet locked.")
 				this.password="";
+				this.walletLoginSuccess=false;
 				this.walletUnlocked=false;
 			}
 			else
@@ -554,6 +573,8 @@ created: function ()
 			this.walletExist=false;
 			this.walletBackedup=false;
 			this.walletBackupConfirmed=false;
+			this.setWalletType({name:'Next Wallet',code:'next'});
+			this.setNetwork({name:"Mainnet",code:"mainnet"});
 		},
 		setLanguage(language)
 		{
@@ -570,8 +591,22 @@ created: function ()
 		},
 		setActiveWallet(wallet)
 		{
+			console.log(wallet);
+			window.network=wallet.network;
+			if (wallet.network=="mainnet")
+			{
+				bitcore.Networks.defaultNetwork = bitcore.Networks.livenet;
+			}
+			else
+			{
+				bitcore.Networks.defaultNetwork = bitcore.Networks.testnet;
+			}
 			this.active_wallet_already_exist=true;
 			this.active_wallet_name=wallet.name+"_"+wallet.type+"_"+wallet.network;
+			this.selectedWalletType=wallet.type;
+			this.selectedNetwork=wallet.network;
+			this.$store.commit('config/setWalletType', {name:wallet.type,code:wallet.type});
+			this.$store.commit('config/setNetwork', {name:wallet.network,code:wallet.network});
 		},
 		setNetwork(network)
 		{
@@ -682,7 +717,9 @@ created: function ()
 		initNavcoinJS: function (mnemonic)
 		{
 			let vm=this;
-			this.$store.commit('config/setSyncStatus', vm.$t('message.walletLoading'));
+			vm.walletLoginSuccess=true;
+			vm.$store.commit('config/setSyncStatus', vm.$t('message.walletLoading'));
+			console.log("Mnemonics : "+mnemonic);
 			console.log("Wallet ("+vm.$store.state.config.wallet_type.code+") loading on "+vm.$store.state.config.network.name+" ("+vm.$store.state.config.network.code+")"+"...");
 			njs.wallet.Init().then(async () =>
 			{
@@ -696,6 +733,7 @@ created: function ()
 						zapwallettxes:zapwallettxes,
 						log:log
 					})
+					console.log(wallet);
 				}
 				else
 				{
@@ -714,6 +752,7 @@ created: function ()
 						log:log
 					})
 				}
+				wallet.walletName=this.active_wallet_name;
 				window.wallet=wallet;
 				wallet.on('new_mnemonic', (mnemonic) => console.log(`wallet created with mnemonic ${mnemonic} - please back it up!`));
 				wallet.on('loaded', async () =>
@@ -731,6 +770,8 @@ created: function ()
 						this.$store.commit('config/setPrivateAddress', xNAVAddress);
 						console.log("xNAV receiving address : " + xNAVAddress);
 					});
+					//wallet.ClearNodeList();
+					//wallet.AddNode('electrum.nextwallet.org', 40004, 'wss');
 					await wallet.Connect();
 				});
 				wallet.on('sync_started', () => 
@@ -801,11 +842,22 @@ created: function ()
 				{
 				});
 				await wallet.Load();
+				this.walletUnlocked=true;
 			});
 		},
 		createDatabase: function (bImport)
 		{
 			var code;
+			let vm=this;
+			this.wallets.forEach(w => 
+			{
+				if(w.name==this.wallet_name)
+				{
+					vm.$ons.notification.toast(vm.$t('message.walletNameAlreadyUsed'), { timeout: 3000, animation: 'fall' });
+					vm.busy=false;
+					return;
+				}
+			});
 			if (bImport) code=new Mnemonic(this.mnemonics); else code=new Mnemonic(Mnemonic.Words.ENGLISH);
 			this.mnemonics=code;
 			var xpriv=code.toHDPrivateKey();
@@ -822,8 +874,8 @@ created: function ()
 			window.db.defaults({addr:[],mnemonics:code.toString(),count:0}).write();
 			window.db.get('addr').push({publicAddress: address.toString()}).write();
 			this.active_wallet_name=this.wallet_name + "_" + this.$store.state.config.wallet_type.code + "_" + this.$store.state.config.network.code;
+			console.log("Active wallet name : " + this.active_wallet_name);
 			this.walletExist=true;
-			this.walletUnlocked=true;
 			this.initNavcoinJS(code.toString());
 			/*console.log("*** Create wallet");
 			console.log("*** Password:"+this.password);
@@ -848,7 +900,6 @@ created: function ()
 			if (db.has('addr').value())
 			{
 				this.busy=true;
-				this.walletUnlocked=true;
 				this.initNavcoinJS(window.db.get('mnemonics').value())
 			}
 			else

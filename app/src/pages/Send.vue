@@ -1,5 +1,17 @@
 <template>
 	<v-ons-page id="page-send">
+		<v-ons-dialog cancelable :visible.sync="dialogVisible">
+			<v-ons-list v-if="config.book.length>0" style="width: 100%;height:300px;overflow-y: scroll;">
+				<v-ons-list-item v-on:click="setAddress(user.address)" v-for="user,index in config.book"  tappable>
+					<div class="center">
+						<span class="list-item__subtitle">
+							<i class="fa fa-user"></i>&nbsp;{{user.name}}
+						</span>
+						<span class="list-item__subtitle"><small>{{user.address}}</small></span>
+					</div>
+				</v-ons-list-item>
+			</v-ons-list>
+		</v-ons-dialog>
 		<v-ons-modal :visible="modalVisible" @click="modalVisible = false">
 			<p style="text-align: center">
 				{{$t('message.txInProgress')}} <v-ons-icon icon="fa-spinner" spin></v-ons-icon>
@@ -14,7 +26,7 @@
 			<div class="title">
 				{{$t('message.send')}}
 				<v-ons-button style="float:right" v-on:click="scan()"><i class="ion-md-qr-scanner"></i>&nbsp;{{$t('message.scan')}}</v-ons-button>
-				<v-ons-button style="float:right;margin-right:5px;" v-on:click="push(pages['0'].component, $t('message.settingsAddressBook'))"><i class="ion-md-person"></i></v-ons-button>
+				<v-ons-button style="float:right;margin-right:5px;" v-on:click="dialogVisible=true"><i class="ion-md-person"></i></v-ons-button>
 			</div>
 			<div class="content">
 				<div class="center" style="margin-top:20px">
@@ -57,7 +69,6 @@
 </template>
 <script>
 import sb from 'satoshi-bitcoin';
-import AddressBook from './AddressBook.vue';
 export default
 {
 	data ()
@@ -70,13 +81,15 @@ export default
 			address:'',
 			amount:'',
 			fee:100000,
-			pages: [
-			{
-				component: AddressBook,
-				label: 'AddressBook',
-				desc: 'AddressBook'
-			}]
+			dialogVisible: false,
 		};
+	},
+	computed:
+	{
+		config()
+		{
+			return this.$store.state.config;
+		}
 	},
 	methods:
 	{
@@ -110,6 +123,11 @@ export default
 				QRScanner.show();
 			}
 		},
+		setAddress(address)
+		{
+			this.address=address;
+			this.dialogVisible=false;
+		},
 		useAllFunds()
 		{
 			if (this.isPrivateTransaction)
@@ -130,7 +148,7 @@ export default
 				try
 				{
 					vm.modalVisible_2=true;
-					window.wallet.xNavCreateTransaction(vm.address, amount, '', undefined, vm.isIncludesTxFee).then(function (tx)
+					wallet.xNavCreateTransaction(vm.address, amount, '', undefined, vm.isIncludesTxFee).then(function (tx)
 					{
 						vm.modalVisible_2=false;
 						vm.$ons.notification.confirm(vm.$t('message.amountToSend') + " : " + sb.toBitcoin((vm.isIncludesTxFee?amount-tx.fee:amount)) + " xNAV<br/>" + vm.$t('message.transactionFee') + " : " + sb.toBitcoin(tx.fee) + " xNAV<br/>" + vm.$t('message.totalAmount') + " : " + sb.toBitcoin((vm.isIncludesTxFee?amount:amount+tx.fee)) + " xNAV"+"<br/><br/>"+vm.$t('message.sendConfirmQuestion'),{title:vm.$t('message.sendConfirm'),buttonLabels:[vm.$t('message.sendConfirmNo'), vm.$t('message.sendConfirmYes')]})
@@ -139,7 +157,7 @@ export default
 							if (response)
 							{
 								vm.modalVisible=true;
-								window.wallet.SendTransaction(tx.tx).then(function (result)
+								wallet.SendTransaction(tx.tx).then(function (result)
 								{
 									if (result.error)
 									{
@@ -190,7 +208,7 @@ export default
 				try
 				{
 					vm.modalVisible_2=true;
-					window.wallet.NavCreateTransaction(vm.address,amount, '', undefined, vm.isIncludesTxFee).then(function (tx)
+					wallet.NavCreateTransaction(vm.address,amount, '', undefined, vm.isIncludesTxFee).then(function (tx)
 					{
 						vm.modalVisible_2=false;
 						vm.$ons.notification.confirm(vm.$t('message.amountToSend') + " : " + sb.toBitcoin((vm.isIncludesTxFee?amount-tx.fee:amount)) + " NAV<br/>" + vm.$t('message.transactionFee') + " : " + sb.toBitcoin(tx.fee) + " NAV<br/>" + vm.$t('message.totalAmount') + " : " + sb.toBitcoin((vm.isIncludesTxFee?amount:amount+tx.fee)) + " NAV"+"<br/><br/>"+vm.$t('message.sendConfirmQuestion'),{title:vm.$t('message.sendConfirm'),buttonLabels:[vm.$t('message.sendConfirmNo'), vm.$t('message.sendConfirmYes')]})
@@ -199,7 +217,7 @@ export default
 							if (response)
 							{
 								vm.modalVisible=true;
-								window.wallet.SendTransaction(tx.tx).then(function (result)
+								wallet.SendTransaction(tx.tx).then(function (result)
 								{
 									if (result.error)
 									{

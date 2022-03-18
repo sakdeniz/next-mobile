@@ -240,7 +240,7 @@ export default {
 				vm.modalVisible=false;
 				vm.$ons.notification.alert(e.message,{title:vm.$t('message.updateName')});
 			});
-		}	
+		}
 	}
 }
 </script>

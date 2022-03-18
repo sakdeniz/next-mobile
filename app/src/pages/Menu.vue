@@ -87,26 +87,26 @@ export default
 			pages:[
 				{
 					component: PrivateToken,
-					title: 'Private Tokens',
-					desc: 'PrivateTokens',
+					title: vm.$t('message.privateTokensTitle'),
+					desc: vm.$t('message.privateTokensTitle'),
 					icon: this.md ? 'ion-ios-hammer' : 'ion-ios-hammer',
 				},
 				{
 					component: NFTWorkshop,
-					title: 'NFT Workshop',
-					desc: 'NFT Workshop',
+					title: vm.$t('message.nftWorkshopTitle'),
+					desc: vm.$t('message.nftWorkshopTitle'),
 					icon: this.md ? 'ion-ios-images' : 'ion-ios-images',
 				},
 				{
 					component: DotNAV,
-					title: 'dotNAV',
-					desc: 'dotNAV',
+					title: vm.$t('message.dotNavTitle'),
+					desc: vm.$t('message.dotNavTitle'),
 					icon: this.md ? 'ion-ios-globe' : 'ion-ios-globe',
 				},
 				{
 					component: LinkedProjects,
-					title: 'Linked Projects',
-					desc: 'Linked Projects',
+					title: vm.$t('message.linkedProjectsTitle'),
+					desc: vm.$t('message.linkedProjectsTitle'),
 					icon: this.md ? 'ion-ios-planet' : 'ion-ios-planet',
 				}
 			],

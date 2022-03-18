@@ -18,12 +18,17 @@
 	</v-ons-page>
 </template>
 <script>
-import bitcore from 'bitcore-lib';
+import bitcore from '@aguycalled/bitcore-lib';
 import message from 'bitcore-message';
 export default
 {
 	data() {
 		return {
+			toolbarInfo:
+			{
+				backLabel: 'Home',
+				title: "Verify",
+			},
 			message:'',
 			address:'',
 			signature:'',
@@ -41,7 +46,7 @@ export default
 			{
 				try
 				{
-					var result = new bitcore.Message(this.message).verify(this.address, this.signature);
+					let result=wallet.VerifySignature(this.address,this.message,this.signature)
 					vm.$ons.notification.toast((result.toString()=="true"?vm.$t('message.messageValid'):vm.$t('message.messageNotValid')), {timeout: 1000, animation: 'fall' });
 				}
 				catch (err)

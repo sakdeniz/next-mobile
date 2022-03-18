@@ -13,7 +13,7 @@
 	</v-ons-page>
 </template>
 <script>
-import bitcore from 'bitcore-lib';
+import bitcore from '@aguycalled/bitcore-lib';
 import axios from 'axios';
 import sb from 'satoshi-bitcoin';
 import { mapGetters,mapActions,mapState} from 'vuex';

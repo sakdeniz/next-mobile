@@ -16,7 +16,6 @@
 			<v-ons-list v-if="config.book.length>0">
 				<v-ons-list-item v-for="user,index in config.book"  tappable modifier="nodivider">
 					<div class="center">
-						<v-ons-button modifier="outline" v-on:click="send(user.address)"><i class="ion-ios-paper-plane fa-2x"></i></v-ons-button>
 						<v-ons-button modifier="outline" v-on:click="update(index)"><i class="ion-ios-create fa-2x"></i></v-ons-button>
 						<v-ons-button modifier="outline" v-on:click="deleteConfirm(index)"><i class="ion-ios-trash fa-2x"></i></v-ons-button>
 						<span class="list-item__subtitle">{{user.name}}</span>
@@ -84,7 +83,7 @@ export default {
 				return {
 					toolbarInfo: {
 						backLabel: 'Home',
-						title: vm.$t('message.updateContact'),
+						title: "Address Book",
 					},
 					index:id,
 					update:true,
@@ -94,11 +93,6 @@ export default {
 				}
 			}
 			});
-		},
-		send:function(address)
-		{
-			this.$store.commit('config/setAddress', address);
-			this.$store.commit('navigator/pop');
 		},
 		push(page, key)
 		{

@@ -3,7 +3,7 @@
 		<custom-toolbar v-bind="toolbarInfo"></custom-toolbar>
 		<v-ons-card>
 			<span class="about-logo-text">NEXT</span>
-			<p>Build 1.0.7</p>
+			<p>Build 1.0.8</p>
 			<p>Developed by Navcoin Developers</p>
 			<a href="https://www.nextwallet.org">https://www.nextwallet.org</a>
 			<p>
@@ -18,12 +18,17 @@
 	</v-ons-page>
 </template>
 <script>
-const njs = require('navcoin-js');
+const njs=require('navcoin-js');
 export default
 {
 	data()
 	{
 		return {
+			toolbarInfo:
+			{
+				backLabel: 'Home',
+				title: "About",
+			},
 			njs:null,
 		};
 	},

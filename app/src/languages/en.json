@@ -1,8 +1,8 @@
- {
-    "message":
-    {
-    	"selectLanguage":"Select Language",
-    	"continue":"Continue",
+{
+	"message":
+	{
+		"selectLanguage":"Select Language",
+		"continue":"Continue",
 		"hello": "Welcome to the NEXT Wallet",
 		"aboutNext":"About NEXT",
 		"navcoinWebsite":"Navcoin Website",
@@ -121,7 +121,7 @@
 		"backupPhrase":"Seed Phrase",
 		"segmentCreateWallet":"Create Wallet",
 		"segmentImportWallet":"Import Wallet",
-		"importWallet":"Import",
+		"importWallet":"Import Wallet",
 		"invalidMnemonics":"Invalid Backup Phrase",
 		"mnemonics":"Backup Phrase",
 		"password":"Password",
@@ -404,6 +404,13 @@
 		"projectID":"Project ID",
 		"noLinkedProjectFound":"No linked project found.",
 		"linkProject":"Link Project",
-		"scanLinkCode":"Scan QR Code"
+		"scanLinkCode":"Scan QR Code",
+		"back":"Back",
+		"walletNameAlreadyUsed":"Wallet name already used",
+		"noWalletFound":"Wallet not found.",
+		"privateTokensTitle":"Private Tokens",
+		"nftWorkshopTitle":"NFT Workshop",
+		"dotNavTitle":"dotNAV",
+		"linkedProjectsTitle":"Linked Projects"
 	}
 }

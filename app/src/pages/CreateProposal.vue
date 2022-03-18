@@ -46,8 +46,9 @@
 </template>
 <script>
 import axios from 'axios';
+import moment from 'moment';
 import sb from 'satoshi-bitcoin';
-import bitcore from 'bitcore-lib';
+import bitcore from '@aguycalled/bitcore-lib';
 import { mapGetters,mapActions,mapState} from 'vuex';
 export default {
 	data() {
@@ -138,6 +139,7 @@ export default {
 						console.log("Time:"+vm.strdzeel_d);
 						console.log("Public address:"+vm.publicAddress);
 						console.log("Private key:"+vm.privateKey);
+						console.log(moment().unix());
 						//
 						axios.get(window.apiURL+'utxo', {
 							params: {

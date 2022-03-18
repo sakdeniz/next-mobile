@@ -19,7 +19,7 @@
 export default {
   data() {
     return {
-    	links: [
+        links: [
         {
           title: "Facebook",
           icon: 'ion-logo-facebook',

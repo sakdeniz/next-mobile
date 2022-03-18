@@ -271,10 +271,18 @@ export default {
 				{
 					if (crypto.createHash('md5').update(input).digest("hex")==window.ENCRYPTION_KEY)
 					{
-						localStorage.clear();
-						njs.wallet.WalletFile.RemoveWallet("wallet.db").then(() =>
+						njs.wallet.WalletFile.RemoveWallet(wallet.walletName).then(() =>
 						{
-							console.log("Wallet removed.");
+							console.log("Wallet "+wallet.walletName+" removed.");
+							njs.wallet.WalletFile.ListWallets().then((wallets) =>
+							{
+								console.log("Remaining wallet numbers : " + wallets.length);
+								if (wallets.length<1)
+								{
+									console.log("Clearing local storage...");
+									localStorage.clear();
+								}
+							});
 						});
 						vm.$ons.notification.toast(vm.$t('message.walletRemoved'), { timeout: 3000, animation: 'fall' });
 						navigator.app.exitApp();

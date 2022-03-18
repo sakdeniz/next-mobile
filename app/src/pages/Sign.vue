@@ -22,13 +22,18 @@
 	</v-ons-page>
 </template>
 <script>
-import bitcore from 'bitcore-lib';
+import bitcore from '@aguycalled/bitcore-lib';
 import message from 'bitcore-message';
 import { mapGetters,mapActions,mapState} from 'vuex';
 export default {
 	data()
 	{
 		return {
+			toolbarInfo:
+			{
+				backLabel: 'Home',
+				title: "Sign",
+			},
 			message:'',
 			signedMessage:''
 		};
@@ -54,10 +59,7 @@ export default {
 				{
 					wallet.NavGetPrivateKeys("",this.config.public_address).then(function (e)
 					{
-						var privateKey=bitcore.PrivateKey.fromWIF(e[0].privateKey);
-						var message=new bitcore.Message(vm.message);
-						var signature=message.sign(privateKey);
-						vm.signedMessage=signature.toString();
+						vm.signedMessage=wallet.Sign(bitcore.PrivateKey.fromWIF(e[0].privateKey),vm.message);
 					});
 				}
 				catch (err)

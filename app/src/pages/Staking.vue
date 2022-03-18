@@ -129,7 +129,7 @@ export default {
 			{
 				if (response)
 				{
-					window.wallet.NavCreateTransaction(vm.publicAddress,vm.$store.state.config.Balance.staked.confirmed, '', undefined, true, undefined,0x2).then(function (tx)
+					wallet.NavCreateTransaction(vm.config.public_address,vm.$store.state.config.Balance.staked.confirmed,'',undefined,true,undefined,0x2).then(function (tx)
 					{
 						vm.$ons.notification.confirm(vm.$t('message.amountToSend') + " : " + sb.toBitcoin(vm.$store.state.config.Balance.staked.confirmed) + " NAV<br/>" + vm.$t('message.transactionFee') + " : " + sb.toBitcoin(tx.fee) + " NAV<br/>" + vm.$t('message.totalAmount') + " : " + sb.toBitcoin(vm.$store.state.config.Balance.staked.confirmed-tx.fee) + " NAV"+"<br/><br/>"+vm.$t('message.sendConfirmQuestion'),{title:vm.$t('message.sendConfirm'),buttonLabels:[vm.$t('message.sendConfirmNo'), vm.$t('message.sendConfirmYes')]})
 						.then((response) =>
@@ -138,7 +138,7 @@ export default {
 							{
 								vm.state=true;
 								vm.modalVisible=true;
-								window.wallet.SendTransaction(tx.tx).then(function (result)
+								wallet.SendTransaction(tx.tx).then(function (result)
 								{
 									if (result.error)
 									{
@@ -174,7 +174,7 @@ export default {
 		startColdStaking(coldStakingAddress)
 		{
 			let vm=this;
-			window.wallet.NavCreateTransaction(coldStakingAddress,vm.$store.state.config.Balance.nav.confirmed, '', undefined, true).then(function (tx)
+			wallet.NavCreateTransaction(coldStakingAddress,vm.$store.state.config.Balance.nav.confirmed, '', undefined, true).then(function (tx)
 			{
 				vm.$ons.notification.confirm(vm.$t('message.amountToSend') + " : " + sb.toBitcoin(vm.$store.state.config.Balance.nav.confirmed) + " NAV<br/>" + vm.$t('message.transactionFee') + " : " + sb.toBitcoin(tx.fee) + " NAV<br/>" + vm.$t('message.totalAmount') + " : " + sb.toBitcoin(vm.$store.state.config.Balance.nav.confirmed-tx.fee) + " NAV"+"<br/><br/>"+vm.$t('message.sendConfirmQuestion'),{title:vm.$t('message.confirmColdStakingStartTitle'),buttonLabels:[vm.$t('message.sendConfirmNo'), vm.$t('message.sendConfirmYes')]})
 				.then((response) =>
@@ -183,7 +183,7 @@ export default {
 					{
 						vm.state=true;
 						vm.modalVisible=true;
-						window.wallet.SendTransaction(tx.tx).then(function (result)
+						wallet.SendTransaction(tx.tx).then(function (result)
 						{
 							if (result.error)
 							{
@@ -220,7 +220,7 @@ export default {
 		},
 		confirmColdStaking(type)
 		{
-			const bitcore=require('bitcore-lib');
+			const bitcore=require('@aguycalled/bitcore-lib');
 			let vm=this;
 			if (vm.$store.state.config.Balance.nav.confirmed>0)
 			{
@@ -231,41 +231,44 @@ export default {
 					{
 						if (response)
 						{
-							var privateKey = bitcore.PrivateKey.fromWIF(db.get('addr').value()[0].privateKey.toString());
-							var message = new bitcore.Message("next wallet cold staking permission "+vm.publicAddress);
-							var signature = message.sign(privateKey);
-							axios.get(window.apiURL+'getcoldstakingaddress', {
-								params:{
-									network: window.network,
-									a: vm.publicAddress,
-									signature : signature
-								}
-							})
-							.then(function (response)
+							wallet.NavGetPrivateKeys("",vm.config.public_address).then(function (e)
 							{
-								try
-								{
-									if (!response.data.error)
-									{
-										vm.startColdStaking(response.data.coldStakingAddress);
+								var privateKey = bitcore.PrivateKey.fromWIF(e[0].privateKey);
+								var message = new bitcore.Message("next wallet cold staking permission "+vm.config.public_address);
+								var signature = message.sign(privateKey);
+								axios.get(window.apiURL+'getcoldstakingaddress', {
+									params:{
+										network: window.network,
+										a: vm.config.public_address,
+										signature : signature
 									}
-									else
+								})
+								.then(function (response)
+								{
+									try
+									{
+										if (!response.data.error)
+										{
+											vm.startColdStaking(response.data.coldStakingAddress);
+										}
+										else
+										{
+											vm.state=false;
+											vm.$ons.notification.alert(response.data.error,{title:vm.$t('message.staking')});
+										}
+									}
+									catch(e)
 									{
 										vm.state=false;
-										vm.$ons.notification.alert(response.data.error,{title:vm.$t('message.staking')});
+										vm.modalVisible=false;
+										vm.$ons.notification.alert(e.message,{title:vm.$t('message.staking')});
 									}
-								}
-								catch(e)
+								})
+								.catch(function (error)
 								{
 									vm.state=false;
-									vm.modalVisible=false;
-									vm.$ons.notification.alert(e.message,{title:vm.$t('message.staking')});
-								}
-							})
-							.catch(function (error)
-							{
-								vm.state=false;
-							})
+								})
+							});
 						}
 					});
 				}
@@ -278,7 +281,7 @@ export default {
 						{
 							try
 							{
-								let coldStakingAddress=bitcore.Address.fromScript(new bitcore.Script.fromAddresses(stakingAddress,bitcore.Address(vm.publicAddress))).toString(window.network);
+								let coldStakingAddress=bitcore.Address.fromScript(new bitcore.Script.fromAddresses(stakingAddress,bitcore.Address(vm.config.public_address))).toString(window.network);
 								vm.startColdStaking(coldStakingAddress);
 							}
 							catch(e)

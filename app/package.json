@@ -15,6 +15,7 @@
     "device": "cordova run android --device && C:/Users/PC/AppData/Local/Android/sdk/platform-tools/adb logcat chromium:D SystemWebViewClient:D *:S"
   },
   "dependencies": {
+    "@parvineyvazov/json-translator": "^0.7.1",
     "@uniswap/sdk": "^3.0.3",
     "async-mutex": "^0.3.1",
     "axios": "^0.21.1",
@@ -29,7 +30,7 @@
     "lodash": "^3.10.1",
     "lowdb": "^1.0.0",
     "metamask-onboarding": "^0.1.1",
-    "navcoin-js": "^1.1.34",
+    "navcoin-js": "^1.1.39",
     "net": "^1.0.2",
     "onsenui": "^2.10.2",
     "sass-loader": "^10.1.1",

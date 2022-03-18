@@ -90,7 +90,7 @@ export default {
 				try
 				{
 					vm.modalVisible_2=true;
-					window.wallet.xNavCreateTransaction(publicAddress, amount, '', undefined, vm.isIncludesTxFee).then(function (tx)
+					wallet.xNavCreateTransaction(publicAddress, amount, '', undefined, vm.isIncludesTxFee).then(function (tx)
 					{
 						vm.modalVisible_2=false;
 						vm.$ons.notification.confirm(vm.$t('message.amountToSwap') + " : " + sb.toBitcoin((vm.isIncludesTxFee?amount-tx.fee:amount)) + " xNAV<br/>" + vm.$t('message.transactionFee') + " : " + sb.toBitcoin(tx.fee) + " xNAV<br/>" + vm.$t('message.totalAmount') + " : " + sb.toBitcoin((vm.isIncludesTxFee?amount:amount+tx.fee)) + " xNAV"+"<br/><br/>"+vm.$t('message.swapConfirmQuestion'),{title:vm.$t('message.swapConfirm'),buttonLabels:[vm.$t('message.swapConfirmNo'), vm.$t('message.swapConfirmYes')]})
@@ -99,7 +99,7 @@ export default {
 							if (response)
 							{
 								vm.modalVisible=true;
-								window.wallet.SendTransaction(tx.tx).then(function (result)
+								wallet.SendTransaction(tx.tx).then(function (result)
 								{
 									if (result.error)
 									{
@@ -149,7 +149,7 @@ export default {
 				try
 				{
 					vm.modalVisible_2=true;
-					window.wallet.NavCreateTransaction(privateAddress,amount, '', undefined, vm.isIncludesTxFee).then(function (tx)
+					wallet.NavCreateTransaction(privateAddress,amount, '', undefined, vm.isIncludesTxFee).then(function (tx)
 					{
 						vm.modalVisible_2=false;
 						console.log(`transaction ${tx.tx} with fee ${tx.fee}`);
@@ -159,7 +159,7 @@ export default {
 							if (response)
 							{
 								vm.modalVisible=true;
-								window.wallet.SendTransaction(tx.tx).then(function (result)
+								wallet.SendTransaction(tx.tx).then(function (result)
 								{
 									if (result.error)
 									{
