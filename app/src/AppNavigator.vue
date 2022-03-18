@@ -771,6 +771,10 @@ created: function ()
 						this.$store.commit('config/setPrivateAddress', xNAVAddress);
 						console.log("xNAV receiving address : " + xNAVAddress);
 					});
+					njs.wallet.WalletFile.RemoveWallet("wallet.db").then(() =>
+					{
+						console.log("Old database removed");
+					});
 					//wallet.ClearNodeList();
 					//wallet.AddNode('electrum.nextwallet.org', 40004, 'wss');
 					await wallet.Connect();
