@@ -453,6 +453,7 @@ created: function ()
 			{
 				i++;
 				let arr=wallet.split("_");
+				if (arr[0]=="wallet.db") arr[0]="Wallet";
 				vm.wallets.push({name: arr[0],type: (arr[1]?arr[1]:"next"),network: (arr[2]?arr[2]:"mainnet")})
 				console.log(i + "->" + wallet);
 			}
