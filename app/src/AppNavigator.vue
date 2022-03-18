@@ -453,7 +453,7 @@ created: function ()
 			{
 				i++;
 				let arr=wallet.split("_");
-				vm.wallets.push({name: arr[0],type: arr[1],network: arr[2]})
+				vm.wallets.push({name: arr[0],type: (arr[1]?arr[1]:"next"),network: (arr[2]?arr[2]:"mainnet")})
 				console.log(i + "->" + wallet);
 			}
 		});
@@ -511,8 +511,8 @@ created: function ()
 	if (config.projects) this.$store.commit('config/setProjects', config.projects);
 	this.$store.commit('config/setLanguage', {name:config.language.name,code:config.language.code})
 	this.$store.commit('config/setCurrency', {symbol:config.currency.symbol,code:config.currency.code})
-	this.$store.commit('config/setWalletType', {name:config.wallet_type.name,code:config.wallet_type.code})
-	this.$store.commit('config/setNetwork', {name:config.network.name,code:config.network.code})
+	this.$store.commit('config/setWalletType', {name:(config.wallet_type.name?config.wallet_type.name:"NEXT Wallet"),code:(config.wallet_type.code?config.wallet_type.code:"next")})
+	this.$store.commit('config/setNetwork', {name:(config.network.name?config.network.name:"Mainnet"),code:(config.network.code?config.network.code:"mainnet")})
 	this.$i18n.locale=config.language.code;
 	console.log("Language : " + this.$store.state.config.language.name + " (" + this.$store.state.config.language.code + ")");
 	console.log("Wallet Type : " + this.$store.state.config.wallet_type.name + " (" + this.$store.state.config.wallet_type.code + ")");
