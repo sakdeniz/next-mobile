@@ -301,6 +301,7 @@ export default {
 			categories:
 			[
 				{"id":"art",name:"Art"},
+				{"id":"game_content",name:"Game Content"},
 				{"id":"collectibles",name:"Collectibles"},
 				{"id":"music",name:"Music"},
 				{"id":"photography",name:"Photography"},
