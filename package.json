@@ -1,7 +1,7 @@
 {
     "name": "nextmobile",
     "displayName": "Navcoin NEXT Wallet",
-    "version": "1.0.7",
+    "version": "1.0.9",
     "description": "Navcoin NEXT Wallet",
     "main": "index.js",
     "scripts": {

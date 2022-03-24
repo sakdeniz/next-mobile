@@ -453,7 +453,7 @@ created: function ()
 			{
 				i++;
 				let arr=wallet.split("_");
-				if (arr[0]=="wallet.db") arr[0]="Wallet";
+				if (arr[0]=="wallet.db") arr[0]="Default";
 				vm.wallets.push({name: arr[0],type: (arr[1]?arr[1]:"next"),network: (arr[2]?arr[2]:"mainnet")})
 				console.log(i + "->" + wallet);
 			}
@@ -730,7 +730,7 @@ created: function ()
 					console.log("Loading existing wallet : " + vm.active_wallet_name);
 					wallet=new njs.wallet.WalletFile(
 					{
-						file:vm.active_wallet_name,
+						file:(vm.active_wallet_name=="Default_next_mainnet"?"wallet.db":vm.active_wallet_name),
 						zapwallettxes:zapwallettxes,
 						log:log
 					})
@@ -743,7 +743,7 @@ created: function ()
 					console.log("Network : " + vm.$store.state.config.network.code);
 					wallet=new njs.wallet.WalletFile(
 					{
-						file:vm.active_wallet_name,
+						file:(vm.active_wallet_name=="Default_next_mainnet"?"wallet.db":vm.active_wallet_name),
 						network:vm.$store.state.config.network.code,
 						mnemonic:mnemonic,
 						type: vm.$store.state.config.wallet_type.code,
@@ -770,10 +770,6 @@ created: function ()
 						let xNAVAddress=value.filter((e) => e.path == "0/0")[0].address;
 						this.$store.commit('config/setPrivateAddress', xNAVAddress);
 						console.log("xNAV receiving address : " + xNAVAddress);
-					});
-					njs.wallet.WalletFile.RemoveWallet("wallet.db").then(() =>
-					{
-						console.log("Old database removed");
 					});
 					//wallet.ClearNodeList();
 					//wallet.AddNode('electrum.nextwallet.org', 40004, 'wss');
