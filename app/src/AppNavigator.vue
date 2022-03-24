@@ -753,7 +753,7 @@ created: function ()
 						log:log
 					})
 				}
-				wallet.walletName=this.active_wallet_name;
+				wallet.walletName=(vm.active_wallet_name=="Default_next_mainnet"?"wallet.db":vm.active_wallet_name);
 				window.wallet=wallet;
 				wallet.on('new_mnemonic', (mnemonic) => console.log(`wallet created with mnemonic ${mnemonic} - please back it up!`));
 				wallet.on('loaded', async () =>
