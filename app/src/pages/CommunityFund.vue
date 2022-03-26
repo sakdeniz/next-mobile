@@ -187,7 +187,7 @@
 							</div>
 						</ons-col>
 					</ons-row>
-					<ons-row v-show="proposal.status=='accepted' && proposal.paymentAddress==config.public_address" style="margin-top:10px;">
+					<ons-row v-show="proposal.status=='pending' && proposal.paymentAddress==config.public_address" style="margin-top:10px;">
 						<ons-col width="100%">
 							<center>
 								<v-ons-button @click="showCreatePaymentDialog(proposal)">
@@ -206,7 +206,7 @@
 import axios from 'axios';
 import moment from 'moment';
 import sb from 'satoshi-bitcoin';
-import bitcore from 'bitcore-lib';
+import bitcore from '@aguycalled/bitcore-lib';
 import message from 'bitcore-message';
 import CreateProposal from './CreateProposal.vue';
 export default
@@ -226,6 +226,7 @@ export default
 			actionSheetVisible: false,
 			actionSheet2Visible: false,
 			createPaymentDialogVisible: false,
+			privateKey:undefined,
 			proposalFilter:0,
 			paymentRequestFilter:0,
 			strdzeel_v:26,
@@ -284,82 +285,94 @@ export default
 	createPaymentRequest:function()
 	{
 		let vm=this;
-		axios.get(window.apiURL+'utxo', {
-			params: {
-				network: window.network,
-				a: vm.$store.state.config.public_address
-			}
-		})
-		.then(function (response)
-		{
-			var randomString=moment().unix();
-			var signString=randomString+"I kindly ask to withdraw "+sb.toSatoshi(vm.paymentRequestAmount)+"NAV from the proposal "+vm.paymentRequestProposal.hash+". Payment request id: " + vm.paymentRequestId;
-			console.log("String");
-			console.log("======");
-			console.log(signString);
-			var privateKey = bitcore.PrivateKey.fromWIF(window.db.get('addr').value()[0].privateKey.toString());
-			var signature = message(signString).sign(privateKey);
-			console.log(signature.toString());
-			var utxo=response.data;
-			console.log(utxo);
-			try
+			wallet.NavGetPrivateKeys().then(function (e)
 			{
-				var script = new bitcore.Script()
-				.add('OP_RETURN')
-				.add('OP_CFUND')
-				var strdzeel='{\"h\":\"'+vm.paymentRequestProposal.hash+'\",\"n\":'+sb.toSatoshi(vm.paymentRequestAmount)+',\"s\":\"'+signature.toString()+'\",\"r\":\"'+randomString+'\",\"i\":\"'+vm.paymentRequestId+'\",\"v\":'+vm.strdzeel_v+'}';
-				console.log("strdzeel:"+strdzeel);
-				var tx=new bitcore.Transaction()
-				.from(utxo)
-				.addOutput(new bitcore.Transaction.Output({
-					script: script,
-					satoshis: 10000
-				}))
-				.settime(moment().unix())
-				.change(vm.$store.state.config.public_address)
-				.setversion("5")
-				.anondest(strdzeel)
-				.sign(privateKey);
-				console.log("-----------");
-				console.log("TRANSACTION");
-				console.log("-----------");
-				console.log(tx.toObject());
-				console.log("----------");
-				console.log("SERIALIZED");
-				console.log("----------");
-				console.log(tx.serialize({disableSmallFees: true,disableMoreOutputThanInput:true}));
-				console.log("-----------");
-				axios.post(window.apiURL+'sendrawtransaction', "network="+window.network+"&a="+tx.serialize({disableSmallFees: true,disableMoreOutputThanInput:true}).toString(),window.config)
-				.then((retval) =>
+				Object.entries(e).forEach(([key, item]) =>
 				{
-					console.log(retval.data);
-					vm.createPaymentDialogVisible=false;
-					if (retval.data.substring(0,5) == "error")
+					if(item.address==vm.$store.state.config.public_address)
 					{
-						vm.$ons.notification.alert(retval.data,{title:vm.$t('message.error')});
+						vm.privateKey=item.privateKey;
 					}
-					else
-					{
-						vm.$ons.notification.toast(vm.$t('message.createProposalSubmitSuccess'), { timeout: 2000, animation: 'fall' });
+				});
+				axios.get(window.apiURL+'utxo', {
+					params: {
+						network: window.network,
+						a: vm.$store.state.config.public_address
 					}
-				}
-				).catch((e) =>
-				{
-					//vm.$ons.notification.toast(e, { timeout: 2000, animation: 'fall' });
 				})
-			}
-			catch(err)
-			{
-				console.log(err);
-			}
-		})
-		.catch(function (error)
-		{
-			console.log(error);
-		})
-		.then(function ()
-		{
-		});
+				.then(function (response)
+				{
+					var randomString=moment().unix();
+					var signString=randomString+"I kindly ask to withdraw "+sb.toSatoshi(vm.paymentRequestAmount)+"NAV from the proposal "+vm.paymentRequestProposal.hash+". Payment request id: " + vm.paymentRequestId;
+					console.log("String");
+					console.log("======");
+					console.log(signString);
+					var privateKey = bitcore.PrivateKey.fromWIF(vm.privateKey);
+					var signature = message(signString).sign(privateKey);
+					console.log(signature.toString());
+					var utxo=response.data;
+					console.log(utxo);
+					try
+					{
+						var script = new bitcore.Script()
+						.add('OP_RETURN')
+						.add('OP_CFUND')
+						var strdzeel='{\"h\":\"'+vm.paymentRequestProposal.hash+'\",\"n\":'+sb.toSatoshi(vm.paymentRequestAmount)+',\"s\":\"'+signature.toString()+'\",\"r\":\"'+randomString+'\",\"i\":\"'+vm.paymentRequestId+'\",\"v\":'+vm.strdzeel_v+'}';
+						console.log("strdzeel:"+strdzeel);
+						var tx=new bitcore.Transaction()
+						.from(utxo)
+						.addOutput(new bitcore.Transaction.Output({
+							script: script,
+							satoshis: 10000
+						}))
+						.settime(moment().unix())
+						.change(vm.$store.state.config.public_address)
+						.setversion("5")
+						.anondest(strdzeel)
+						.sign(privateKey);
+						console.log("-----------");
+						console.log("TRANSACTION");
+						console.log("-----------");
+						console.log(tx.toObject());
+						console.log("----------");
+						console.log("SERIALIZED");
+						console.log("----------");
+						console.log(tx.serialize({disableSmallFees: true,disableMoreOutputThanInput:true}));
+						console.log("-----------");
+						axios.post(window.apiURL+'sendrawtransaction', "network="+window.network+"&a="+tx.serialize({disableSmallFees: true,disableMoreOutputThanInput:true}).toString(),window.config)
+						.then((retval) =>
+						{
+							console.log(retval.data);
+							vm.createPaymentDialogVisible=false;
+							if (retval.data.substring(0,5) == "error")
+							{
+								vm.$ons.notification.alert(retval.data,{title:vm.$t('message.error')});
+							}
+							else
+							{
+								vm.$ons.notification.toast(vm.$t('message.createPaymentRequestSubmitSuccess'), { timeout: 2000, animation: 'fall' });
+							}
+						}
+						).catch((e) =>
+						{
+							vm.$ons.notification.toast(e, { timeout: 2000, animation: 'fall' });
+						})
+					}
+					catch(err)
+					{
+						console.log(err);
+					}
+				})
+				.catch(function (error)
+				{
+					console.log(error);
+				})
+				.then(function ()
+				{
+				});
+			});
+
+
 	},
 	secondsToDhms:function(seconds)
 	{

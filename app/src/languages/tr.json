@@ -411,6 +411,7 @@
 		"privateTokensTitle":"Özel Jetonlar",
 		"nftWorkshopTitle":"NFT Atölyesi",
 		"dotNavTitle":"dotNAV",
-		"linkedProjectsTitle":"Bağlı Projeler"
+		"linkedProjectsTitle":"Bağlı Projeler",
+		"createPaymentRequestSubmitSuccess":"Ödeme talebiniz başarıyla oluşturuldu"
 	}
 }

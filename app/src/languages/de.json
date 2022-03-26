@@ -411,6 +411,7 @@
 		"privateTokensTitle":"Private Tokens",
 		"nftWorkshopTitle":"NFT Workshop",
 		"dotNavTitle":"dotNAV",
-		"linkedProjectsTitle":"Verknüpfte Projekte"
+		"linkedProjectsTitle":"Verknüpfte Projekte",
+		"createPaymentRequestSubmitSuccess":"Ihre Zahlungsanforderung wurde erfolgreich übermittelt."
 	}
 }
