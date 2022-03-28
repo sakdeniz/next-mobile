@@ -30,7 +30,7 @@
     "lodash": "^3.10.1",
     "lowdb": "^1.0.0",
     "metamask-onboarding": "^0.1.1",
-    "navcoin-js": "^1.1.42",
+    "navcoin-js": "^1.1.45",
     "net": "^1.0.2",
     "onsenui": "^2.10.2",
     "sass-loader": "^10.1.1",
