@@ -187,7 +187,7 @@
 							</div>
 						</ons-col>
 					</ons-row>
-					<ons-row v-show="proposal.status=='pending' && proposal.paymentAddress==config.public_address" style="margin-top:10px;">
+					<ons-row v-show="proposal.state=='1' && proposal.paymentAddress==config.public_address" style="margin-top:10px;">
 						<ons-col width="100%">
 							<center>
 								<v-ons-button @click="showCreatePaymentDialog(proposal)">

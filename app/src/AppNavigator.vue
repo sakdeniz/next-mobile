@@ -771,8 +771,8 @@ created: function ()
 						this.$store.commit('config/setPrivateAddress', xNAVAddress);
 						console.log("xNAV receiving address : " + xNAVAddress);
 					});
-					wallet.ClearNodeList();
-					wallet.AddNode('electrum.nextwallet.org', 40004, 'wss');
+					//wallet.ClearNodeList();
+					//wallet.AddNode('electrum.nextwallet.org', 40004, 'wss');
 					await wallet.Connect();
 				});
 				wallet.on('sync_started', () => 
@@ -839,7 +839,7 @@ created: function ()
 				wallet.on('new_tx', async (list) =>
 				{
 				});
-				wallet.on('remove_tx', async (txid) => 
+				wallet.on('remove_tx', async (txid) =>
 				{
 				});
 				await wallet.Load();
