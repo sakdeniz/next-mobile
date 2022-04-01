@@ -143,7 +143,7 @@
 </template>
 <script>
 import axios from 'axios';
-import bitcore from 'bitcore-lib';
+import bitcore from '@aguycalled/bitcore-lib';
 import sb from 'satoshi-bitcoin';
 import Vue from 'vue'
 import VueChartkick from 'vue-chartkick'

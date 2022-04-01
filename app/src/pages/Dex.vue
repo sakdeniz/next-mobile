@@ -175,7 +175,7 @@
 </template>
 
 <script>
-import Bitcore from 'bitcore-lib';
+import Bitcore from '@aguycalled/bitcore-lib';
 import MetamaskOnboarding from 'metamask-onboarding';
 import { ChainId } from '@uniswap/sdk';
 import Vue from 'vue';

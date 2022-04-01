@@ -347,8 +347,8 @@ const log = true; // Log to console
 const IV_LENGTH = 16; // For AES, this is always 16
 const buffer=require('buffer');
 const crypto=require('crypto');
-const bitcore = require('bitcore-lib');
-const Mnemonic = require('bitcore-mnemonic');
+const bitcore = require('@aguycalled/bitcore-lib');
+const Mnemonic = require('@aguycalled/bitcore-mnemonic');
 var ENCRYPTION_KEY;
 window.config={ headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, responseType: 'text' }
 window.apiURL='https://navcommunity.net/api/lw/';
@@ -396,8 +396,8 @@ data()
 		step:0,
 		segmentIndex: 0,
 		wallet_name:'',
-		password:"",
-		password_again:"",
+		password:"123456",
+		password_again:"123456",
 		active_wallet_already_exist:false,
 		active_wallet_name:"",
 		walletExist:false,

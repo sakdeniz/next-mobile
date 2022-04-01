@@ -12,6 +12,7 @@
 				<button>{{$t('message.createNFT')}}</button>
 				<button>{{$t('message.mintNFT')}}</button>
 				<button>{{$t('message.sendNFT')}}</button>
+				<button>{{$t('message.marketPlace')}}</button>
 			</v-ons-segment>
 		</div>
 		<v-ons-card v-show="segmentIndex==0">
@@ -21,7 +22,7 @@
 						<img src="images/nft.png" style="width:64px;height:auto;">
 					</center>
 				</div>
-				<div class="center" v-show="segmentIndex==0" style="margin-top:20px;margin-bottom:20px;">
+				<div class="center" style="margin-top:20px;margin-bottom:20px;">
 					<v-ons-segment :index.sync="segmentIndexSub" style="width:100%">
 						<button>{{$t('message.NFTBrowse')}}</button>
 						<button>{{$t('message.NFTInspect')}}</button>
@@ -261,6 +262,65 @@
 				</div>
 			</div>
 		</v-ons-card>
+		<v-ons-card v-show="segmentIndex==4">
+			<div class="center" style="margin-top:20px;margin-bottom:20px;">
+				<v-ons-segment :index.sync="segmentIndexSubMarketplace" style="width:100%">
+					<button>{{$t('message.sellNFT')}}</button>
+					<button @click="getSellOrders()">{{$t('message.sellOrders')}}</button>
+				</v-ons-segment>
+			</div>
+			<div class="content" >
+				<div v-if="segmentIndexSubMarketplace==0">
+					<div class="center" style="margin-top:20px">
+						<center>
+							<img src="images/nft_sell.png" style="width:64px;height:auto;">
+						</center>
+					</div>
+					<div class="center" style="margin-top:20px">
+						<p>
+							<small>{{$t('message.sellNFTInfo')}}</small>
+						</p>
+					</div>
+					<div class="center" style="margin-top:40px">
+						{{$t('message.collection')}} : <v-ons-select float style="width: 100%" v-model="sell_token_id" v-if="config.Balance">
+							<option v-bind:value="index" v-for="(item,index) in config.Balance.nfts">{{item.name}}</option>
+						</v-ons-select>
+					</div>
+					<div class="center" style="margin-top:40px">
+						{{$t('message.nft')}} : <v-ons-select float style="width: 100%" v-model="sell_nft_id" v-if="sell_token_id">
+							<option v-bind:value="index" v-for="(item,index) in config.Balance.nfts[sell_token_id].confirmed">{{index}} - {{(parseJSON(item)?parseJSON(item).name:item)}}</option>
+						</v-ons-select>
+					</div>
+					<div class="center" style="margin-top:40px">
+						<v-ons-input :placeholder="$t('message.sellNFTPaymentAddress')" float type="text" v-model="sell_payment_address" style="width:100%"></v-ons-input>
+					</div>
+					<div class="center" style="margin-top:30px">
+						<v-ons-input :placeholder="$t('message.sellNFTPrice')" float type="number" v-model="sell_price" style="width:100%"></v-ons-input>
+					</div>
+					<div class="center" style="margin-top:40px">
+						<v-ons-button :disabled="!sell_payment_address || !sell_nft_id" v-on:click="sellNFT()">{{$t('message.sellNFTSubmit')}}</v-ons-button>
+					</div>
+				</div>
+				<div v-if="segmentIndexSubMarketplace==1">
+					<v-ons-list v-if="orders.length>0">
+						<v-ons-list-item expandable :expanded.sync="item.isExpanded" v-for="(item,index) in orders">
+							<img src="images/nft2.png" style="width:32px;height:auto;margin-right:10px;"><b>{{item.nft_id}}</b>
+							<div class="expandable-content">
+								<!--<div class="left">
+									{{item.token_id}}
+								</div>
+								<div class="center">
+									{{item.nft_id}}
+								</div>!-->
+								<div class="right">
+									{{formatBalance(JSON.parse(item.nft_order).pay[0].amount)}} NAV
+								</div>
+							</div>
+						</v-ons-list-item>
+					</v-ons-list>
+				</div>
+			</div>
+		</v-ons-card>
 	</v-ons-page>
 </template>
 <style>
@@ -322,6 +382,7 @@ export default {
 			modalVisible:false,
 			segmentIndex:0,
 			segmentIndexSub:0,
+			segmentIndexSubMarketplace:0,
 			category:undefined,
 			name:'',
 			description:'',
@@ -340,7 +401,12 @@ export default {
 			token:'',
 			nft_id:'',
 			address:'',
-			memo:''
+			memo:'',
+			sell_token_id:'',
+			sell_nft_id:'',
+			sell_payment_address:undefined,
+			sell_price:0,
+			orders:[]
 		};
 	},
 	computed:
@@ -353,6 +419,7 @@ export default {
 	updated:function()
 	{
 		if (this.mint_nft_destination==undefined) this.mint_nft_destination=this.config.private_address;
+		if (this.sell_payment_address==undefined) this.sell_payment_address=this.config.private_address;
 		this.getNFTCollectionScheme();
 		this.getNFTScheme();
 	},
@@ -736,6 +803,67 @@ export default {
 				vm.modalVisible=false;
 				vm.$ons.notification.alert(e.message,{title:vm.$t('message.send')});
 			}
+		},
+		sellNFT()
+		{
+			console.log(this.sell_token_id);
+			console.log(this.sell_nft_id);
+			console.log(this.sell_payment_address);
+			console.log(this.sell_price);
+			console.log("Submitting sell order...");
+			let vm=this;
+			let amount=parseFloat((vm.sell_price*1e8).toFixed(0));
+			try
+			{
+				wallet.CreateNftProof(vm.sell_token_id,vm.sell_nft_id,undefined).then((p) =>
+				{
+					let hex=Buffer.from(p.sig).toString('hex');
+					let proof={nftId:vm.sell_nft_id,tokenId:vm.sell_token_id,sig:Buffer.from(hex,'hex')};
+					console.log(proof);
+					wallet.CreateSellNftOrder(vm.sell_token_id, vm.sell_nft_id, vm.sell_payment_address, amount).then(function (order)
+					{
+						console.log("Order created.");
+						console.log(order);
+						//console.log(JSON.stringify(order));
+						//console.log(JSON.parse(JSON.stringify(order)));
+						axios.post('http://localhost:3000/CreateSellNftOrder',{order:order,proof:proof},config).then(function(retval)
+						{
+							console.log(retval.data);
+						}).
+						catch(function(err)
+						{
+							console.log(err);
+						})
+					})
+					.catch((e) =>
+					{
+						vm.$ons.notification.alert(e.message,{title:vm.$t('message.sellNFT')});
+					});
+				}).
+				catch((e) =>
+				{
+					console.log("Error while creating nft proof -> " + e.message);
+					vm.$ons.notification.alert(vm.$t('message.nftProofError')+"<br/><br/>"+e.message,{title:vm.$t('message.proofNFT')});
+				});
+			}
+			catch(e)
+			{
+				vm.$ons.notification.alert(e.message,{title:vm.$t('message.sellNFT')});
+			}
+		},
+		getSellOrders()
+		{
+			console.log("Getting sell orders...");
+			let vm=this;
+			axios.post('http://localhost:3000/GetSellOrders',{},config).then(function(retval)
+			{
+				console.log(retval.data.orders);
+				vm.orders=retval.data.orders;
+			}).
+			catch(function(err)
+			{
+				console.log(err);
+			})
 		}
 	}
 }

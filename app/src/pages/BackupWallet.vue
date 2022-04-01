@@ -24,8 +24,8 @@
 <script>
 	const buffer=require('buffer');
 	const crypto=require('crypto');
-	const bitcore = require('bitcore-lib');
-	const Mnemonic = require('bitcore-mnemonic');
+	const bitcore = require('@aguycalled/bitcore-lib');
+	const Mnemonic = require('@aguycalled/bitcore-mnemonic');
 	import { mapGetters,mapActions,mapState} from 'vuex';
 	export default
 	{

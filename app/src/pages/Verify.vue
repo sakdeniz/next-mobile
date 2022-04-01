@@ -19,7 +19,7 @@
 </template>
 <script>
 import bitcore from '@aguycalled/bitcore-lib';
-import message from 'bitcore-message';
+import message from '@aguycalled/bitcore-message';
 export default
 {
 	data() {

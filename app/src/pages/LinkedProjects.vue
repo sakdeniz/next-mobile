@@ -10,6 +10,15 @@
 			</template>
 		</v-ons-alert-dialog>
 		<v-ons-card>
+			<div v-if="total!=completed">
+				<v-ons-progress-circular indeterminate></v-ons-progress-circular>
+				Verifying <b>{{total}}</b> NFTs...
+			</div>
+			<div v-if="verified" style="color:green"><span class="ion-md-checkmark"></span> {{verified}} NFTs successfully verified.</div>
+			<div v-if="already_verified"  style="color:orange"><span class="ion-md-checkmark"></span> {{already_verified}} NFTs already verified.</div>
+			<div v-if="failed"  style="color:red"><span class="ion-md-close"></span> {{failed}} NFTs verification failed.</div>
+		</v-ons-card>
+		<v-ons-card>
 			<v-ons-fab position="bottom right" modifier="mini" v-on:click="push(pages[0].component, $t('message.linkProject'))">
 				<v-ons-icon icon="md-plus"></v-ons-icon>
 			</v-ons-fab>
@@ -31,6 +40,7 @@
 	</v-ons-page>
 </template>
 <script>
+import axios from 'axios';
 import LinkProject from './LinkProject.vue';
 export default {
 	data()
@@ -43,6 +53,11 @@ export default {
 			},
 			isVisible:false,
 			id:'',
+			total:0,
+			completed:0,
+			verified:0,
+			already_verified:0,
+			failed:0,
 			pages:[
 			{
 				component: LinkProject,
@@ -73,32 +88,81 @@ export default {
 			this.isVisible=false;
 			this.$store.commit('config/removeProject', this.id);
 		},
-		syncNFTs:function()
+		syncNFTs:function(project_index)
 		{
+			let vm=this;
+			console.log("Syncing NFTs...");
+			vm.total=0;
+			vm.completed=0;
+			vm.verified=0;
+			vm.already_verified=0;
+			vm.failed=0;
 			wallet.GetBalance().then((v) =>
 			{
+				if (Object.keys(v.nfts).length==0)
+				{
+					vm.$ons.notification.alert(vm.$t('message.noNFTFound')+"<br/><br/>"+e.message,{title:vm.$t('message.proofNFT')});
+					return;
+				}
+				console.log(Object.keys(v.nfts).length + " NFT collection found...");
 				for (const [tokenId, value] of Object.entries(v.nfts))
 				{
 					//console.log(tokenId);
 					//console.log(value);
+					console.log(Object.keys(value.confirmed).length + " NFT found...");
 					for (const [nftId, scheme] of Object.entries(value.confirmed))
 					{
-						//console.log(nftId);
 						//console.log(scheme);
-						wallet.CreateNftProof(tokenId,parseInt(nftId),undefined).then((result) =>
+						console.log("Creating proof for NFT -> "+ nftId);
+						vm.total++;
+						wallet.CreateNftProof(tokenId,parseInt(nftId),undefined).then((p) =>
 						{
-							//console.log(result);
-							let hex=Buffer.from(result.sig).toString('hex');
+							//console.log(p);
+							let hex=Buffer.from(p.sig).toString('hex');
 							//console.log(hex);
 							//console.log(Buffer.from(hex, 'hex'));
 							let proof={nftId:nftId,tokenId:tokenId,sig:Buffer.from(hex,'hex')};
+							console.log("Creating proof...");
 							console.log(proof);
-							wallet.VerifyNftProof(tokenId,parseInt(nftId),proof).then((result) =>
+							console.log("Verifying proof...");
+							wallet.VerifyNftProof(tokenId,parseInt(nftId),proof).then((v) =>
 							{
 								console.log(nftId);
-								console.log(result);
+								console.log(v);
+								axios.post('http://localhost:3000/proof',{"project_id":vm.config.projects[project_index].id,"private_address":vm.config.private_address,"proof":proof,"result":v},config).then(function(retval)
+								{
+									vm.completed++;
+									if (retval.data.status=="verified")
+									{
+										vm.verified++;
+									}
+									else if (retval.data.status=="already_verified")
+									{
+										vm.already_verified++;
+									}
+									else if (retval.data.status=="failed")
+									{
+										vm.failed++;
+									}
+									console.log(retval.data);
+								}).
+								catch(function(err)
+								{
+									console.log(err);
+								})
+							}).
+							catch((e) =>
+							{
+								console.log("Error while verifying nft proof -> " + e.message);
+								vm.$ons.notification.alert(vm.$t('message.nftVerifyError')+"<br/><br/>"+e.message,{title:vm.$t('message.proofNFT')});
 							});
+						}).
+						catch((e) =>
+						{
+							console.log("Error while creating nft proof -> " + e.message);
+							vm.$ons.notification.alert(vm.$t('message.nftProofError')+"<br/><br/>"+e.message,{title:vm.$t('message.proofNFT')});
 						});
+
 					}
 				}
 			});

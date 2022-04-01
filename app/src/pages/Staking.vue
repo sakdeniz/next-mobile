@@ -67,7 +67,7 @@
 <script>
 import axios from 'axios';
 import sb from 'satoshi-bitcoin';
-import message from 'bitcore-message';
+import message from '@aguycalled/bitcore-message';
 import { mapGetters,mapActions,mapState} from 'vuex';
 export default {
 	data () {

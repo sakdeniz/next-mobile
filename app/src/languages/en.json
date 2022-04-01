@@ -412,6 +412,17 @@
 		"nftWorkshopTitle":"NFT Workshop",
 		"dotNavTitle":"dotNAV",
 		"linkedProjectsTitle":"Linked Projects",
-		"createPaymentRequestSubmitSuccess":"Your payment request submitted successfully"
+		"createPaymentRequestSubmitSuccess":"Your payment request submitted successfully",
+		"proofNFT":"Proof NFT",
+		"noNFTFound":"No NFT Found",
+		"nftProofError":"NFT proof failed.",
+		"nftVerifyError":"NFT verify failed.",
+		"marketPlace":"Marketplace",
+		"sellNFT":"Sell",
+		"sellNFTInfo":"Please select your NFT you want to sell, set a price and specify the address to which you will receive the payment.",
+		"sellNFTPaymentAddress":"Payment Address",
+		"sellNFTPrice":"Price",
+		"sellNFTSubmit":"Submit Sell Order",
+		"sellOrders":"Sell Orders"
 	}
 }

@@ -207,7 +207,7 @@ import axios from 'axios';
 import moment from 'moment';
 import sb from 'satoshi-bitcoin';
 import bitcore from '@aguycalled/bitcore-lib';
-import message from 'bitcore-message';
+import message from '@aguycalled/bitcore-message';
 import CreateProposal from './CreateProposal.vue';
 export default
 {
