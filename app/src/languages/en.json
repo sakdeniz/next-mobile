@@ -423,6 +423,8 @@
 		"sellNFTPaymentAddress":"Payment Address",
 		"sellNFTPrice":"Price",
 		"sellNFTSubmit":"Submit Sell Order",
-		"sellOrders":"Sell Orders"
+		"sellOrders":"Sell Orders",
+		"sellNFTOrderSuccess":"NFT Sell Order Success",
+		"sellNFTOrderFailed":"NFT Sell Order Failed"
 	}
 }

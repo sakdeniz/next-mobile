@@ -302,22 +302,42 @@
 					</div>
 				</div>
 				<div v-if="segmentIndexSubMarketplace==1">
+					<div class="center" style="margin-top:20px">
+						<center>
+							<img src="images/nft_orders.png" style="width:64px;height:auto;">
+						</center>
+					</div>
 					<v-ons-list v-if="orders.length>0">
 						<v-ons-list-item expandable :expanded.sync="item.isExpanded" v-for="(item,index) in orders">
-							<img src="images/nft2.png" style="width:32px;height:auto;margin-right:10px;"><b>{{item.nft_id}}</b>
+							<v-ons-icon icon="ion-ios-bookmark"></v-ons-icon>&nbsp;
+							{{parseJSON(parseJSON(item.metadata).metadata).name}}
 							<div class="expandable-content">
-								<!--<div class="left">
-									{{item.token_id}}
+								<div class="left" style="width:25%;float:left;">
+									<img class="list-item__thumbnail" style="width:100%;height:auto" :src="parseJSON(parseJSON(item.metadata).metadata).attributes.thumbnail_url">
 								</div>
-								<div class="center">
-									{{item.nft_id}}
-								</div>!-->
-								<div class="right">
-									{{formatBalance(JSON.parse(item.nft_order).pay[0].amount)}} NAV
+								<div class="center" style="width:70%;margin-left: 15px;float:right;">
+									<div class="list-item__subtitle">
+										{{parseJSON(parseJSON(item.metadata).metadata).name}}
+									</div>
+									<div class="list-item__subtitle">
+										{{parseJSON(parseJSON(item.metadata).metadata).description}}
+									</div>
+									<div class="list-item__subtitle">
+										Price : {{formatBalance(JSON.parse(item.nft_order).pay[0].amount)}} NAV
+									</div>
+									<div class="list-item__subtitle" style="margin-top:15px;">
+										Listed on {{formatDate(item.verification_date)}}
+									</div>
+									<div class="list-item__subtitle" style="margin-top:15px;">
+										<v-ons-button modifier="outline" style="float:right" v-on:click="cancelOrder(item.token_id,item.nft_id)"><v-ons-icon icon="ion-md-trash"></v-ons-icon>&nbsp;Cancel Order</v-ons-button>
+									</div>
 								</div>
 							</div>
 						</v-ons-list-item>
 					</v-ons-list>
+					<div v-else style="margin-top:30px;">
+						<center>No sell order found.</center>
+					</div>
 				</div>
 			</div>
 		</v-ons-card>
@@ -406,7 +426,8 @@ export default {
 			sell_nft_id:'',
 			sell_payment_address:undefined,
 			sell_price:0,
-			orders:[]
+			orders:[],
+			apiURL:"http://localhost:3000/"
 		};
 	},
 	computed:
@@ -425,6 +446,10 @@ export default {
 	},
 	methods:
 	{
+		formatDate: n =>
+		{
+			if (n) return moment(n).format('DD.MM.YY HH:mm:ss'); else return "";
+		},
 		formatBalance: n =>
 		{
 			if (n==0) return n;
@@ -815,6 +840,8 @@ export default {
 			let amount=parseFloat((vm.sell_price*1e8).toFixed(0));
 			try
 			{
+				console.log("Creating NFT proof...");
+				vm.modalVisible=true;
 				wallet.CreateNftProof(vm.sell_token_id,vm.sell_nft_id,undefined).then((p) =>
 				{
 					let hex=Buffer.from(p.sig).toString('hex');
@@ -822,32 +849,49 @@ export default {
 					console.log(proof);
 					wallet.CreateSellNftOrder(vm.sell_token_id, vm.sell_nft_id, vm.sell_payment_address, amount).then(function (order)
 					{
-						console.log("Order created.");
 						console.log(order);
 						//console.log(JSON.stringify(order));
 						//console.log(JSON.parse(JSON.stringify(order)));
-						axios.post('http://localhost:3000/CreateSellNftOrder',{order:order,proof:proof},config).then(function(retval)
+						console.log("Verifying proof...");
+						wallet.VerifyNftProof(vm.sell_token_id,parseInt(vm.sell_nft_id),proof).then((v) =>
 						{
+							console.log(v);
+						});
+						axios.post(vm.apiURL+'CreateSellNftOrder',{order:order,proof:proof},config).then(function(retval)
+						{
+							vm.modalVisible=false;
 							console.log(retval.data);
+							if (retval.data.status=="order_created")
+							{
+								vm.$ons.notification.alert(vm.$t('message.sellNFTOrderSuccess'),{title:vm.$t('message.sellNFT')});
+							}
+							else
+							{
+								vm.$ons.notification.alert(vm.$t('message.sellNFTOrderFailed') +"<br/><br/>"+retval.data.message,{title:vm.$t('message.sellNFT')});
+							}
 						}).
 						catch(function(err)
 						{
 							console.log(err);
+							vm.modalVisible=false;
 						})
 					})
 					.catch((e) =>
 					{
 						vm.$ons.notification.alert(e.message,{title:vm.$t('message.sellNFT')});
+						vm.modalVisible=false;
 					});
 				}).
 				catch((e) =>
 				{
+					vm.modalVisible=false;
 					console.log("Error while creating nft proof -> " + e.message);
 					vm.$ons.notification.alert(vm.$t('message.nftProofError')+"<br/><br/>"+e.message,{title:vm.$t('message.proofNFT')});
 				});
 			}
 			catch(e)
 			{
+				vm.modalVisible=false;
 				vm.$ons.notification.alert(e.message,{title:vm.$t('message.sellNFT')});
 			}
 		},
@@ -855,7 +899,7 @@ export default {
 		{
 			console.log("Getting sell orders...");
 			let vm=this;
-			axios.post('http://localhost:3000/GetSellOrders',{},config).then(function(retval)
+			axios.post(vm.apiURL+'GetSellOrders',{},config).then(function(retval)
 			{
 				console.log(retval.data.orders);
 				vm.orders=retval.data.orders;
@@ -864,6 +908,93 @@ export default {
 			{
 				console.log(err);
 			})
+		},
+		cancelOrder(token_id,nft_id)
+		{
+			console.log(token_id);
+			console.log(nft_id);
+			let vm=this;
+			try
+			{
+				vm.modalVisible=true;
+				wallet.tokenCreateTransaction(this.config.private_address, 1, undefined, undefined, token_id,nft_id).then(function (tx)
+				{
+					vm.modalVisible=false;
+					vm.$ons.notification.confirm(vm.$t('message.transactionFee') + " : " + sb.toBitcoin(tx.fee) + " xNAV<br/><br/>"+vm.$t('message.sendConfirmQuestion'),{title:vm.$t('message.sendConfirm'),buttonLabels:[vm.$t('message.sendConfirmNo'), vm.$t('message.sendConfirmYes')]})
+					.then((response) =>
+					{
+						if (response)
+						{
+							vm.modalVisible=true;
+							console.log(tx);
+							wallet.SendTransaction(tx.tx).then(function (result)
+							{
+								console.log(result);
+								if (result.error)
+								{
+									vm.modalVisible=false;
+									vm.$ons.notification.alert(result.error,{title:vm.$t('message.txSubmitError')});
+								}
+								else
+								{
+									wallet.CreateNftProof(token_id,nft_id,undefined).then((p) =>
+									{
+										let hex=Buffer.from(p.sig).toString('hex');
+										let proof={nftId:nft_id,tokenId:token_id,sig:Buffer.from(hex,'hex')};
+										console.log(proof);
+										//console.log(JSON.stringify(order));
+										//console.log(JSON.parse(JSON.stringify(order)));
+										console.log("Verifying proof...");
+										wallet.VerifyNftProof(token_id,nft_id,proof).then((v) =>
+										{
+											console.log(v);
+											axios.post(vm.apiURL+'CancelOrder',{proof:proof},config).then(function(retval)
+											{
+												console.log(retval.data);
+												if (retval.data.status=="success")
+												{
+													vm.getSellOrders();
+												}
+											}).
+											catch(function(e)
+											{
+												console.log("Error while verifying nft proof -> " + e.message);
+											})
+										});
+									}).
+									catch((e) =>
+									{
+										console.log("Error while creating nft proof -> " + e.message);
+										vm.$ons.notification.alert(vm.$t('message.nftProofError')+"<br/><br/>"+e.message,{title:vm.$t('message.proofNFT')});
+									});
+									vm.modalVisible=false;
+									vm.$ons.notification.toast(vm.$t('message.sendSuccess'), { timeout: 3000, animation: 'fall' });
+								}
+							})
+							.catch((e) =>
+							{
+								vm.modalVisible=false;
+								vm.$ons.notification.alert(e.message,{title:vm.$t('message.send')});
+							});
+						}
+					})
+					.catch((e) =>
+					{
+						vm.modalVisible=false;
+						vm.$ons.notification.alert(e.message,{title:vm.$t('message.send')});
+					});
+				})
+				.catch((e) =>
+				{
+					vm.modalVisible=false;
+					vm.$ons.notification.alert(e.message,{title:vm.$t('message.send')});
+				});
+			}
+			catch(e)
+			{
+				vm.modalVisible=false;
+				vm.$ons.notification.alert(e.message,{title:vm.$t('message.send')});
+			}
 		}
 	}
 }
