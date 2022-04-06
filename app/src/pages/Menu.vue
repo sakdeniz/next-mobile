@@ -39,6 +39,7 @@ import PrivateToken from './PrivateToken.vue';
 import NFTWorkshop from './NFTWorkshop.vue';
 import DotNAV from './DotNAV.vue';
 import LinkedProjects from './LinkedProjects.vue';
+import NFTOrders from './NFTOrders.vue';
 
 export default
 {
@@ -108,6 +109,12 @@ export default
 					title: vm.$t('message.linkedProjectsTitle'),
 					desc: vm.$t('message.linkedProjectsTitle'),
 					icon: this.md ? 'ion-ios-planet' : 'ion-ios-planet',
+				},
+				{
+					component: NFTOrders,
+					title: vm.$t('message.NFTOrdersTitle'),
+					desc: vm.$t('message.NFTOrdersTitle'),
+					icon: this.md ? 'ion-ios-timer' : 'ion-ios-timer',
 				}
 			],
 			access: [
@@ -122,6 +129,10 @@ export default
 				{
 					title: vm.$t('message.send'),
 					icon: 'ion-ios-send,ion-ios-send'
+				},
+				{
+					title: vm.$t('message.nftMarketplace'),
+					icon: 'ion-ios-cart,ion-ios-cart'
 				},
 				{
 					title: vm.$t('message.staking'),
