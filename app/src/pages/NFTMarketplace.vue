@@ -17,7 +17,7 @@
 				</v-ons-button>
 			</div>
 			<div style="padding:15px;">
-				<v-ons-progress-circular indeterminate v-if="orders.length<1"></v-ons-progress-circular>
+				<v-ons-progress-circular indeterminate v-if="is_loading"></v-ons-progress-circular>
 				<span v-if="filter">Filtering by : {{filter}}</span>
 			</div>
 		</div>
@@ -39,7 +39,7 @@
 						<span class="list-item__subtitle">Price : {{formatBalance(JSON.parse(item.nft_order).pay[0].amount)}} <img style="width: 24px;height: 24px;position: absolute;margin-left:8px;margin-top:-3px;" src="images/xnav-logo-border.png"/></span>
 						<span class="list-item__subtitle" v-show="item.owner" style="color: purple">This nft belongs to you.</span>
 						<span class="list-item__subtitle" v-show="!item.owner" style="margin-top:15px;">
-							<v-ons-button v-on:click="buyNFT(item.nft_order,parseJSON(parseJSON(item.metadata).metadata).attributes.thumbnail_url)">BUY</v-ons-button>
+							<v-ons-button v-on:click="buyNFT(index,item.nft_order,parseJSON(parseJSON(item.metadata).metadata).attributes.thumbnail_url)">BUY</v-ons-button>
 						</span>
 				</div>
 			</v-ons-list-item>
@@ -61,6 +61,7 @@ export default {
 		return {
 			modalVisible:false,
 			orders:[],
+			is_loading:true,
 			order:undefined,
 			filter:undefined,
 			actionSheetVisible:false,
@@ -131,6 +132,7 @@ export default {
 		},
 		getSellOrders()
 		{
+			let vm=this;
 			try
 			{
 				console.log("Getting nfts in wallet...");
@@ -158,6 +160,7 @@ export default {
 							order.owner=false;
 						}
 					});
+					vm.is_loading=false;
 				}).
 				catch(function(err)
 				{
@@ -169,17 +172,18 @@ export default {
 				console.log(e);
 			}
 		},
-		buyNFT(o,img_url)
+		buyNFT(index,o,img_url)
 		{
+			let vm=this;
 			let order=JSON.parse(o);
 			vm.$ons.notification.confirm("<img style='width:100%;height:auto' src='"+img_url+"'/>"+vm.$t('message.nftTokenId') + " : <pre style='width:240px;height:40px;white-space:normal;word-spacing:initial;word-wrap:break-word;font-size:8pt;'>" + order.receive[0].tokenId + "</pre>"+vm.$t('message.nftId') + " : " + order.receive[0].tokenNftId + "<br/><br/>"+vm.$t('message.nftPrice') + " : " + sb.toBitcoin(order.pay[0].amount) + " xNAV<br/><br/>"+vm.$t('message.nftBuyConfirmQuestion'),{title:vm.$t('message.nftBuyConfirm'),buttonLabels:[vm.$t('message.nftBuyConfirmNo'), vm.$t('message.nftBuyConfirmYes')]})
 			.then((response) =>
 			{
 				if (response)
 				{
+					vm.modalVisible=true;
 					wallet.AcceptOrder(order).then(function (tx)
 					{
-						vm.modalVisible=true;
 						wallet.SendTransaction(tx.tx).then(function (result)
 						{
 							if (result.error)
@@ -189,6 +193,7 @@ export default {
 							}
 							else
 							{
+								vm.orders.splice(index,1);
 								vm.modalVisible=false;
 								vm.$ons.notification.toast(vm.$t('message.nftBuySuccess'), { timeout: 3000, animation: 'fall' });
 							}
