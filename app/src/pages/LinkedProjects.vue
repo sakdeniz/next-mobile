@@ -58,6 +58,8 @@ export default {
 			verified:0,
 			already_verified:0,
 			failed:0,
+			isLocal:false,
+			apiURL:(this.isLocal?"http://localhost:3000/":"https://api.nextwallet.org/"),
 			pages:[
 			{
 				component: LinkProject,
@@ -101,7 +103,7 @@ export default {
 			{
 				if (Object.keys(v.nfts).length==0)
 				{
-					vm.$ons.notification.alert(vm.$t('message.noNFTFound')+"<br/><br/>"+e.message,{title:vm.$t('message.proofNFT')});
+					vm.$ons.notification.alert(vm.$t('message.noNFTFound'),{title:vm.$t('message.proofNFT')});
 					return;
 				}
 				console.log(Object.keys(v.nfts).length + " NFT collection found...");
@@ -129,7 +131,7 @@ export default {
 							{
 								console.log(nftId);
 								console.log(v);
-								axios.post('http://localhost:3000/proof',{"project_id":vm.config.projects[project_index].id,"private_address":vm.config.private_address,"proof":proof,"result":v},config).then(function(retval)
+								axios.post(vm.apiURL+'CreateNftProof',{"project_id":vm.config.projects[project_index].id,"private_address":vm.config.private_address,"proof":proof},config).then(function(retval)
 								{
 									vm.completed++;
 									if (retval.data.status=="verified")

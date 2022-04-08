@@ -108,6 +108,7 @@ export default
 					}
 					else
 					{
+						console.log(text);
 						if (text.startsWith("navcoin:"))
 						{
 							vm.address=text.split(":")[1];

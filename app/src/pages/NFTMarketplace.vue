@@ -1,5 +1,12 @@
 <template id="main">
-	<v-ons-page>
+	<v-ons-page id="page-marketplace">
+		<v-ons-pull-hook :action="loadItem" @changestate="state = $event.state">
+			<span v-show="state === 'initial'">{{$t('message.pullToRefresh')}}</span>
+			<span v-show="state === 'preaction'">{{$t('message.release')}}</span>
+			<span v-show="state === 'action'">
+				<v-ons-progress-circular indeterminate></v-ons-progress-circular>
+			</span>
+		</v-ons-pull-hook>
 		<v-ons-modal :visible="modalVisible" @click="modalVisible = false">
 			<p style="text-align: center">
 				{{$t('message.txInProgress')}} <v-ons-icon icon="fa-spinner" spin></v-ons-icon>
@@ -12,12 +19,13 @@
 		<div style="background: #ffffff;background-image: url(https://img.freepik.com/free-vector/abstract-background-with-squares_23-2148995948.jpg);">
 			<div style="font-size:18pt;padding:15px;">
 				<v-ons-icon icon="ion-ios-cart" style="position: absolute;margin-top:4px;"></v-ons-icon>&nbsp;&nbsp;&nbsp;&nbsp; {{$t('message.nftMarketplace')}}
-				<v-ons-button @click="actionSheetVisible = true" style="float:right;">
-					<i class="fa fa-filter"></i>&nbsp;{{$t('message.filter')}}
-				</v-ons-button>
+				<v-ons-progress-circular indeterminate v-if="is_loading" style="float:right"></v-ons-progress-circular>
 			</div>
 			<div style="padding:15px;">
-				<v-ons-progress-circular indeterminate v-if="is_loading"></v-ons-progress-circular>
+				<v-ons-button v-on:click="scan()"><i class="ion-md-qr-scanner"></i>&nbsp;{{$t('message.scan')}}</v-ons-button>
+				<v-ons-button @click="actionSheetVisible = true">
+					<i class="fa fa-filter"></i>&nbsp;{{$t('message.filter')}}
+				</v-ons-button>
 				<span v-if="filter">Filtering by : {{filter}}</span>
 			</div>
 		</div>
@@ -59,6 +67,8 @@ export default {
 	data()
 	{
 		return {
+			state: 'initial',
+			items: [1, 2, 3],
 			modalVisible:false,
 			orders:[],
 			is_loading:true,
@@ -91,11 +101,96 @@ export default {
 	{
 		wallet.on('connected', (e) =>
 		{
-			this.getSellOrders();
+			this.getNftSellOrders();
 		});
 	},
 	methods:
 	{
+		loadItem(done)
+		{
+			this.orders=[];
+			this.getNftSellOrders();
+			setTimeout(() => 
+			{
+				this.items = [...this.items, this.items.length + 1];
+				done();
+			}, 1000);
+		},
+		scan()
+		{
+			if (typeof(QRScanner) != "undefined")
+			{
+				let vm=this;
+				$("#page-marketplace").hide();
+				QRScanner.scan(displayContents);
+				function displayContents(err, text)
+				{
+					if(err)
+					{
+						// an error occurred, or the scan was canceled (error code `6`)
+					}
+					else
+					{
+						if (text.startsWith("navcoin-nft-order:"))
+						{
+							let token_id=text.split(":")[1];
+							let token_nft_id=text.split(":")[2];
+							let order;
+							let img_url='';
+							vm.orders.forEach(o =>
+							{
+								let or=JSON.parse(o.nft_order);
+								if (or.receive[0].tokenId==token_id && or.receive[0].tokenNftId==token_nft_id)
+								{
+									order=or;
+									img_url=vm.parseJSON(vm.parseJSON(o.metadata).metadata).attributes.thumbnail_url;
+								}
+							});
+							vm.$ons.notification.confirm("<img style='width:100%;height:auto' src='"+img_url+"'/>"+vm.$t('message.nftTokenId') + " : <pre style='width:240px;height:40px;white-space:normal;word-spacing:initial;word-wrap:break-word;font-size:8pt;'>" + order.receive[0].tokenId + "</pre>"+vm.$t('message.nftId') + " : " + order.receive[0].tokenNftId + "<br/><br/>"+vm.$t('message.nftPrice') + " : " + sb.toBitcoin(order.pay[0].amount) + " xNAV<br/><br/>"+vm.$t('message.nftBuyConfirmQuestion'),{title:vm.$t('message.nftBuyConfirm'),buttonLabels:[vm.$t('message.nftBuyConfirmNo'), vm.$t('message.nftBuyConfirmYes')]})
+							.then((response) =>
+							{
+								if (response)
+								{
+									vm.modalVisible=true;
+									wallet.AcceptOrder(order).then(function (tx)
+									{
+										wallet.SendTransaction(tx.tx).then(function (result)
+										{
+											if (result.error)
+											{
+												vm.modalVisible=false;
+												vm.$ons.notification.alert(result.error,{title:vm.$t('message.txSubmitError')});
+											}
+											else
+											{
+												vm.modalVisible=false;
+												vm.$ons.notification.toast(vm.$t('message.nftBuySuccess'), { timeout: 3000, animation: 'fall' });
+											}
+										})
+										.catch((e) =>
+										{
+											vm.modalVisible=false;
+											vm.$ons.notification.alert(e.message,{title:vm.$t('message.nftBuy')});
+										});
+									})
+									.catch((e) =>
+									{
+										vm.$ons.notification.alert(e.message,{title:vm.$t('message.nftBuy')});
+									});
+								}
+							});
+						}
+						console.log("Destroying QRScanner...");
+						QRScanner.destroy(function(status)
+						{
+							console.log(status);
+						});
+						$("#page-marketplace").show();
+					}
+				}
+				QRScanner.show();
+			}
+		},
 		setFilter: function(filter)
 		{
 			this.filter=filter;
@@ -130,7 +225,7 @@ export default {
 				return false;
 			}
 		},
-		getSellOrders()
+		getNftSellOrders()
 		{
 			let vm=this;
 			try
@@ -144,9 +239,9 @@ export default {
 						arr.push(token_id+":"+nft_id);
 					}
 				}
-				console.log("Getting sell orders...");
+				console.log("Getting nft sell orders...");
 				let vm=this;
-				axios.post(vm.apiURL+'GetSellOrders',{},config).then(function(retval)
+				axios.post(vm.apiURL+'GetNftSellOrders',{},config).then(function(retval)
 				{
 					vm.orders=retval.data.orders;
 					vm.orders.forEach(order =>

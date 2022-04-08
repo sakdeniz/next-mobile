@@ -10,7 +10,7 @@
 			<div class="center" style="margin-top:20px;margin-bottom:20px;">
 				<v-ons-segment :index.sync="segmentIndex" style="width:100%">
 					<button>{{$t('message.sellNFT')}}</button>
-					<button @click="getSellOrders()">{{$t('message.sellOrders')}}</button>
+					<button @click="getNftSellOrders()">{{$t('message.sellOrders')}}</button>
 				</v-ons-segment>
 			</div>
 			<div class="content" >
@@ -76,7 +76,7 @@
 										Listed on {{formatDate(item.verification_date)}}
 									</div>
 									<div class="list-item__subtitle" style="margin-top:15px;">
-										<v-ons-button modifier="outline" style="float:right" v-on:click="cancelOrder(item.token_id,item.nft_id)"><v-ons-icon icon="ion-md-trash"></v-ons-icon>&nbsp;Cancel Order</v-ons-button>
+										<v-ons-button modifier="outline" style="float:right" v-on:click="CancelSellNftOrder(item.token_id,item.nft_id)"><v-ons-icon icon="ion-md-trash"></v-ons-icon>&nbsp;Cancel Order</v-ons-button>
 									</div>
 								</div>
 							</div>
@@ -227,6 +227,7 @@ export default {
 					})
 					.catch((e) =>
 					{
+						console.log("CreateSellNftOrder failed -> " + e.message);
 						vm.$ons.notification.alert(e.message,{title:vm.$t('message.sellNFT')});
 						vm.modalVisible=false;
 					});
@@ -234,7 +235,7 @@ export default {
 				catch((e) =>
 				{
 					vm.modalVisible=false;
-					console.log("Error while creating nft proof -> " + e.message);
+					console.log("CreateNftProof failed -> " + e.message);
 					vm.$ons.notification.alert(vm.$t('message.nftProofError')+"<br/><br/>"+e.message,{title:vm.$t('message.proofNFT')});
 				});
 			}
@@ -244,7 +245,7 @@ export default {
 				vm.$ons.notification.alert(e.message,{title:vm.$t('message.sellNFT')});
 			}
 		},
-		getSellOrders()
+		getNftSellOrders()
 		{
 			console.log("Getting nfts in wallet...");
 			let arr=[];
@@ -255,9 +256,9 @@ export default {
 					arr.push(token_id+":"+nft_id);
 				}
 			}
-			console.log("Getting sell orders...");
+			console.log("Getting nft sell orders...");
 			let vm=this;
-			axios.post(vm.apiURL+'GetSellOrders',{},config).then(function(retval)
+			axios.post(vm.apiURL+'GetNftSellOrders',{},config).then(function(retval)
 			{
 				vm.orders=retval.data.orders;
 				vm.orders.forEach(order =>
@@ -277,7 +278,7 @@ export default {
 				console.log(err);
 			})
 		},
-		cancelOrder(token_id,nft_id)
+		CancelSellNftOrder(token_id,nft_id)
 		{
 			console.log(token_id);
 			console.log(nft_id);
@@ -316,12 +317,12 @@ export default {
 										wallet.VerifyNftProof(token_id,nft_id,proof).then((v) =>
 										{
 											console.log(v);
-											axios.post(vm.apiURL+'CancelOrder',{proof:proof},config).then(function(retval)
+											axios.post(vm.apiURL+'CancelSellNftOrder',{proof:proof},config).then(function(retval)
 											{
 												console.log(retval.data);
 												if (retval.data.status=="success")
 												{
-													vm.getSellOrders();
+													vm.getNftSellOrders();
 												}
 												else
 												{
