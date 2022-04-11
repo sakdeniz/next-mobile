@@ -261,6 +261,7 @@ export default {
 			axios.post(vm.apiURL+'GetNftSellOrders',{},config).then(function(retval)
 			{
 				vm.orders=retval.data.orders;
+				console.log("Retrieved -> " + vm.orders.length);
 				vm.orders.forEach(order =>
 				{
 					if (arr.includes(order.token_id+":"+order.nft_id))
@@ -280,6 +281,7 @@ export default {
 		},
 		CancelSellNftOrder(token_id,nft_id)
 		{
+			console.log(this.config.private_address);
 			console.log(token_id);
 			console.log(nft_id);
 			let vm=this;
@@ -331,12 +333,14 @@ export default {
 											}).
 											catch(function(e)
 											{
+											console.log(e);
 												console.log("Error while verifying nft proof -> " + e.message);
 											})
 										});
 									}).
 									catch((e) =>
 									{
+										console.log(e);
 										console.log("Error while creating nft proof -> " + e.message);
 										vm.$ons.notification.alert(vm.$t('message.nftProofError')+"<br/><br/>"+e.message,{title:vm.$t('message.proofNFT')});
 									});
@@ -346,6 +350,7 @@ export default {
 							})
 							.catch((e) =>
 							{
+								console.log(e);
 								vm.modalVisible=false;
 								vm.$ons.notification.alert(e.message,{title:vm.$t('message.send')});
 							});
@@ -353,18 +358,21 @@ export default {
 					})
 					.catch((e) =>
 					{
+						console.log(e);
 						vm.modalVisible=false;
 						vm.$ons.notification.alert(e.message,{title:vm.$t('message.send')});
 					});
 				})
 				.catch((e) =>
 				{
+					console.log(e);
 					vm.modalVisible=false;
 					vm.$ons.notification.alert(e.message,{title:vm.$t('message.send')});
 				});
 			}
 			catch(e)
 			{
+				console.log(e);
 				vm.modalVisible=false;
 				vm.$ons.notification.alert(e.message,{title:vm.$t('message.send')});
 			}
