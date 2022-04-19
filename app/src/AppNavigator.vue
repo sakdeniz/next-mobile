@@ -396,8 +396,8 @@ data()
 		step:0,
 		segmentIndex: 0,
 		wallet_name:'',
-		password:"123456",
-		password_again:"123456",
+		password:"",
+		password_again:"",
 		active_wallet_already_exist:false,
 		active_wallet_name:"",
 		walletExist:false,
@@ -732,9 +732,9 @@ created: function ()
 					{
 						file:(vm.active_wallet_name=="Default_next_mainnet"?"wallet.db":vm.active_wallet_name),
 						zapwallettxes:zapwallettxes,
+						password:vm.password,
 						log:log
 					})
-					console.log(wallet);
 				}
 				else
 				{
@@ -747,12 +747,13 @@ created: function ()
 						network:vm.$store.state.config.network.code,
 						mnemonic:mnemonic,
 						type: vm.$store.state.config.wallet_type.code,
-						password:password,
+						password:vm.password,
 						spendingPassword:spendingPassword,
 						zapwallettxes:zapwallettxes,
 						log:log
 					})
 				}
+				console.log(wallet.db.open);
 				wallet.walletName=(vm.active_wallet_name=="Default_next_mainnet"?"wallet.db":vm.active_wallet_name);
 				window.wallet=wallet;
 				wallet.on('new_mnemonic', (mnemonic) => console.log(`wallet created with mnemonic ${mnemonic} - please back it up!`));
@@ -905,7 +906,8 @@ created: function ()
 			}
 			else
 			{
-				this.$ons.notification.toast(vm.$t('message.invalidPassword'), { timeout: 2000, animation: 'fall' });
+				this.initNavcoinJS(window.db.get('mnemonics').value())
+				//this.$ons.notification.toast(vm.$t('message.invalidPassword'), { timeout: 2000, animation: 'fall' });
 			}
 		},
 		st1: function ()

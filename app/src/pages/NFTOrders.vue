@@ -199,6 +199,10 @@ export default {
 					wallet.CreateSellNftOrder(vm.sell_token_id, vm.sell_nft_id, vm.sell_payment_address, amount).then(function (order)
 					{
 						console.log(order);
+						wallet.VerifyOrder(order).then((result) =>
+						{
+							console.log("Verify order result -> " + result);
+						})
 						//console.log(JSON.stringify(order));
 						//console.log(JSON.parse(JSON.stringify(order)));
 						console.log("Verifying proof...");
