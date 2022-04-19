@@ -753,7 +753,7 @@ created: function ()
 						log:log
 					})
 				}
-				console.log(wallet.db.open);
+					console.log(wallet.db.open);
 				wallet.walletName=(vm.active_wallet_name=="Default_next_mainnet"?"wallet.db":vm.active_wallet_name);
 				window.wallet=wallet;
 				wallet.on('new_mnemonic', (mnemonic) => console.log(`wallet created with mnemonic ${mnemonic} - please back it up!`));
@@ -776,6 +776,7 @@ created: function ()
 					//wallet.AddNode('electrum.nextwallet.org', 40004, 'wss');
 					await wallet.Connect();
 				});
+				wallet.on('db_load_error', (error) => console.log(`error loading database: ${error}`));
 				wallet.on('sync_started', () => 
 				{
 					console.log('sync started.')
