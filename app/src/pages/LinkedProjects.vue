@@ -10,32 +10,37 @@
 			</template>
 		</v-ons-alert-dialog>
 		<v-ons-card>
-			<div v-if="total!=completed">
-				<v-ons-progress-circular indeterminate></v-ons-progress-circular>
-				Verifying <b>{{total}}</b> NFTs...
+			<div class="content">
+				<div v-if="total!=completed">
+					<v-ons-progress-circular indeterminate></v-ons-progress-circular>
+					Verifying <b>{{total}}</b> NFTs...
+				</div>
+				<div v-if="verified" style="color:green"><span class="ion-md-checkmark"></span> {{verified}} NFTs successfully verified.</div>
+				<div v-if="already_verified"  style="color:orange"><span class="ion-md-checkmark"></span> {{already_verified}} NFTs already verified.</div>
+				<div v-if="failed"  style="color:red"><span class="ion-md-close"></span> {{failed}} NFTs verification failed.</div>
 			</div>
-			<div v-if="verified" style="color:green"><span class="ion-md-checkmark"></span> {{verified}} NFTs successfully verified.</div>
-			<div v-if="already_verified"  style="color:orange"><span class="ion-md-checkmark"></span> {{already_verified}} NFTs already verified.</div>
-			<div v-if="failed"  style="color:red"><span class="ion-md-close"></span> {{failed}} NFTs verification failed.</div>
 		</v-ons-card>
 		<v-ons-card>
-			<v-ons-fab position="bottom right" modifier="mini" v-on:click="push(pages[0].component, $t('message.linkProject'))">
-				<v-ons-icon icon="md-plus"></v-ons-icon>
-			</v-ons-fab>
-			<v-ons-list v-if="config.projects.length>0">
-				<v-ons-list-item v-for="project,index in config.projects"  tappable modifier="nodivider">
-					<div class="left">
-						<v-ons-button modifier="outline" v-on:click="syncNFTs(index)"><i class="ion-ios-checkmark-circle-outline"></i></v-ons-button>
-						<v-ons-button modifier="outline" v-on:click="deleteConfirm(index)"><i class="ion-md-trash"></i></v-ons-button>
-					</div>
-					<div class="center">
-						<span class="list-item__subtitle">Project ID : {{project.id}}</span>
-					</div>
-				</v-ons-list-item>
-			</v-ons-list>
-			<p v-else>
-				{{$t('message.noLinkedProjectFound')}}
-			</p>
+			<div class="content">
+				<v-ons-fab position="bottom right" modifier="mini" v-on:click="push(pages[0].component, $t('message.linkProject'))">
+					<v-ons-icon icon="md-plus"></v-ons-icon>
+				</v-ons-fab>
+				<v-ons-list v-if="config.projects.length>0">
+					<v-ons-list-item v-for="project,index in config.projects" tappable modifier="nodivider">
+						<div class="center">
+							<span class="list-item__subtitle">Project ID : {{project.id}}</span>
+							<span class="list-item__subtitle">Code : {{project.link_code}}</span>
+							<span class="list-item__subtitle" style="margin-top:15px;">
+								<v-ons-button modifier="" v-on:click="syncNFTs(index)"><i class="ion-ios-checkmark-circle-outline"></i>&nbsp;Sync NFts</v-ons-button>
+								<v-ons-button modifier="" v-on:click="deleteConfirm(index)"><i class="ion-md-trash"></i>&nbsp;Unlink Project</v-ons-button>
+							</span>
+						</div>
+					</v-ons-list-item>
+				</v-ons-list>
+				<p v-else>
+					{{$t('message.noLinkedProjectFound')}}
+				</p>
+			</div>
 		</v-ons-card>
 	</v-ons-page>
 </template>
@@ -131,7 +136,13 @@ export default {
 							{
 								console.log(nftId);
 								console.log(v);
-								axios.post(vm.apiURL+'CreateNftProof',{"project_id":vm.config.projects[project_index].id,"private_address":vm.config.private_address,"proof":proof},config).then(function(retval)
+								axios.post(vm.apiURL+'CreateNftProof',
+									{
+										"project_id":vm.config.projects[project_index].id,
+										"link_code":vm.config.projects[project_index].link_code,
+										"private_address":vm.config.private_address,
+										"proof":proof
+									},config).then(function(retval)
 								{
 									vm.completed++;
 									if (retval.data.status=="verified")

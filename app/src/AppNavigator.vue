@@ -728,11 +728,17 @@ created: function ()
 				if (vm.active_wallet_already_exist)
 				{
 					console.log("Loading existing wallet : " + vm.active_wallet_name);
-					wallet=new njs.wallet.WalletFile(
+					/*wallet=new njs.wallet.WalletFile(
 					{
 						file:(vm.active_wallet_name=="Default_next_mainnet"?"wallet.db":vm.active_wallet_name),
 						zapwallettxes:zapwallettxes,
 						password:vm.password,
+						log:log
+					})*/
+					wallet=new njs.wallet.WalletFile(
+					{
+						file:(vm.active_wallet_name=="Default_next_mainnet"?"wallet.db":vm.active_wallet_name),
+						zapwallettxes:zapwallettxes,
 						log:log
 					})
 				}
@@ -747,7 +753,6 @@ created: function ()
 						network:vm.$store.state.config.network.code,
 						mnemonic:mnemonic,
 						type: vm.$store.state.config.wallet_type.code,
-						password:vm.password,
 						spendingPassword:spendingPassword,
 						zapwallettxes:zapwallettxes,
 						log:log
@@ -1128,5 +1133,8 @@ ons-carousel
 }
 .dots > span {
 	cursor: pointer;
+}
+.list-item__subtitle {
+    opacity: 1 !important;
 }
 </style>

@@ -32,23 +32,39 @@
 		<v-ons-list v-show="orders.length>0" style="margin:15px;background: transparent;">
 			<v-ons-list-item modifier="nodivider" v-if="!filter||parseJSON(item.collection_metadata).category==filter" style="padding: 20px;background: #ffffff;border: 1px solid #cfcfcf;margin-bottom: 15px;" v-for="(item,index) in orders">
 				<div class="center">
-					<img style="width:100%;height:auto" :src="parseJSON(parseJSON(item.metadata).metadata).attributes.thumbnail_url">
-						<span class="list-item__title" style="margin-top:15px;">
-							{{parseJSON(parseJSON(item.metadata).metadata).name}}
-						<span style="float: right">#{{item.nft_id}}</span>
-						</span>
-						<span class="list-item__subtitle">
-							{{item.collection_name}}
-							<span style="float: right">{{parseJSON(item.collection_metadata).category}}</span>
-						</span>
-						<span class="list-item__subtitle">
-							{{parseJSON(parseJSON(item.metadata).metadata).description}}
-						</span>
-						<span class="list-item__subtitle">Price : {{formatBalance(JSON.parse(item.nft_order).pay[0].amount)}} <img style="width: 24px;height: 24px;position: absolute;margin-left:8px;margin-top:-3px;" src="images/xnav-logo-border.png"/></span>
-						<span class="list-item__subtitle" v-show="item.owner" style="color: purple">This nft belongs to you.</span>
-						<span class="list-item__subtitle" v-show="!item.owner" style="margin-top:15px;">
-							<v-ons-button v-on:click="buyNFT(index,item.nft_order,parseJSON(parseJSON(item.metadata).metadata).attributes.thumbnail_url)">BUY</v-ons-button>
-						</span>
+					<i v-if="parseJSON(parseJSON(item.metadata).metadata).attributes.content_type.split('/')[0]=='audio'" class="ion-ios-musical-notes fa-2x"></i>
+					<i v-if="parseJSON(parseJSON(item.metadata).metadata).attributes.content_type.split('/')[0]=='video'" class="ion-ios-videocam fa-2x"></i>
+					<img v-else onerror="this.style.display='none'" style="width:100%;height:auto" :src="ipfsToURL(parseJSON(parseJSON(item.metadata).metadata).attributes.thumbnail_url)">
+					<span class="list-item__subtitle" style="margin-top:5px;" v-if="parseJSON(parseJSON(item.metadata).metadata).attributes.content_type.split('/')[0]=='audio'">
+						<audio controls style="width:100%">
+							<source :src="ipfsToURL(parseJSON(parseJSON(item.metadata).metadata).image)" type="audio/ogg">
+							<source :src="ipfsToURL(parseJSON(parseJSON(item.metadata).metadata).image)" type="audio/mpeg">
+							Your browser does not support the audio element.
+						</audio>
+					</span>
+					<span class="list-item__subtitle" style="margin-top:5px;" v-if="parseJSON(parseJSON(item.metadata).metadata).attributes.content_type.split('/')[0]=='video'">
+						<video onplay="this.webkitEnterFullscreen();" controls playsinline style="width:100%">
+							<source :src="ipfsToURL(parseJSON(parseJSON(item.metadata).metadata).image)" type="video/mp4">
+							<source :src="ipfsToURL(parseJSON(parseJSON(item.metadata).metadata).image)" type="video/ogg">
+							Your browser does not support the audio element.
+						</video>
+					</span>
+					<span class="list-item__title" style="margin-top:15px;">
+						{{parseJSON(parseJSON(item.metadata).metadata).name}}
+					<span style="float: right">#{{item.nft_id}}</span>
+					</span>
+					<span class="list-item__subtitle">
+						{{item.collection_name}}
+						<span style="float: right">{{parseJSON(item.collection_metadata).category}}</span>
+					</span>
+					<span class="list-item__subtitle">
+						{{parseJSON(parseJSON(item.metadata).metadata).description}}
+					</span>
+					<span class="list-item__subtitle">Price : {{formatBalance(JSON.parse(item.nft_order).pay[0].amount)}} <img style="width: 24px;height: 24px;position: absolute;margin-left:8px;margin-top:-3px;" src="images/xnav-logo-border.png"/></span>
+					<span class="list-item__subtitle" v-show="item.owner" style="color: purple">This nft belongs to you.</span>
+					<span class="list-item__subtitle" v-show="!item.owner" style="margin-top:15px;">
+						<v-ons-button v-on:click="buyNFT(index,item.nft_order,ipfsToURL(parseJSON(parseJSON(item.metadata).metadata).attributes.thumbnail_url))">BUY</v-ons-button>
+					</span>
 				</div>
 			</v-ons-list-item>
 		</v-ons-list>
@@ -106,6 +122,12 @@ export default {
 	},
 	methods:
 	{
+		ipfsToURL: function(link)
+		{
+			let base_url="https://ipfs.nextwallet.org/ipfs/";
+			let e=link.split("ipfs://");
+			return base_url+e[1];
+		},
 		loadItem(done)
 		{
 			this.orders=[];
@@ -146,7 +168,7 @@ export default {
 									img_url=vm.parseJSON(vm.parseJSON(o.metadata).metadata).attributes.thumbnail_url;
 								}
 							});
-							vm.$ons.notification.confirm("<img style='width:100%;height:auto' src='"+img_url+"'/>"+vm.$t('message.nftTokenId') + " : <pre style='width:240px;height:40px;white-space:normal;word-spacing:initial;word-wrap:break-word;font-size:8pt;'>" + order.receive[0].tokenId + "</pre>"+vm.$t('message.nftId') + " : " + order.receive[0].tokenNftId + "<br/><br/>"+vm.$t('message.nftPrice') + " : " + sb.toBitcoin(order.pay[0].amount) + " xNAV<br/><br/>"+vm.$t('message.nftBuyConfirmQuestion'),{title:vm.$t('message.nftBuyConfirm'),buttonLabels:[vm.$t('message.nftBuyConfirmNo'), vm.$t('message.nftBuyConfirmYes')]})
+							vm.$ons.notification.confirm("<img style='width:100%;height:auto' src='"+vm.ipfsToURL(img_url)+"'/>"+vm.$t('message.nftTokenId') + " : <pre style='width:240px;height:40px;white-space:normal;word-spacing:initial;word-wrap:break-word;font-size:8pt;'>" + order.receive[0].tokenId + "</pre>"+vm.$t('message.nftId') + " : " + order.receive[0].tokenNftId + "<br/><br/>"+vm.$t('message.nftPrice') + " : " + sb.toBitcoin(order.pay[0].amount) + " xNAV<br/><br/>"+vm.$t('message.nftBuyConfirmQuestion'),{title:vm.$t('message.nftBuyConfirm'),buttonLabels:[vm.$t('message.nftBuyConfirmNo'), vm.$t('message.nftBuyConfirmYes')]})
 							.then((response) =>
 							{
 								if (response)
@@ -269,6 +291,7 @@ export default {
 		},
 		buyNFT(index,o,img_url)
 		{
+			console.log(img_url);
 			let vm=this;
 			let order=JSON.parse(o);
 			vm.$ons.notification.confirm("<img style='width:100%;height:auto' src='"+img_url+"'/>"+vm.$t('message.nftTokenId') + " : <pre style='width:240px;height:40px;white-space:normal;word-spacing:initial;word-wrap:break-word;font-size:8pt;'>" + order.receive[0].tokenId + "</pre>"+vm.$t('message.nftId') + " : " + order.receive[0].tokenNftId + "<br/><br/>"+vm.$t('message.nftPrice') + " : " + sb.toBitcoin(order.pay[0].amount) + " xNAV<br/><br/>"+vm.$t('message.nftBuyConfirmQuestion'),{title:vm.$t('message.nftBuyConfirm'),buttonLabels:[vm.$t('message.nftBuyConfirmNo'), vm.$t('message.nftBuyConfirmYes')]})
@@ -288,8 +311,8 @@ export default {
 							}
 							else
 							{
-								vm.orders.splice(index,1);
 								vm.modalVisible=false;
+								vm.orders.splice(index,1);
 								vm.$ons.notification.toast(vm.$t('message.nftBuySuccess'), { timeout: 3000, animation: 'fall' });
 							}
 						})
@@ -301,6 +324,7 @@ export default {
 					})
 					.catch((e) =>
 					{
+						vm.modalVisible=false;
 						vm.$ons.notification.alert(e.message,{title:vm.$t('message.nftBuy')});
 					});
 				}

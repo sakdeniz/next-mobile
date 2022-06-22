@@ -120,12 +120,12 @@
 								<template v-if="tx.memos">
 									<div v-if="tx.memos.in.length>0">
 										<div v-for="(item,index) in tx.memos.in" style="margin-top:10px;">
-											<small v-if="item!='' && item!='Change'"><v-ons-icon style="color:#cc6600" icon="ion-md-arrow-round-up" class="list-item__icon"></v-ons-icon>{{item}}</small>
+											<small v-if="item!='' && item!=undefined && item!='Change'"><v-ons-icon style="color:#cc6600" icon="ion-md-arrow-round-up" class="list-item__icon"></v-ons-icon>{{item}}</small>
 										</div>
 									</div>
 									<div v-if="tx.memos.out.length>0">
 										<span class="list-item__subtitle" v-for="(item,index) in tx.memos.out" style="margin-top:10px;">
-											<small v-if="item!='' && item!='Change'"><v-ons-icon style="color:#669900" icon="ion-md-arrow-round-down" class="list-item__icon"></v-ons-icon>{{item}}</small>
+											<small v-if="item!='' && item!=undefined && item!='Change'"><v-ons-icon style="color:#669900" icon="ion-md-arrow-round-down" class="list-item__icon"></v-ons-icon>{{item}}</small>
 										</span>
 									</div>
 								</template>

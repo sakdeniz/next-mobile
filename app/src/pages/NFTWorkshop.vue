@@ -32,13 +32,10 @@
 						<img src="images/nft2.png" style="width:32px;height:auto;margin-right:10px;"><b>{{item.name}}</b>
 						<div class="expandable-content">
 							<div class="left" style="width:25%;float:left;">
-								<img class="list-item__thumbnail" style="width:100%;height:auto" :src="parseJSON(item.scheme).image">
+								<img class="list-item__thumbnail" style="width:100%;height:auto" :src="ipfsToURL(parseJSON(item.scheme).image)">
 							</div>
 							<div class="center" style="width:75%;float:right;">
 								<div style="margin-left:15px">
-									<div class="list-item__subtitle">
-										{{parseJSON(item.scheme).name}}
-									</div>
 									<div class="list-item__subtitle">
 										{{parseJSON(item.scheme).description}}
 									</div>
@@ -57,7 +54,7 @@
 									<div class="left">
 										<i v-if="parseJSON(item2).attributes.content_type.split('/')[0]=='audio'" class="ion-ios-musical-notes fa-2x"></i>
 										<i v-if="parseJSON(item2).attributes.content_type.split('/')[0]=='video'" class="ion-ios-videocam fa-2x"></i>
-										<img v-else onerror="this.style.display='none'" class="list-item__thumbnail" :src="parseJSON(item2).image">
+										<img v-else onerror="this.style.display='none'" class="list-item__thumbnail" :src="ipfsToURL(parseJSON(item2).image)">
 									</div>
 									<div class="center">
 										<div class="list-item__subtitle">
@@ -77,15 +74,15 @@
 										</span>
 										<span class="list-item__subtitle" style="margin-top:5px;" v-if="parseJSON(item2).attributes.content_type.split('/')[0]=='audio'">
 											<audio controls style="width:100%">
-												<source :src="parseJSON(item2).image" type="audio/ogg">
-												<source :src="parseJSON(item2).image" type="audio/mpeg">
+												<source :src="ipfsToURL(parseJSON(item2).image)" type="audio/ogg">
+												<source :src="ipfsToURL(parseJSON(item2).image)" type="audio/mpeg">
 												Your browser does not support the audio element.
 											</audio>
 										</span>
 										<span class="list-item__subtitle" style="margin-top:5px;" v-if="parseJSON(item2).attributes.content_type.split('/')[0]=='video'">
 											<video onplay="this.webkitEnterFullscreen();" controls playsinline style="width:100%">
-												<source :src="parseJSON(item2).image" type="video/mp4">
-												<source :src="parseJSON(item2).image" type="video/ogg">
+												<source :src="ipfsToURL(parseJSON(item2).image)" type="video/mp4">
+												<source :src="ipfsToURL(parseJSON(item2).image)" type="video/ogg">
 												Your browser does not support the audio element.
 											</video>
 										</span>
@@ -146,8 +143,8 @@
 					<v-ons-button :disabled="!uploadEnabled" v-on:click="addFile"><i class="fa fa-cloud-upload"></i>&nbsp;{{$t('message.uploadFileToIPFS')}}</v-ons-button>
 				</div>
 				<div style="margin-top:15px;" v-show="uploadSuccess">
-					<img style="width:100%;height:auto" :src="url"/>
-					<a target="_blank" :href="url">{{url}}</a>
+					<img style="width:100%;height:auto" :src="preview_url"/>
+					<a target="_blank" :href="preview_url">{{preview_url}}</a>
 				</div>
 				<div class="center" style="margin-top:40px">
 					{{$t('message.category')}} : <v-ons-select float style="width: 100%" v-model="category">
@@ -164,10 +161,10 @@
 					<v-ons-input :placeholder="$t('message.nftCollectionExternalURL')" float type="text" style="width:100%;" v-model="external_url"/>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-input :placeholder="$t('message.nftCollectionScheme')" float type="text" style="width:100%;" v-model="scheme"/>
+					<v-ons-input :placeholder="$t('message.nftMaxSupply')" float type="number" style="width:100%;" v-model="max_supply"/>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-input :placeholder="$t('message.nftMaxSupply')" float type="number" style="width:100%;" v-model="max_supply"/>
+					<v-ons-input :placeholder="$t('message.nftCollectionScheme')" float type="text" style="width:100%;" v-model="scheme"/>
 				</div>
 				<div class="center" style="margin-top:40px">
 					<v-ons-button v-on:click='createNFT' :disabled="!category || !name || !scheme || !max_supply"><i class="ion-ios-color-wand"></i>&nbsp;{{$t('message.btnCreateNFT')}}</v-ons-button>
@@ -197,8 +194,8 @@
 					<v-ons-button :disabled="!uploadNFTEnabled" v-on:click="addNFTFile"><i class="fa fa-cloud-upload"></i>&nbsp;{{$t('message.uploadNFTFileToIPFS')}}</v-ons-button>
 				</div>
 				<div style="margin-top:15px;" v-show="uploadNFTSuccess">
-					<img style="width:100%;height:auto" :src="nftFileUrl"/>
-					<a target="_blank" :href="nftFileUrl">{{nftFileUrl}}</a>
+					<img style="width:100%;height:auto" :src="nft_preview_url" onerror="this.style.display='none'"/>
+					<a target="_blank" :href="nft_preview_url">{{nft_preview_url}}</a>
 				</div>
 				<div class="center" style="margin-top:40px">
 					{{$t('message.collection')}} : <v-ons-select float style="width: 100%" v-model="mint_nft_token_id">
@@ -318,7 +315,9 @@ export default {
 			uploadSuccess:false,
 			uploadNFTSuccess:false,
 			url:"",
+			preview_url:"",
 			nftFileUrl:"",
+			nft_preview_url:"",
 			modalVisible:false,
 			segmentIndex:0,
 			segmentIndexSub:0,
@@ -358,6 +357,12 @@ export default {
 	},
 	methods:
 	{
+		ipfsToURL: function(link)
+		{
+			let base_url="https://ipfs.nextwallet.org/ipfs/";
+			let e=link.split("ipfs://");
+			return base_url+e[1];
+		},
 		formatDate: n =>
 		{
 			if (n) return moment(n).format('DD.MM.YY HH:mm:ss'); else return "";
@@ -493,12 +498,15 @@ export default {
 			{
 				if (response.data.success)
 				{
+					vm.uploadSuccess=true;
+					vm.preview_url=response.data.url+response.data.cid;
+					vm.url="ipfs://"+response.data.cid;
+					vm.file_type_collection=vm.getFileMIMEType(vm.$refs.doc.files[0].name);
+					console.log("Filename:" + vm.$refs.doc.files[0].name);
 					console.log("Success!");
 					console.log("URL:"+response.data.url);
 					console.log("CID:"+response.data.cid);
-					vm.uploadSuccess=true;
-					vm.url=response.data.url+response.data.cid;
-					vm.file_type_collection=vm.getFileMIMEType(vm.$refs.doc.files[0].name);
+					console.log("Extension:"+vm.file_type_collection);
 				}
 				else
 				{
@@ -525,6 +533,9 @@ export default {
 					break;
 				case "jpeg":
 					type="image/jpeg";
+					break;
+				case "png":
+					type="image/png";
 					break;
 				case "webp":
 					type="image/webp";
@@ -560,7 +571,6 @@ export default {
 			this.scheme=JSON.stringify({
 				version:this.version,
 				category:this.category,
-				name:this.name,
 				description:this.description,
 				image:this.url,
 				external_url:this.external_url,
@@ -625,7 +635,8 @@ export default {
 				if (response.data.success)
 				{
 					vm.uploadNFTSuccess=true;
-					vm.nftFileUrl=response.data.url+response.data.cid;
+					vm.nft_preview_url=response.data.url+response.data.cid;
+					vm.nftFileUrl="ipfs://"+response.data.cid;
 					vm.nft_file_type_collection=vm.getFileMIMEType(vm.$refs.doc_nft.files[0].name);
 					console.log("Success!");
 					console.log("URL:"+response.data.url);
