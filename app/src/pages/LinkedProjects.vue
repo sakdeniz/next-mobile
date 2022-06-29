@@ -2,14 +2,14 @@
 	<v-ons-page>
 		<custom-toolbar v-bind="toolbarInfo"></custom-toolbar>
 		<v-ons-alert-dialog modifier="rowfooter" :visible.sync="isVisible">
-			<span slot="title">{{$t('message.deleteContact')}}</span>
-			{{$t('message.confirmDeleteContact')}}
+			<span slot="title">{{$t('message.deleteLinkedProject')}}</span>
+			{{$t('message.confirmDeleteLinkedProject')}}
 			<template slot="footer">
 				<v-ons-alert-dialog-button v-on:click="isVisible = false">{{$t('message.btnCancel')}}</v-ons-alert-dialog-button>
-				<v-ons-alert-dialog-button v-on:click="del()">{{$t('message.btnDelete')}}</v-ons-alert-dialog-button>
+				<v-ons-alert-dialog-button v-on:click="del()">{{$t('message.btnUnlink')}}</v-ons-alert-dialog-button>
 			</template>
 		</v-ons-alert-dialog>
-		<v-ons-card>
+		<v-ons-card v-show="total>0">
 			<div class="content">
 				<div v-if="total!=completed">
 					<v-ons-progress-circular indeterminate></v-ons-progress-circular>
@@ -28,11 +28,12 @@
 				<v-ons-list v-if="config.projects.length>0">
 					<v-ons-list-item v-for="project,index in config.projects" tappable modifier="nodivider">
 						<div class="center">
+							<span class="list-item__subtitle">Project Name : {{project.name}}</span>
 							<span class="list-item__subtitle">Project ID : {{project.id}}</span>
 							<span class="list-item__subtitle">Code : {{project.link_code}}</span>
 							<span class="list-item__subtitle" style="margin-top:15px;">
-								<v-ons-button modifier="" v-on:click="syncNFTs(index)"><i class="ion-ios-checkmark-circle-outline"></i>&nbsp;Sync NFts</v-ons-button>
-								<v-ons-button modifier="" v-on:click="deleteConfirm(index)"><i class="ion-md-trash"></i>&nbsp;Unlink Project</v-ons-button>
+								<v-ons-button v-on:click="syncNFTs(index)"><i class="ion-ios-checkmark-circle-outline"></i>&nbsp;Sync NFts</v-ons-button>
+								<v-ons-button style="float:right" v-on:click="deleteConfirm(index)"><i class="ion-md-trash"></i>&nbsp;Unlink Project</v-ons-button>
 							</span>
 						</div>
 					</v-ons-list-item>
@@ -63,8 +64,6 @@ export default {
 			verified:0,
 			already_verified:0,
 			failed:0,
-			isLocal:false,
-			apiURL:(this.isLocal?"http://localhost:3000/":"https://api.nextwallet.org/"),
 			pages:[
 			{
 				component: LinkProject,
@@ -136,7 +135,7 @@ export default {
 							{
 								console.log(nftId);
 								console.log(v);
-								axios.post(vm.apiURL+'CreateNftProof',
+								axios.post(vm.$store.state.config.api_url+'CreateNftProof',
 									{
 										"project_id":vm.config.projects[project_index].id,
 										"link_code":vm.config.projects[project_index].link_code,

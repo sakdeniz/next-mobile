@@ -439,6 +439,10 @@
 		"nftBuySuccess":"You have successfully purchased NFT.",
 		"nftPrice":"Price",
 		"nftTokenId":"NFT Token ID",
-		"nftId":"NFT ID"
+		"nftId":"NFT ID",
+		"projectName":"Project Name",
+		"deleteLinkedProject":"Unlink Project",
+		"confirmDeleteLinkedProject":"Are you sure you want to unlink the project?",
+		"btnUnlink":"Unlink"
 	}
 }

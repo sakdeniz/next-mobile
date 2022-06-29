@@ -63,6 +63,7 @@ export default {
       namespaced: true,
       state:
       {
+		api_url:"",
       	address:"",
       	public_address:undefined,
       	private_address:undefined,
@@ -197,6 +198,7 @@ export default {
         setNetwork(state,network)
         {
 			state.network=network;
+			state.api_url="https://api.nextwallet.org/"+network.code+"/";
 			localStorage.setItem("config", JSON.stringify(this.state.config));
         },
         setCurrency(state,currency)

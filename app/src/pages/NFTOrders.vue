@@ -57,7 +57,7 @@
 							{{parseJSON(parseJSON(item.metadata).metadata).name}}
 							<div class="expandable-content">
 								<div class="left" style="width:25%;float:left;">
-									<img style="width:100%;height:auto" :src="parseJSON(parseJSON(item.metadata).metadata).attributes.thumbnail_url">
+									<img style="width:100%;height:auto" :src="ipfsToURL(parseJSON(parseJSON(item.metadata).metadata).attributes.thumbnail_url)">
 								</div>
 								<div class="center" style="width:70%;margin-left: 15px;float:right;">
 									<div class="list-item__subtitle">
@@ -70,7 +70,7 @@
 										{{parseJSON(parseJSON(item.metadata).metadata).description}}
 									</div>
 									<div class="list-item__subtitle">
-										Price : {{formatBalance(JSON.parse(item.nft_order).pay[0].amount)}} NAV
+										Price : {{formatBalance(JSON.parse(item.nft_order).pay.amount)}} NAV
 									</div>
 									<div class="list-item__subtitle" style="margin-top:15px;">
 										Listed on {{formatDate(item.verification_date)}}
@@ -131,9 +131,7 @@ export default {
 			sell_nft_id:'',
 			sell_payment_address:undefined,
 			sell_price:0,
-			orders:[],
-			isLocal:false,
-			apiURL:(this.isLocal?"http://localhost:3000/":"https://api.nextwallet.org/")
+			orders:[]
 		};
 	},
 	computed:
@@ -149,6 +147,12 @@ export default {
 	},
 	methods:
 	{
+		ipfsToURL: function(link)
+		{
+			let base_url="https://ipfs.nextwallet.org/ipfs/";
+			let e=link.split("ipfs://");
+			return base_url+e[1];
+		},
 		formatDate: n =>
 		{
 			if (n) return moment(n).format('DD.MM.YY HH:mm:ss'); else return "";
@@ -210,7 +214,7 @@ export default {
 						{
 							console.log(v);
 						});
-						axios.post(vm.apiURL+'CreateSellNftOrder',{order:order,proof:proof},config).then(function(retval)
+						axios.post(vm.$store.state.config.api_url+'CreateSellNftOrder',{order:order,proof:proof},config).then(function(retval)
 						{
 							vm.modalVisible=false;
 							console.log(retval.data);
@@ -262,7 +266,7 @@ export default {
 			}
 			console.log("Getting nft sell orders...");
 			let vm=this;
-			axios.post(vm.apiURL+'GetNftSellOrders',{},config).then(function(retval)
+			axios.post(vm.$store.state.config.api_url+'GetNftSellOrders',{},config).then(function(retval)
 			{
 				vm.orders=retval.data.orders;
 				console.log("Retrieved -> " + vm.orders.length);
@@ -271,10 +275,12 @@ export default {
 					if (arr.includes(order.token_id+":"+order.nft_id))
 					{
 						order.owner=true;
+						console.log("Order owner -> " + order.token_id+":"+order.nft_id);
 					}
 					else
 					{
 						order.owner=false;
+						console.log("Not order owner -> " + order.token_id+":"+order.nft_id);
 					}
 				});
 			}).
@@ -301,7 +307,6 @@ export default {
 						if (response)
 						{
 							vm.modalVisible=true;
-							console.log(tx);
 							wallet.SendTransaction(tx.tx).then(function (result)
 							{
 								console.log(result);
@@ -312,49 +317,12 @@ export default {
 								}
 								else
 								{
-									wallet.CreateNftProof(token_id,nft_id,undefined).then((p) =>
-									{
-										let hex=Buffer.from(p.sig).toString('hex');
-										let proof={nftId:nft_id,tokenId:token_id,sig:Buffer.from(hex,'hex')};
-										console.log(proof);
-										//console.log(JSON.stringify(order));
-										//console.log(JSON.parse(JSON.stringify(order)));
-										console.log("Verifying proof...");
-										wallet.VerifyNftProof(token_id,nft_id,proof).then((v) =>
-										{
-											console.log(v);
-											axios.post(vm.apiURL+'CancelSellNftOrder',{proof:proof},config).then(function(retval)
-											{
-												console.log(retval.data);
-												if (retval.data.status=="success")
-												{
-													vm.getNftSellOrders();
-												}
-												else
-												{
-													vm.$ons.notification.alert(vm.$t('message.nftSellOrderCancelError')+"<br/><br/>"+retval.data.message,{title:vm.$t('message.nftSellOrderCancel')});
-												}
-											}).
-											catch(function(e)
-											{
-											console.log(e);
-												console.log("Error while verifying nft proof -> " + e.message);
-											})
-										});
-									}).
-									catch((e) =>
-									{
-										console.log(e);
-										console.log("Error while creating nft proof -> " + e.message);
-										vm.$ons.notification.alert(vm.$t('message.nftProofError')+"<br/><br/>"+e.message,{title:vm.$t('message.proofNFT')});
-									});
 									vm.modalVisible=false;
 									vm.$ons.notification.toast(vm.$t('message.sendSuccess'), { timeout: 3000, animation: 'fall' });
 								}
 							})
 							.catch((e) =>
 							{
-								console.log(e);
 								vm.modalVisible=false;
 								vm.$ons.notification.alert(e.message,{title:vm.$t('message.send')});
 							});

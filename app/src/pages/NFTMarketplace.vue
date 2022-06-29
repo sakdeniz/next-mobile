@@ -101,9 +101,7 @@ export default {
 				{"id":"sports",name:"Sports"},
 				{"id":"trading_cards",name:"Trading Cards"},
 				{"id":"utility",name:"Utility"}
-			],
-			isLocal:false,
-			apiURL:(this.isLocal?"http://localhost:3000/":"https://api.nextwallet.org/")
+			]
 		};
 	},
 	computed:
@@ -263,8 +261,9 @@ export default {
 				}
 				console.log("Getting nft sell orders...");
 				let vm=this;
-				axios.post(vm.apiURL+'GetNftSellOrders',{},config).then(function(retval)
+				axios.post(vm.$store.state.config.api_url+'GetNftSellOrders',{},config).then(function(retval)
 				{
+					console.log(retval);
 					vm.orders=retval.data.orders;
 					vm.orders.forEach(order =>
 					{

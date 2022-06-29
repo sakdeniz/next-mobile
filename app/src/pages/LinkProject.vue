@@ -10,6 +10,9 @@
 					<v-ons-input :placeholder="$t('message.projectID')" float type="number" v-model="id" style="width:100%"></v-ons-input>
 				</div>
 				<div class="center" style="margin-top:20px">
+					<v-ons-input :placeholder="$t('message.projectName')" float v-model="name" style="width:100%"></v-ons-input>
+				</div>
+				<div class="center" style="margin-top:20px">
 					<v-ons-button v-on:click="scan()"><i class="ion-ios-qr-scanner"></i>&nbsp;{{$t('message.scanLinkCode')}}</v-ons-button>
 					<v-ons-button v-on:click="addProject()"><i class="ion-ios-color-wand"></i>&nbsp;{{$t('message.linkProject')}}</v-ons-button>
 				</div>
@@ -29,6 +32,7 @@ export default
 			},
 			link_code:'',
 			id:'',
+			name:''
 		};
 	},
 	computed:
@@ -68,7 +72,7 @@ export default
 		addProject()
 		{
 			{
-				this.$store.commit('config/addProject', {id: this.id,link_code:this.link_code})
+				this.$store.commit('config/addProject', {id: this.id,link_code:this.link_code,name:this.name})
 			}
 			this.$store.commit('navigator/pop');
 		}

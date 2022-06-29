@@ -912,8 +912,7 @@ created: function ()
 			}
 			else
 			{
-				this.initNavcoinJS(window.db.get('mnemonics').value())
-				//this.$ons.notification.toast(vm.$t('message.invalidPassword'), { timeout: 2000, animation: 'fall' });
+				this.$ons.notification.toast(vm.$t('message.invalidPassword'), { timeout: 2000, animation: 'fall' });
 			}
 		},
 		st1: function ()
