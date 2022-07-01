@@ -106,11 +106,12 @@ export default {
 					{
 						console.log(status);
 					});
+					$("#page-send").show();
+					$("#page-add-contact").show();
+					$("#page-nft-marketplace").show();
 		  		}
 		  	});
 	  	}
-	  	$("#page-send").show();
-		$("#page-add-contact").show();
      	// Apply the same transition as ons-tabbar
       	this.animationOptions = animationOptions;
       	// Interpolate colors and top position

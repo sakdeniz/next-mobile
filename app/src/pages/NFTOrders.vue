@@ -1,7 +1,7 @@
 <template id="main">
 	<v-ons-page>
 		<custom-toolbar v-bind="toolbarInfo"></custom-toolbar>
-		<v-ons-modal :visible="modalVisible" @click="modalVisible = false">
+		<v-ons-modal :visible="modalVisible">
 			<p style="text-align: center">
 				{{$t('message.pleaseWait')}} <v-ons-icon icon="fa-spinner" spin></v-ons-icon>
 			</p>
@@ -70,20 +70,20 @@
 										{{parseJSON(parseJSON(item.metadata).metadata).description}}
 									</div>
 									<div class="list-item__subtitle">
-										Price : {{formatBalance(JSON.parse(item.nft_order).pay.amount)}} NAV
+										{{$t('message.nftPrice')}} : {{formatBalance(JSON.parse(item.nft_order).pay[0].amount)}} xNAV
 									</div>
 									<div class="list-item__subtitle" style="margin-top:15px;">
-										Listed on {{formatDate(item.verification_date)}}
+										{{$t('message.nftListedOn')}} {{formatDate(item.verification_date)}}
 									</div>
 									<div class="list-item__subtitle" style="margin-top:15px;">
-										<v-ons-button modifier="outline" style="float:right" v-on:click="CancelSellNftOrder(item.token_id,item.nft_id)"><v-ons-icon icon="ion-md-trash"></v-ons-icon>&nbsp;Cancel Order</v-ons-button>
+										<v-ons-button modifier="outline" style="float:right" v-on:click="CancelSellNftOrder(item.token_id,item.nft_id)"><v-ons-icon icon="ion-md-trash"></v-ons-icon>&nbsp;{{$t('message.nftCancelOrder')}}</v-ons-button>
 									</div>
 								</div>
 							</div>
 						</v-ons-list-item>
 					</v-ons-list>
 					<div v-else style="margin-top:30px;">
-						<center>No sell order found.</center>
+						<center>{{$t('message.nftNoSellOrderFound')}}</center>
 					</div>
 				</div>
 			</div>
@@ -301,7 +301,7 @@ export default {
 				wallet.tokenCreateTransaction(this.config.private_address, 1, undefined, undefined, token_id,nft_id).then(function (tx)
 				{
 					vm.modalVisible=false;
-					vm.$ons.notification.confirm(vm.$t('message.transactionFee') + " : " + sb.toBitcoin(tx.fee) + " xNAV<br/><br/>"+vm.$t('message.sendConfirmQuestion'),{title:vm.$t('message.sendConfirm'),buttonLabels:[vm.$t('message.sendConfirmNo'), vm.$t('message.sendConfirmYes')]})
+					vm.$ons.notification.confirm(vm.$t('message.transactionFee') + " : " + sb.toBitcoin(tx.fee) + " xNAV<br/><br/>"+vm.$t('message.cancelNFTSellOrderConfirmQuestion'),{title:vm.$t('message.cancelNFTSellOrder'),buttonLabels:[vm.$t('message.cancelNFTSellOrderCancel'), vm.$t('message.cancelNFTSellOrderConfirm')]})
 					.then((response) =>
 					{
 						if (response)
@@ -318,13 +318,13 @@ export default {
 								else
 								{
 									vm.modalVisible=false;
-									vm.$ons.notification.toast(vm.$t('message.sendSuccess'), { timeout: 3000, animation: 'fall' });
+									vm.$ons.notification.toast(vm.$t('message.cancelNFTSellOrderSuccess'), { timeout: 3000, animation: 'fall' });
 								}
 							})
 							.catch((e) =>
 							{
 								vm.modalVisible=false;
-								vm.$ons.notification.alert(e.message,{title:vm.$t('message.send')});
+								vm.$ons.notification.alert(e.message,{title:vm.$t('message.cancelNFTSellOrder')});
 							});
 						}
 					})
@@ -332,21 +332,21 @@ export default {
 					{
 						console.log(e);
 						vm.modalVisible=false;
-						vm.$ons.notification.alert(e.message,{title:vm.$t('message.send')});
+						vm.$ons.notification.alert(e.message,{title:vm.$t('message.cancelNFTSellOrder')});
 					});
 				})
 				.catch((e) =>
 				{
 					console.log(e);
 					vm.modalVisible=false;
-					vm.$ons.notification.alert(e.message,{title:vm.$t('message.send')});
+					vm.$ons.notification.alert(e.message,{title:vm.$t('message.cancelNFTSellOrder')});
 				});
 			}
 			catch(e)
 			{
 				console.log(e);
 				vm.modalVisible=false;
-				vm.$ons.notification.alert(e.message,{title:vm.$t('message.send')});
+				vm.$ons.notification.alert(e.message,{title:vm.$t('message.cancelNFTSellOrder')});
 			}
 		}
 	}

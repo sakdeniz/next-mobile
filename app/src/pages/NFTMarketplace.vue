@@ -1,5 +1,5 @@
 <template id="main">
-	<v-ons-page id="page-marketplace">
+	<v-ons-page id="page-nft-marketplace">
 		<v-ons-pull-hook :action="loadItem" @changestate="state = $event.state">
 			<span v-show="state === 'initial'">{{$t('message.pullToRefresh')}}</span>
 			<span v-show="state === 'preaction'">{{$t('message.release')}}</span>
@@ -7,7 +7,7 @@
 				<v-ons-progress-circular indeterminate></v-ons-progress-circular>
 			</span>
 		</v-ons-pull-hook>
-		<v-ons-modal :visible="modalVisible" @click="modalVisible = false">
+		<v-ons-modal :visible="modalVisible">
 			<p style="text-align: center">
 				{{$t('message.txInProgress')}} <v-ons-icon icon="fa-spinner" spin></v-ons-icon>
 			</p>
@@ -61,7 +61,7 @@
 						{{parseJSON(parseJSON(item.metadata).metadata).description}}
 					</span>
 					<span class="list-item__subtitle">Price : {{formatBalance(JSON.parse(item.nft_order).pay[0].amount)}} <img style="width: 24px;height: 24px;position: absolute;margin-left:8px;margin-top:-3px;" src="images/xnav-logo-border.png"/></span>
-					<span class="list-item__subtitle" v-show="item.owner" style="color: purple">This nft belongs to you.</span>
+					<span class="list-item__subtitle cl1" v-show="item.owner">This nft belongs to you.</span>
 					<span class="list-item__subtitle" v-show="!item.owner" style="margin-top:15px;">
 						<v-ons-button v-on:click="buyNFT(index,item.nft_order,ipfsToURL(parseJSON(parseJSON(item.metadata).metadata).attributes.thumbnail_url))">BUY</v-ons-button>
 					</span>
@@ -113,7 +113,7 @@ export default {
 	},
 	mounted: function ()
 	{
-		wallet.on('connected', (e) =>
+		wallet.on('sync_finished', (e) =>
 		{
 			this.getNftSellOrders();
 		});
@@ -141,7 +141,7 @@ export default {
 			if (typeof(QRScanner) != "undefined")
 			{
 				let vm=this;
-				$("#page-marketplace").hide();
+				$("#page-nft-marketplace").hide();
 				QRScanner.scan(displayContents);
 				function displayContents(err, text)
 				{
@@ -205,7 +205,7 @@ export default {
 						{
 							console.log(status);
 						});
-						$("#page-marketplace").show();
+						$("#page-nft-marketplace").show();
 					}
 				}
 				QRScanner.show();
@@ -248,45 +248,51 @@ export default {
 		getNftSellOrders()
 		{
 			let vm=this;
-			try
+			wallet.GetBalance().then((value) =>
 			{
-				console.log("Getting nfts in wallet...");
-				let arr=[];
-				for (const [token_id, value] of Object.entries(this.config.Balance.nfts))
+				vm.$store.commit('config/setBalance', value);
+				try
 				{
-					for (const [nft_id] of Object.entries(value.confirmed))
+					console.log("Getting nfts in wallet...");
+					let arr=[];
+					for (const [token_id, value] of Object.entries(vm.config.Balance.nfts))
 					{
-						arr.push(token_id+":"+nft_id);
+						for (const [nft_id] of Object.entries(value.confirmed))
+						{
+							arr.push(token_id+":"+nft_id);
+						}
 					}
-				}
-				console.log("Getting nft sell orders...");
-				let vm=this;
-				axios.post(vm.$store.state.config.api_url+'GetNftSellOrders',{},config).then(function(retval)
-				{
-					console.log(retval);
-					vm.orders=retval.data.orders;
-					vm.orders.forEach(order =>
+					console.log("------");
+					console.log(arr);
+					console.log("------");
+					console.log("Getting nft sell orders...");
+					axios.post(vm.$store.state.config.api_url+'GetNftSellOrders',{},config).then(function(retval)
 					{
-						if (arr.includes(order.token_id+":"+order.nft_id))
+						console.log(retval);
+						vm.orders=retval.data.orders;
+						vm.orders.forEach(order =>
 						{
-							order.owner=true;
-						}
-						else
-						{
-							order.owner=false;
-						}
-					});
-					vm.is_loading=false;
-				}).
-				catch(function(err)
+							if (arr.includes(order.token_id+":"+order.nft_id))
+							{
+								order.owner=true;
+							}
+							else
+							{
+								order.owner=false;
+							}
+						});
+						vm.is_loading=false;
+					}).
+					catch(function(err)
+					{
+						console.log(err);
+					})
+				}
+				catch (e)
 				{
-					console.log(err);
-				})
-			}
-			catch (e)
-			{
-				console.log(e);
-			}
+					console.log(e);
+				}
+			});
 		},
 		buyNFT(index,o,img_url)
 		{
@@ -332,3 +338,6 @@ export default {
 	}
 }
 </script>
+<style>
+	.cl1 {text-align:center;margin:3px;margin-top:10px;color:#ffffff;padding:5px;border-radius:5px;background-image: linear-gradient(to right, #673AB7 0%, #8862e2 51%, #673AB7 100%)}
+</style>

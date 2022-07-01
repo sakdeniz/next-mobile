@@ -1,7 +1,7 @@
 <template id="main">
 	<v-ons-page>
 		<custom-toolbar v-bind="toolbarInfo"></custom-toolbar>
-		<v-ons-modal :visible="modalVisible" @click="modalVisible = false">
+		<v-ons-modal :visible="modalVisible">
 			<p style="text-align: center">
 				{{$t('message.pleaseWait')}} <v-ons-icon icon="fa-spinner" spin></v-ons-icon>
 			</p>

@@ -426,7 +426,7 @@
 		"sellOrders":"Sell Orders",
 		"sellNFTOrderSuccess":"NFT sell order successfully created.",
 		"sellNFTOrderFailed":"An error occurred while creating the NFT sell order.",
-		"nftSellOrderCancel":"Cancel Sell Order",
+		"nftSellOrderCancel":"Cancel NFT Sell Order",
 		"nftSellOrderCancelError":"An error occurred while canceling the NFT sell order.",
 		"NFTOrdersTitle":"NFT Orders",
 		"nftFilter":"Filter NFTs",
@@ -443,6 +443,15 @@
 		"projectName":"Project Name",
 		"deleteLinkedProject":"Unlink Project",
 		"confirmDeleteLinkedProject":"Are you sure you want to unlink the project?",
-		"btnUnlink":"Unlink"
+		"btnUnlink":"Unlink",
+		"cancelNFTSellOrder":"Cancel NFT Sell Order",
+		"cancelNFTSellOrderConfirmQuestion":"Do you want to cancel your NFT sell order? It may take some time for the  process to take place.",
+		"cancelNFTSellOrderConfirm":"Confirm",
+		"cancelNFTSellOrderCancel":"Cancel",
+		"cancelNFTSellOrderSuccess":"Your NFT sell order has been successfully canceled.",
+		"cancelNFTSellOrderFailed":"An error occurred while canceling your NFT sell order.",
+		"nftListedOn":"Listed on",
+		"nftNoSellOrderFound":"No sell order found",
+		"nftCancelOrder":"Cancel Order"
 	}
 }

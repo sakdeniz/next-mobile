@@ -1,6 +1,6 @@
 <template>
 	<v-ons-page id="page-staking">
-		<v-ons-modal :visible="modalVisible" @click="modalVisible = false">
+		<v-ons-modal :visible="modalVisible">
 			<p style="text-align: center">
 				{{$t('message.txInProgress')}} <v-ons-icon icon="fa-spinner" spin></v-ons-icon>
 			</p>
@@ -333,14 +333,7 @@ ons-card {
 .card__title, .card--material__title {
   font-size: 20px;
 }
-
 .cl1 {text-align:center;margin:3px;margin-top:10px;color:#ffffff;padding:5px;border-radius:5px;background-image: linear-gradient(to right, #673AB7 0%, #8862e2 51%, #673AB7 100%)}
-.cl1:hover { background-position: right center; }
-
 .cl2 {font-family:"Courier New";margin:3px;margin-top:10px;color:#232323;padding:5px;border-radius:5px;background-color:#f3f3f3;}
-.cl2:hover { background-position: right center; }
-
 .cl3 {text-align:center;margin:3px;margin-top:10px;color:#ffffff;padding:5px;border-radius:5px;background-image: linear-gradient(to right, #1a98e9 0%, #1a98e9 51%, #1a98e9 100%)}
-.cl3:hover { background-position: right center; }
-
 </style>

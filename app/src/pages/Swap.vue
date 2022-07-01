@@ -1,11 +1,11 @@
 <template>
 	<v-ons-page>
-		<v-ons-modal :visible="modalVisible" @click="modalVisible = false">
+		<v-ons-modal :visible="modalVisible">
 			<p style="text-align: center">
 				{{$t('message.swapInProgress')}} <v-ons-icon icon="fa-spinner" spin></v-ons-icon>
 			</p>
 		</v-ons-modal>
-		<v-ons-modal :visible="modalVisible_2" @click="modalVisible_2 = false">
+		<v-ons-modal :visible="modalVisible_2">
 			<p style="text-align: center">
 				{{$t('message.pleaseWait')}} <v-ons-icon icon="fa-spinner" spin></v-ons-icon>
 			</p>

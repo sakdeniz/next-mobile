@@ -467,7 +467,6 @@ created: function ()
 			vm.$ons.setDefaultDeviceBackButtonListener(function(event)
 			{
 				if (vm.closeConfirmActive) return;
-				vm.closeConfirmActive=true;
 				console.log("Getting QRScanner status...");
 				QRScanner.getStatus(function(status)
 				{
@@ -480,9 +479,11 @@ created: function ()
 						});
 						$("#page-send").show();
 						$("#page-add-contact").show();
+						$("#page-nft-marketplace").show();
 					}
 					else
 					{
+						vm.closeConfirmActive=true;
 						vm.$ons.notification.confirm(vm.$t('message.confirmCloseQuestion'),{title:vm.$t('message.confirmClose'),buttonLabels:[vm.$t('message.confirmCloseNo'), vm.$t('message.confirmCloseYes')]})
 						.then((response) =>
 						{
