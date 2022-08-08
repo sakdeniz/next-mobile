@@ -139,12 +139,9 @@
 					<input type="file" ref="doc" @change="readFile()" />
 					 <i class="ion-ios-filing"></i>&nbsp;{{$t('message.chooseFile')}}
 				</label>
-				<div style="margin-top:15px;">
-					<v-ons-button :disabled="!uploadEnabled" v-on:click="addFile"><i class="fa fa-cloud-upload"></i>&nbsp;{{$t('message.uploadFileToIPFS')}}</v-ons-button>
-				</div>
 				<div style="margin-top:15px;" v-show="uploadSuccess">
 					<img style="width:100%;height:auto" :src="preview_url"/>
-					<a target="_blank" :href="preview_url">{{preview_url}}</a>
+					<!--<a target="_blank" :href="preview_url">{{preview_url}}</a>!-->
 				</div>
 				<div class="center" style="margin-top:40px">
 					{{$t('message.category')}} : <v-ons-select float style="width: 100%" v-model="category">
@@ -190,12 +187,9 @@
 					<input type="file" ref="doc_nft" @change="readNFTFile()" />
 					 <i class="ion-ios-filing"></i>&nbsp;{{$t('message.chooseNFTFile')}}
 				</label>
-				<div style="margin-top:15px;">
-					<v-ons-button :disabled="!uploadNFTEnabled" v-on:click="addNFTFile"><i class="fa fa-cloud-upload"></i>&nbsp;{{$t('message.uploadNFTFileToIPFS')}}</v-ons-button>
-				</div>
 				<div style="margin-top:15px;" v-show="uploadNFTSuccess">
-					<img style="width:100%;height:auto" :src="nft_preview_url" onerror="this.style.display='none'"/>
-					<a target="_blank" :href="nft_preview_url">{{nft_preview_url}}</a>
+					<img style="width:100%;height:auto" :src="nft_preview_url"/>
+					<!--<a target="_blank" :href="nft_preview_url">{{nft_preview_url}}</a>!-->
 				</div>
 				<div class="center" style="margin-top:40px">
 					{{$t('message.collection')}} : <v-ons-select float style="width: 100%" v-model="mint_nft_token_id">
@@ -612,6 +606,7 @@ export default {
 				console.log("Image file selected.");
 				this.file = this.$refs.doc.files[0];
 				this.uploadEnabled=true;
+				this.addFile();
 				reader.onload = (res) =>
 				{
 					//console.log(res.target.result);
@@ -678,6 +673,7 @@ export default {
 				console.log("NFT file selected.");
 				this.nftFile = this.$refs.doc_nft.files[0];
 				this.uploadNFTEnabled=true;
+				this.addNFTFile();
 				reader.onload = (res) =>
 				{
 					//console.log(res.target.result);
