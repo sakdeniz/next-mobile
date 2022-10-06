@@ -39,6 +39,10 @@ var app = {
                 console.error(err);
             }
             if (status.authorized) {
+				window.QRScanner.destroy(function(status)
+				{
+					console.log(status);
+				});
                 // W00t, you have camera access and the scanner is initialized.
                 // QRscanner.show() should feel very fast.
             } else if (status.denied) {

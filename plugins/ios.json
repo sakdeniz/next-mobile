@@ -16,12 +16,6 @@
     "cordova-plugin-statusbar": {
       "PACKAGE_NAME": "net.navcommunity.next"
     },
-    "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "net.navcommunity.next"
-    },
-    "cordova-sqlcipher-adapter": {
-      "PACKAGE_NAME": "net.navcommunity.next"
-    },
     "cordova-plugin-webview-checker": {
       "PACKAGE_NAME": "net.navcommunity.next"
     }

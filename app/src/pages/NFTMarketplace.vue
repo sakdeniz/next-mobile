@@ -26,23 +26,28 @@
 				<v-ons-button @click="actionSheetVisible = true">
 					<i class="fa fa-filter"></i>&nbsp;{{$t('message.filter')}}
 				</v-ons-button>
-				<span v-if="filter">Filtering by : {{filter}}</span>
+			</div>
+			<div style="padding:15px;" v-if="filter">
+				Filtering by : {{filter}}
 			</div>
 		</div>
 		<v-ons-list v-show="orders.length>0" style="margin:15px;background: transparent;">
 			<v-ons-list-item modifier="nodivider" v-if="!filter||parseJSON(item.collection_metadata).category==filter" style="padding: 20px;background: #ffffff;border: 1px solid #cfcfcf;margin-bottom: 15px;" v-for="(item,index) in orders">
 				<div class="center">
-					<i v-if="parseJSON(parseJSON(item.metadata).metadata).attributes.content_type.split('/')[0]=='audio'" class="ion-ios-musical-notes fa-2x"></i>
-					<i v-if="parseJSON(parseJSON(item.metadata).metadata).attributes.content_type.split('/')[0]=='video'" class="ion-ios-videocam fa-2x"></i>
-					<img v-else onerror="this.style.display='none'" style="width:100%;height:auto" :src="ipfsToURL(parseJSON(parseJSON(item.metadata).metadata).attributes.thumbnail_url)">
-					<span class="list-item__subtitle" style="margin-top:5px;" v-if="parseJSON(parseJSON(item.metadata).metadata).attributes.content_type.split('/')[0]=='audio'">
+					<i v-if="parseJSON(parseJSON(item.metadata).metadata)&&parseJSON(parseJSON(item.metadata).metadata).attributes.content_type.split('/')[0]=='audio'" class="ion-ios-musical-notes fa-2x"></i>
+					<i v-if="parseJSON(parseJSON(item.metadata).metadata)&&parseJSON(parseJSON(item.metadata).metadata).attributes.content_type.split('/')[0]=='video'" class="ion-ios-videocam fa-2x"></i>
+					<img v-else-if="parseJSON(parseJSON(item.metadata).metadata)" onerror="this.style.display='none'" style="width:100%;height:auto" :src="ipfsToURL(parseJSON(parseJSON(item.metadata).metadata).attributes.thumbnail_url)">
+					<div v-else>
+						<i class="ion-ios-image fa-10x" style="color: #C3C3C3;text-align: center;"></i>
+					</div>
+					<span class="list-item__subtitle" style="margin-top:5px;" v-if="parseJSON(parseJSON(item.metadata).metadata)&&parseJSON(parseJSON(item.metadata).metadata).attributes.content_type.split('/')[0]=='audio'">
 						<audio controls style="width:100%">
 							<source :src="ipfsToURL(parseJSON(parseJSON(item.metadata).metadata).image)" type="audio/ogg">
 							<source :src="ipfsToURL(parseJSON(parseJSON(item.metadata).metadata).image)" type="audio/mpeg">
 							Your browser does not support the audio element.
 						</audio>
 					</span>
-					<span class="list-item__subtitle" style="margin-top:5px;" v-if="parseJSON(parseJSON(item.metadata).metadata).attributes.content_type.split('/')[0]=='video'">
+					<span class="list-item__subtitle" style="margin-top:5px;" v-if="parseJSON(parseJSON(item.metadata).metadata).attributes&&parseJSON(parseJSON(item.metadata).metadata).attributes.content_type.split('/')[0]=='video'">
 						<video onplay="this.webkitEnterFullscreen();" controls playsinline style="width:100%">
 							<source :src="ipfsToURL(parseJSON(parseJSON(item.metadata).metadata).image)" type="video/mp4">
 							<source :src="ipfsToURL(parseJSON(parseJSON(item.metadata).metadata).image)" type="video/ogg">

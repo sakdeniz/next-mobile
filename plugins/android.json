@@ -7,12 +7,6 @@
     "files": {}
   },
   "installed_plugins": {
-    "cordova-plugin-navigationbar-color": {
-      "PACKAGE_NAME": "net.navcommunity.next"
-    },
-    "cordova-plugin-statusbar": {
-      "PACKAGE_NAME": "net.navcommunity.next"
-    },
     "cordova-plugin-qrscanner": {
       "PACKAGE_NAME": "net.navcommunity.next"
     }
