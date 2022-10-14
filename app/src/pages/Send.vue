@@ -68,6 +68,37 @@
 	</v-ons-page>
 </template>
 <script>
+function onDone(err, status)
+{
+	console.log("STATUS:"+JSON.stringify(status));
+	console.log("err:"+err);
+    if (err)
+    {
+        // here we can handle errors and clean up any loose ends.
+        console.error(err);
+        alert(err);
+    }
+    if (status.authorized)
+    {
+    	alert("authorized");
+        // W00t, you have camera access and the scanner is initialized.
+        // QRscanner.show() should feel very fast.
+    }
+    else if (status.denied)
+    {
+    	alert("denied");
+    	QRScanner.openSettings();
+        // The video preview will remain black, and scanning is disabled. We can
+        // try to ask the user to change their mind, but we'll have to send them
+        // to their device settings with `QRScanner.openSettings()`.
+    }
+    else
+    {
+        // we didn't get permission, but we didn't get permanently denied. (On
+        // Android, a denial isn't permanent unless the user checks the "Don't
+        // ask again" box.) We can ask again at the next relevant opportunity.
+    }
+}
 import sb from 'satoshi-bitcoin';
 export default
 {
@@ -95,6 +126,7 @@ export default
 	{
 		scan()
 		{
+			QRScanner.prepare(onDone);
 			if (typeof(QRScanner) != "undefined")
 			{
 				let vm=this;
