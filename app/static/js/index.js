@@ -30,8 +30,10 @@ var app = {
         this.receivedEvent('deviceready');
         //StatusBar.hide();
         //NavigationBar.hide();
-        window.QRScanner.prepare(onDone);
-        function onDone(err, status){
+        /*window.QRScanner.prepare(onDone);
+        
+        function onDone(err, status)
+        {
         	console.log("STATUS:"+JSON.stringify(status));
         	console.log("err:"+err);
             if (err) {
@@ -63,7 +65,7 @@ var app = {
                 // The scan completed, display the contents of the QR code:
                 alert(text);
             }
-        }
+        }*/
     },
 
     // Update DOM on a Received Event
