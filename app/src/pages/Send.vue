@@ -76,7 +76,9 @@ function onDone(err, status)
     {
         // here we can handle errors and clean up any loose ends.
         console.error(err);
-        alert(err);
+        alert(JSON.stringify(err));
+        alert(status);
+    	QRScanner.openSettings();
     }
     if (status.authorized)
     {
@@ -94,6 +96,7 @@ function onDone(err, status)
     }
     else
     {
+    	QRScanner.openSettings();
         // we didn't get permission, but we didn't get permanently denied. (On
         // Android, a denial isn't permanent unless the user checks the "Don't
         // ask again" box.) We can ask again at the next relevant opportunity.
