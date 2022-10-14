@@ -60,8 +60,8 @@
 					<v-ons-input :placeholder="$t('message.sendAmount')" float type="number" v-model="amount" inputmode="decimal" style="width:100%"></v-ons-input>
 				</div>
 				<div class="center" style="margin-top:40px">
-					<v-ons-button :disabled="!address || !amount" v-on:click="send()">{{$t('message.sendSubmit')}}</v-ons-button>
-					<v-ons-button style="float:right" v-on:click="useAllFunds()">{{$t('message.useAllFunds')}}</v-ons-button>
+					<v-ons-button v-on:click="useAllFunds()">{{$t('message.useAllFunds')}}</v-ons-button>
+					<v-ons-button style="float:right" :disabled="!address || !amount" v-on:click="send()">{{$t('message.sendSubmit')}}</v-ons-button>
 				</div>
 			</div>
 		</v-ons-card>
@@ -72,35 +72,20 @@ function onDone(err, status)
 {
 	console.log("STATUS:"+JSON.stringify(status));
 	console.log("err:"+err);
-    if (err)
-    {
-        // here we can handle errors and clean up any loose ends.
-        console.error(err);
-        alert(JSON.stringify(err));
-        alert(status);
-    	QRScanner.openSettings();
-    }
-    if (status.authorized)
-    {
-    	alert("authorized");
-        // W00t, you have camera access and the scanner is initialized.
-        // QRscanner.show() should feel very fast.
-    }
-    else if (status.denied)
-    {
-    	alert("denied");
-    	QRScanner.openSettings();
-        // The video preview will remain black, and scanning is disabled. We can
-        // try to ask the user to change their mind, but we'll have to send them
-        // to their device settings with `QRScanner.openSettings()`.
-    }
-    else
-    {
-    	QRScanner.openSettings();
-        // we didn't get permission, but we didn't get permanently denied. (On
-        // Android, a denial isn't permanent unless the user checks the "Don't
-        // ask again" box.) We can ask again at the next relevant opportunity.
-    }
+	if (err)
+	{
+		alert(JSON.stringify(err._message));
+	}
+	if (status.authorized)
+	{
+	}
+	else if (status.denied)
+	{
+		alert("Camera access denied");
+	}
+	else
+	{
+	}
 }
 import sb from 'satoshi-bitcoin';
 export default

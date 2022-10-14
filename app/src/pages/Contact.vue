@@ -1,7 +1,7 @@
 <template>
-	<v-ons-page id="page-add-contact">
+	<v-ons-page v-if="!scanning">
 		<custom-toolbar v-bind="toolbarInfo"></custom-toolbar>
-		<v-ons-card>
+		<v-ons-card >
 			<div class="content">
 				<div class="center" style="margin-top:20px">
 					<v-ons-input :placeholder="$t('message.contactName')" float type="text" v-model="contactName" style="width:100%"></v-ons-input>
@@ -21,8 +21,30 @@
 			</div>
 		</v-ons-card>
 	</v-ons-page>
+	<v-ons-fab v-else id="cancel-scan" position="bottom right" v-on:click="cancelScan()">
+		<v-ons-icon icon="md-close"></v-ons-icon>
+	</v-ons-fab>
 </template>
 <script>
+function onDone(err, status)
+{
+	console.log("STATUS:"+JSON.stringify(status));
+	console.log("err:"+err);
+	if (err)
+	{
+		alert(JSON.stringify(err._message));
+	}
+	if (status.authorized)
+	{
+	}
+	else if (status.denied)
+	{
+		alert("Camera access denied");
+	}
+	else
+	{
+	}
+}
 export default
 {
 	data() {
@@ -36,7 +58,8 @@ export default
 			contactEMail:'',
 			contactAddress:'',
 			index:'',
-			update:false
+			update:false,
+			scanning: false
 		};
 	},
 	computed:
@@ -49,11 +72,12 @@ export default
 	methods: {
 		scan()
 		{
+			QRScanner.prepare(onDone);
 			if (typeof(QRScanner) != "undefined")
 			{
 				let vm=this;
-				$("#page-add-contact").hide();
 				QRScanner.scan(displayContents);
+				vm.scanning=true;
 				function displayContents(err, text)
 				{
 					if(err)
@@ -69,11 +93,19 @@ export default
 						QRScanner.cancelScan(function(status)
 						{
 						});
-						$("#page-add-contact").show();
+						vm.scanning=false;
 					}
 				}
 				QRScanner.show();
 			}
+		},
+		cancelScan()
+		{
+			console.log("cancelling scan...");
+			QRScanner.cancelScan(function(status)
+			{
+			});
+			this.scanning=false;
 		},
 		addContact()
 		{
