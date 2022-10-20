@@ -413,6 +413,7 @@
 		"dotNavTitle":"dotNAV",
 		"linkedProjectsTitle":"Verknüpfte Projekte",
 		"createPaymentRequestSubmitSuccess":"Ihre Zahlungsanforderung wurde erfolgreich übermittelt.",
-		"scanQRCodeFromMarketplace":"QR-Code vom Marketplace scannen"
+		"scanQRCodeFromMarketplace":"QR-Code vom Marketplace scannen",
+		"waitingForWalletSync":"Warten auf die Synchronisierung der Brieftasche ..."
 	}
 }

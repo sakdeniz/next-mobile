@@ -1,6 +1,6 @@
 <template>
   <v-ons-page :style="swipePosition">
-    <custom-toolbar :style="swipeTheme" modifier="white-content">
+    <custom-toolbar v-show="!config.scanning" :style="swipeTheme" modifier="white-content">
       <span class="logo-text">{{title}}</span>
       <v-ons-toolbar-button slot="right" modifier="white-content" @click="$store.commit('splitter/toggle');">
         <v-ons-icon icon="ion-ios-menu, material:md-menu"></v-ons-icon>
@@ -119,6 +119,10 @@ export default {
   },
 
   computed: {
+  	config()
+    {
+      return this.$store.state.config;
+    },
     index: {
       get() {
         return this.$store.state.tabbar.index;

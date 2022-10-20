@@ -20,7 +20,9 @@
 			<div style="background: #ffffff;background-image: url(https://img.freepik.com/free-vector/abstract-background-with-squares_23-2148995948.jpg);">
 				<div style="font-size:18pt;padding:15px;">
 					<v-ons-icon icon="ion-ios-cart" style="position: absolute;margin-top:4px;"></v-ons-icon>&nbsp;&nbsp;&nbsp;&nbsp; {{$t('message.nftMarketplace')}}
-					<v-ons-progress-circular indeterminate v-if="is_loading" style="float:right"></v-ons-progress-circular>
+				</div>
+				<div style="padding:15px;" v-if="is_loading">
+					<v-ons-progress-circular indeterminate style="width:16px;height:16px;"></v-ons-progress-circular>&nbsp;{{$t('message.waitingForWalletSync')}}
 				</div>
 				<div style="padding:15px;">
 					<v-ons-button v-on:click="scan()"><i class="ion-md-qr-scanner"></i>&nbsp;{{$t('message.scanQRCodeFromMarketplace')}}</v-ons-button>
@@ -177,6 +179,7 @@ export default {
 		cancelScan()
 		{
 			this.$store.commit('config/setScanning', false);
+			$('.tabbar').css('display','');
 			$('.page__background').css('background-color','#eceff1');
 			console.log("cancelling scan...");
 			if (typeof(QRScanner) != "undefined")
@@ -192,6 +195,7 @@ export default {
 			if (typeof(QRScanner) != "undefined")
 			{
 				let vm=this;
+				$('.tabbar').css('display','none');
 				$('.page__background').css('background-color','transparent');
 				this.$store.commit('config/setScanning', true);
 				QRScanner.prepare(onDone);
@@ -206,6 +210,7 @@ export default {
 					{
 						if (text.startsWith("navcoin-nft-order:"))
 						{
+							$('.tabbar').css('display','');
 							$('.page__background').css('background-color','#eceff1');
 							vm.$store.commit('config/setScanning', false);
 							console.log("Destroying QRScanner...");

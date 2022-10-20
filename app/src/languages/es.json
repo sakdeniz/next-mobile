@@ -411,6 +411,7 @@
 		"dotNavTitle":"dotNAV",
 		"linkedProjectsTitle":"Proyectos vinculados",
 		"createPaymentRequestSubmitSuccess":"Su solicitud de pago se envió con éxito.",
-		"scanQRCodeFromMarketplace":"Escanea el código QR de Marketplace"
+		"scanQRCodeFromMarketplace":"Escanea el código QR de Marketplace",
+		"waitingForWalletSync":"Esperando a que la billetera se sincronice..."
 	}
 }

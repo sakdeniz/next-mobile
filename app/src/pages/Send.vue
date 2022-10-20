@@ -131,6 +131,7 @@ export default
 			{
 				let vm=this;
 				$('.page__background').css('background-color','transparent');
+				$('.tabbar').css('display','none');
 				this.$store.commit('config/setScanning', true);
 				QRScanner.prepare(onDone);
 				QRScanner.scan(displayContents);
@@ -148,6 +149,7 @@ export default
 						{
 							vm.address=text.split(":")[1];
 							$('.page__background').css('background-color','#eceff1');
+							$('.tabbar').css('display','');
 							vm.$store.commit('config/setScanning', false);
 							console.log("Destroying QRScanner...");
 							QRScanner.destroy(function(status)
@@ -161,6 +163,7 @@ export default
 			}
 			else
 			{
+				$('.tabbar').css('display','none');
 				$('.page__background').css('background-color','transparent');
 				this.$store.commit('config/setScanning', true);
 			}
@@ -169,6 +172,7 @@ export default
 		{
 			this.$store.commit('config/setScanning', false);
 			$('.page__background').css('background-color','#eceff1');
+			$('.tabbar').css('display','');
 			console.log("cancelling scan...");
 			if (typeof(QRScanner) != "undefined")
 			{

@@ -453,6 +453,7 @@
 		"nftListedOn":"Şu tarihte eklendi ",
 		"nftNoSellOrderFound":"Satış emriniz bulunamadı.",
 		"nftCancelOrder":"Emri İptal Et",
-		"scanQRCodeFromMarketplace":"Pazaryeri'nden QR Kodu Okut"
+		"scanQRCodeFromMarketplace":"Pazaryeri'nden QR Kodu Okut",
+		"waitingForWalletSync":"Cüzdanın senkronize edilmesi bekleniyor..."
 	}
 }
