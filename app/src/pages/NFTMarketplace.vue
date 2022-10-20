@@ -23,7 +23,9 @@
 					<v-ons-progress-circular indeterminate v-if="is_loading" style="float:right"></v-ons-progress-circular>
 				</div>
 				<div style="padding:15px;">
-					<v-ons-button v-on:click="scan()"><i class="ion-md-qr-scanner"></i>&nbsp;{{$t('message.scan')}}</v-ons-button>
+					<v-ons-button v-on:click="scan()"><i class="ion-md-qr-scanner"></i>&nbsp;{{$t('message.scanQRCodeFromMarketplace')}}</v-ons-button>
+				</div>
+				<div style="padding:15px;">
 					<v-ons-button @click="actionSheetVisible = true">
 						<i class="fa fa-filter"></i>&nbsp;{{$t('message.filter')}}
 					</v-ons-button>

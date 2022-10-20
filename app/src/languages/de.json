@@ -412,6 +412,7 @@
 		"nftWorkshopTitle":"NFT Workshop",
 		"dotNavTitle":"dotNAV",
 		"linkedProjectsTitle":"Verknüpfte Projekte",
-		"createPaymentRequestSubmitSuccess":"Ihre Zahlungsanforderung wurde erfolgreich übermittelt."
+		"createPaymentRequestSubmitSuccess":"Ihre Zahlungsanforderung wurde erfolgreich übermittelt.",
+		"scanQRCodeFromMarketplace":"QR-Code vom Marketplace scannen"
 	}
 }

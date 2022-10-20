@@ -452,6 +452,7 @@
 		"cancelNFTSellOrderFailed":"An error occurred while canceling your NFT sell order.",
 		"nftListedOn":"Listed on",
 		"nftNoSellOrderFound":"No sell order found",
-		"nftCancelOrder":"Cancel Order"
+		"nftCancelOrder":"Cancel Order",
+		"scanQRCodeFromMarketplace":"Scan QR Code from Marketplace"
 	}
 }

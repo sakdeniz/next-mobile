@@ -452,6 +452,7 @@
 		"cancelNFTSellOrderFailed":"NFT satış emriniz iptal edilirken bir sorun oluştu.",
 		"nftListedOn":"Şu tarihte eklendi ",
 		"nftNoSellOrderFound":"Satış emriniz bulunamadı.",
-		"nftCancelOrder":"Emri İptal Et"
+		"nftCancelOrder":"Emri İptal Et",
+		"scanQRCodeFromMarketplace":"Pazaryeri'nden QR Kodu Okut"
 	}
 }
