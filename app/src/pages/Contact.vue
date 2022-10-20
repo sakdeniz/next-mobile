@@ -100,8 +100,9 @@ export default
 							vm.contactAddress=text.split(":")[1];
 							$('.page__background').css('background-color','#eceff1');
 							vm.$store.commit('config/setScanning', false);
-							QRScanner.cancelScan(function(status)
+							QRScanner.destroy(function(status)
 							{
+								console.log(status);
 							});
 						}
 					}
@@ -116,8 +117,9 @@ export default
 			console.log("cancelling scan...");
 			if (typeof(QRScanner) != "undefined")
 			{
-				QRScanner.cancelScan(function(status)
+				QRScanner.destroy(function(status)
 				{
+					console.log(status);
 				});
 			}
 		},

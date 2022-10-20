@@ -172,8 +172,9 @@ export default
 			console.log("cancelling scan...");
 			if (typeof(QRScanner) != "undefined")
 			{
-				QRScanner.cancelScan(function(status)
+				QRScanner.destroy(function(status)
 				{
+					console.log(status);
 				});
 			}
 		},
