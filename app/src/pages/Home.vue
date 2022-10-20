@@ -183,6 +183,7 @@ export default
 		this.getStatus();
 		this.getGraph();
 		this.getProposals();
+		console.log("HOME!!!");
 	},
 	computed:
 	{

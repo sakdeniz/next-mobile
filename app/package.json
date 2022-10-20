@@ -1,7 +1,7 @@
 {
   "name": "NEXT",
   "description": "Navcoin NEXT Mobile App",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "author": "Navcoin Developers <info@nextwallet.org>",
   "license": "MIT",
   "scripts": {
@@ -30,7 +30,7 @@
     "lodash": "^3.10.1",
     "lowdb": "^1.0.0",
     "metamask-onboarding": "^0.1.1",
-    "navcoin-js": "^1.1.167",
+    "navcoin-js": "^1.1.180",
     "net": "^1.0.2",
     "onsenui": "2.11.2",
     "sass-loader": "^10.1.1",

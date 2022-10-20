@@ -71,6 +71,7 @@ export default {
       	sync_status:"",
       	sync_progress:"",
       	Balance:null,
+      	scanning:false,
         addresses:{
         	spending:
         	{
@@ -153,6 +154,10 @@ export default {
         setNames(state,names)
         {
       		state.names=names;
+        },
+        setScanning(state,value)
+        {
+      		state.scanning=value;
         },
       	setSyncStatus(state,status)
         {

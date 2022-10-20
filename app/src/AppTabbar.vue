@@ -106,9 +106,6 @@ export default {
 					{
 						console.log(status);
 					});
-					$("#page-send").show();
-					$("#page-add-contact").show();
-					$("#page-nft-marketplace").show();
 		  		}
 		  	});
 	  	}
