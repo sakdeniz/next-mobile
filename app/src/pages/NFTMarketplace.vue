@@ -1,13 +1,13 @@
 <template id="main">
 	<v-ons-page>
 		<div v-show="!config.scanning">
-			<v-ons-pull-hook :action="loadItem" @changestate="state = $event.state">
+			<!--<v-ons-pull-hook :action="loadItem" @changestate="state = $event.state">
 				<span v-show="state === 'initial'">{{$t('message.pullToRefresh')}}</span>
 				<span v-show="state === 'preaction'">{{$t('message.release')}}</span>
 				<span v-show="state === 'action'">
 					<v-ons-progress-circular indeterminate></v-ons-progress-circular>
 				</span>
-			</v-ons-pull-hook>
+			</v-ons-pull-hook>!-->
 			<v-ons-modal :visible="modalVisible">
 				<p style="text-align: center">
 					{{$t('message.txInProgress')}} <v-ons-icon icon="fa-spinner" spin></v-ons-icon>

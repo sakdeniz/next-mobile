@@ -784,11 +784,11 @@ created: function ()
 						this.$store.commit('config/setPrivateAddress', xNAVAddress);
 						console.log("xNAV receiving address : " + xNAVAddress);
 					});
-					if (vm.$store.state.config.network.code=="mainnet")
+					/*if (vm.$store.state.config.network.code=="mainnet")
 					{
 						wallet.ClearNodeList();
 						wallet.AddNode('electrum.nextwallet.org', 40004, 'wss');
-					}
+					}*/
 					await wallet.Connect();
 				});
 				wallet.on('db_load_error', (error) => console.log(`error loading database: ${error}`));

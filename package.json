@@ -1,7 +1,7 @@
 {
     "name": "nextmobile",
     "displayName": "Navcoin NEXT Wallet",
-    "version": "1.0.14",
+    "version": "1.0.16",
     "description": "Navcoin NEXT Wallet",
     "main": "index.js",
     "scripts": {
@@ -12,7 +12,7 @@
     "dependencies": {
         "cordova-plugin-compat": "^1.2.0",
         "cordova-plugin-navigationbar-color": "0.0.9",
-        "cordova-plugin-qrscanner": "^3.0.1",
+        "cordova-plugin-qrscanner-11": "^3.0.5",
         "cordova-plugin-statusbar": "^2.4.2",
         "xmldom": "^0.6.0"
     },
@@ -20,7 +20,7 @@
         "plugins": {
             "cordova-plugin-statusbar": {},
             "cordova-plugin-navigationbar-color": {},
-            "cordova-plugin-qrscanner": {}
+            "cordova-plugin-qrscanner-11": {}
         },
         "platforms": [
             "ios",
@@ -28,8 +28,8 @@
         ]
     },
     "devDependencies": {
-        "cordova-android": "^10.1.1",
+        "cordova-android": "^11.0.0",
         "cordova-ios": "^6.2.0",
-        "cordova-plugin-qrscanner": "^3.0.1"
+        "cordova-plugin-qrscanner-11": "^3.0.5"
     }
 }

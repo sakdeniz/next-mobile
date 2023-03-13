@@ -2,7 +2,7 @@
   "cordova-plugin-statusbar": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-statusbar@2.4.2"
+      "id": "cordova-plugin-statusbar@^2.4.2"
     },
     "is_top_level": true,
     "variables": {}
@@ -10,23 +10,15 @@
   "cordova-plugin-navigationbar-color": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-navigationbar-color"
+      "id": "cordova-plugin-navigationbar-color@0.0.9"
     },
     "is_top_level": true,
     "variables": {}
   },
-  "cordova-plugin-compat": {
+  "cordova-plugin-qrscanner-11": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-compat@^1.0.0"
-    },
-    "is_top_level": false,
-    "variables": {}
-  },
-  "cordova-plugin-qrscanner": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-qrscanner@3.0.1"
+      "id": "cordova-plugin-qrscanner-11@^3.0.5"
     },
     "is_top_level": true,
     "variables": {}

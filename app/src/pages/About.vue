@@ -3,7 +3,7 @@
 		<custom-toolbar v-bind="toolbarInfo"></custom-toolbar>
 		<v-ons-card>
 			<span class="about-logo-text">NEXT</span>
-			<p>Build 1.0.15</p>
+			<p>Build 1.0.16</p>
 			<p>Developed by Navcoin Developers</p>
 			<a href="https://www.nextwallet.org">https://www.nextwallet.org</a>
 			<p>
