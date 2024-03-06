@@ -88,10 +88,10 @@
 			<v-ons-list-item modifier="nodivider" v-show="config.sync_progress!=100">
 				<div class="center">
 					<span class="list-item__title">
-						{{config.sync_status}}
+						<small>{{config.sync_status}}</small>
 					</span>
 					<span class="list-item__subtitle">
-						{{config.current_node}}
+						<small>{{config.current_node}}</small>
 					</span>
 				</div>
 			</v-ons-list-item>
@@ -121,10 +121,12 @@
 			</div>
 			<div style="margin:0px;padding:0px;">
 				<div style="display:inline-block;float:left;margin-top:10px;margin-left:10px;">
-					Navcoin
+					NAV
 				</div>
-				<div style="display:inline-block;float:right;margin-top:10px;margin-right:10px;">
-					{{getUnitFiatValue()}} {{config.currency.symbol}}
+				<div style="display:inline-block;float:right;margin-top:10px;margin-right:10px;" v-if="priceMulti">
+					{{config.currency.symbol}} {{getUnitFiatValue()}}
+					<br/>
+					Ƀ {{getPriceInSatoshi()}}
 					<br/>
 					<span style="color:red;float:right;" v-if="priceMulti && get24HChange()<0">{{get24HChange()}}%</span>
 					<span style="color:green;float:right;" v-if="priceMulti && get24HChange()>0">+{{get24HChange()}}%</span>
@@ -177,13 +179,23 @@ export default
 			]
 		};
 	},
+	mounted: function () {
+		this.timer = setInterval(() => 
+		{
+			this.getPrice();
+		},
+		1000)
+	},
 	created: function ()
 	{
 		this.getPrice();
 		this.getStatus();
 		this.getGraph();
 		this.getProposals();
-		console.log("HOME!!!");
+	},
+	beforeDestroy()
+	{
+		clearInterval(this.timer)
 	},
 	computed:
 	{
@@ -299,7 +311,11 @@ export default
 		},
 		get24HChange()
 		{
-			return this.priceMulti["DISPLAY"]["NAV"]["USD"]["CHANGEPCT24HOUR"];
+			return this.priceMulti["RAW"]["NAV"]["USD"]["CHANGEPCT24HOUR"].toFixed(2);
+		},
+		getPriceInSatoshi()
+		{
+			return parseFloat(this.priceMulti["RAW"]["NAV"]["BTC"]["PRICE"]).toFixed(8);
 		},
 		getGraph(limit)
 		{
@@ -332,7 +348,7 @@ export default
 			try
 			{
 				var t=sb.toBitcoin(this.$store.state.config.Balance.nav.confirmed+this.$store.state.config.Balance.xnav.confirmed+this.$store.state.config.Balance.staked.confirmed)*this.price[this.config.currency.code];
-					a=this.formatNumbers(t.toFixed(2));
+				a=this.formatNumbers(t.toFixed(2));
 			}
 			catch (e)
 			{
@@ -358,7 +374,7 @@ export default
 		getUnitFiatValue()
 		{
 			var t=this.price[this.config.currency.code];
-			if (t) return this.formatNumbers(t.toFixed(2));
+			if (t) return this.formatNumbers(t.toFixed(4));
 		},
 		getPrice()
 		{
@@ -369,7 +385,7 @@ export default
 			.then(function (response)
 			{
 				vm.price=JSON.parse(JSON.stringify(response.data));
-				console.log(vm.price);
+				//console.log(vm.price);
 			})
 			.catch(function (error)
 			{
@@ -378,7 +394,7 @@ export default
 			.then(function ()
 			{
 			});
-			axios.get("https://min-api.cryptocompare.com/data/pricemultifull?fsyms=NAV&tsyms=USD,EUR", {
+			axios.get("https://min-api.cryptocompare.com/data/pricemultifull?fsyms=NAV&tsyms=USD,EUR,BTC", {
 				params: {}
 			})
 			.then(function (response)

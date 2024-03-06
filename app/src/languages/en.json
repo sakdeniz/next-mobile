@@ -122,6 +122,7 @@
 		"segmentCreateWallet":"Create Wallet",
 		"segmentImportWallet":"Import Wallet",
 		"importWallet":"Import Wallet",
+		"importTestMnemonics":"Activate Test Mode",
 		"invalidMnemonics":"Invalid Backup Phrase",
 		"mnemonics":"Backup Phrase",
 		"password":"Password",
@@ -454,6 +455,10 @@
 		"nftNoSellOrderFound":"No sell order found",
 		"nftCancelOrder":"Cancel Order",
 		"scanQRCodeFromMarketplace":"Scan QR Code from Marketplace",
-		"waitingForWalletSync":"Waiting for the wallet to sync..."
+		"waitingForWalletSync":"Waiting for the wallet to sync...",
+		"confirmTestModeTitle":"Activate Test Mode",
+		"confirmTestModeMessage":"The wallet will be created with predefined seed phrases for testing purposes and the password will be 123456. Do you confirm?",
+		"confirmTestModeYes":"Yes",
+		"confirmTestModeNo":"No"
 	}
 }

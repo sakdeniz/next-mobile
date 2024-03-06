@@ -122,6 +122,7 @@
 		"segmentCreateWallet":"Cüzdan Oluştur",
 		"segmentImportWallet":"İçe Aktar",
 		"importWallet":"İçe Aktar",
+		"importTestMnemonics":"Test Modunu Etkinleştir",
 		"invalidMnemonics":"Geçersiz yedek ifade",
 		"mnemonics":"Yedek kurtarma ifadesi",
 		"password":"Şifre",
@@ -454,6 +455,10 @@
 		"nftNoSellOrderFound":"Satış emriniz bulunamadı.",
 		"nftCancelOrder":"Emri İptal Et",
 		"scanQRCodeFromMarketplace":"Pazaryeri'nden QR Kodu Okut",
-		"waitingForWalletSync":"Cüzdanın senkronize edilmesi bekleniyor..."
+		"waitingForWalletSync":"Cüzdanın senkronize edilmesi bekleniyor...",
+		"confirmTestModeTitle":"Test Modunu Etkinleştir",
+		"confirmTestModeMessage":"Cüzdan, test amaçlı olarak önceden tanımlanmış tohum ifadeleriyle oluşturulacak ve şifre 123456 olacaktır. Onaylıyor musunuz?",
+		"confirmTestModeYes":"Evet",
+		"confirmTestModeNo":"Hayır"
 	}
 }

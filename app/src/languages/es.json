@@ -122,6 +122,7 @@
 		"segmentCreateWallet":"Crear Monedero",
 		"segmentImportWallet":"Importar Monedero",
 		"importWallet":"Importar",
+		"importTestMnemonics":"Activar el modo de prueba",
 		"invalidMnemonics":"Inválida frase para la copia seguridad",
 		"mnemonics":"Frase copia seguridad",
 		"password":"Contraseña",
@@ -412,6 +413,10 @@
 		"linkedProjectsTitle":"Proyectos vinculados",
 		"createPaymentRequestSubmitSuccess":"Su solicitud de pago se envió con éxito.",
 		"scanQRCodeFromMarketplace":"Escanea el código QR de Marketplace",
-		"waitingForWalletSync":"Esperando a que la billetera se sincronice..."
+		"waitingForWalletSync":"Esperando a que la billetera se sincronice...",
+		"confirmTestModeTitle":"Activate Test Mode",
+		"confirmTestModeMessage":"The wallet will be created with predefined seed phrases for testing purposes and the password will be 123456. Do you confirm?",
+		"confirmTestModeYes":"Yes",
+		"confirmTestModeNo":"No"
 	}
 }

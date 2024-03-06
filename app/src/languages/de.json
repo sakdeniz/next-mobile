@@ -124,6 +124,7 @@
 		"segmentCreateWallet":"Wallet erstellen",
 		"segmentImportWallet":"Wallet importieren",
 		"importWallet":"Importieren",
+		"importTestMnemonics":"Aktivieren Sie den Testmodus",
 		"invalidMnemonics":"Ungültige Wortfolge",
 		"mnemonics":"Mnemonische Wortfolge",
 		"password":"Passwort",
@@ -414,6 +415,10 @@
 		"linkedProjectsTitle":"Verknüpfte Projekte",
 		"createPaymentRequestSubmitSuccess":"Ihre Zahlungsanforderung wurde erfolgreich übermittelt.",
 		"scanQRCodeFromMarketplace":"QR-Code vom Marketplace scannen",
-		"waitingForWalletSync":"Warten auf die Synchronisierung der Brieftasche ..."
+		"waitingForWalletSync":"Warten auf die Synchronisierung der Brieftasche ...",
+		"confirmTestModeTitle":"Activate Test Mode",
+		"confirmTestModeMessage":"The wallet will be created with predefined seed phrases for testing purposes and the password will be 123456. Do you confirm?",
+		"confirmTestModeYes":"Yes",
+		"confirmTestModeNo":"No"
 	}
 }

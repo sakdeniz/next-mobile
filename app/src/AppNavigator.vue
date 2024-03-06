@@ -257,7 +257,7 @@
 									<v-ons-input type="password" :placeholder="$t('message.passwordAgain')" v-model="password_again" float style="width:100%"></v-ons-input>
 								</div>
 								<br/>
-								<v-ons-button v-show="!busy" style="margin: 6px 0" v-on:click="createWallet()">{{$t('message.createWallet')}}</v-ons-button>
+								<v-ons-button modifier="large" v-show="!busy" style="margin: 6px 0" v-on:click="createWallet()">{{$t('message.createWallet')}}</v-ons-button>
 								<v-ons-progress-circular indeterminate v-show="busy"></v-ons-progress-circular>
 							</div>
 							<div v-show="segmentIndex==1">
@@ -273,12 +273,16 @@
 								<div class="center" style="margin-top:30px;margin-bottom:15px;">
 									<v-ons-input type="password" :placeholder="$t('message.passwordAgain')" v-model="password_again" float style="width:100%"></v-ons-input>
 								</div>
-								<br />
-								<v-ons-button v-show="!busy" style="margin: 6px 0" v-on:click="importWallet()">{{$t('message.importWallet')}}</v-ons-button>
+								<div class="center" style="clear:both;margin-top:30px;margin-bottom:15px;">
+									<v-ons-button modifier="large" v-show="!busy" style="margin: 6px 0" v-on:click="importWallet()">{{$t('message.importWallet')}}</v-ons-button>
+								</div>
+								<div class="center" style="clear:both;margin-top:30px;margin-bottom:15px;">
+									<v-ons-button modifier="large" v-show="!busy" style="margin: 6px 0" v-on:click="activateTestMode()">{{$t('message.importTestMnemonics')}}</v-ons-button>
+								</div>
 								<v-ons-progress-circular indeterminate v-show="busy"></v-ons-progress-circular>
 							</div>
 							<div style="margin-top: 30px;">
-								<v-ons-button v-on:click="networkSelected=false"><i class="ion-ios-arrow-back"></i>&nbsp;{{$t('message.back')}}</v-ons-button>
+								<v-ons-button modifier="large" v-on:click="networkSelected=false"><i class="ion-ios-arrow-back"></i>&nbsp;{{$t('message.back')}}</v-ons-button>
 							</div>
 						</div>
 					</div>
@@ -660,6 +664,23 @@ created: function ()
 		{
 			this.wordArrayConfirm.push(word);
 		},
+		activateTestMode: function ()
+		{
+			let vm=this;
+			vm.$ons.notification.confirm(vm.$t('message.confirmTestModeMessage'),{title:vm.$t('message.confirmTestModeTitle'),buttonLabels:[vm.$t('message.confirmTestModeNo'), vm.$t('message.confirmTestModeYes')]})
+			.then((response) =>
+			{
+				if (response)
+				{
+					vm.wallet_name="Test";
+					vm.mnemonics="panther scheme man melt scheme gentle wolf strong crowd gesture consider unknown";
+					vm.password="123456";
+					vm.password_again="123456";
+					this.importWallet();
+				}
+			});
+
+		},
 		importWallet: function ()
 		{
 			if (!this.mnemonics)
@@ -787,6 +808,7 @@ created: function ()
 					/*if (vm.$store.state.config.network.code=="mainnet")
 					{
 						wallet.ClearNodeList();
+						wallet.AddNode('electrum2.nav.community', 40004, 'wss');
 						wallet.AddNode('electrum.nextwallet.org', 40004, 'wss');
 					}*/
 					await wallet.Connect();
@@ -839,10 +861,10 @@ created: function ()
 					this.$store.commit('config/setSyncStatus', vm.$t('message.walletConnected'));
 					this.$store.commit('config/setCurrentNode', node);
 				});
-				wallet.on('connection_failed', () =>
+				wallet.on('connection_failed', async (host,port,failedConnections) =>
 				{
-					console.log('connection failed.')
-					this.$store.commit('config/setSyncStatus', vm.$t('message.walletConnectionFailed'));
+					console.log('connection failed.'+host+":"+port)
+					this.$store.commit('config/setSyncStatus', vm.$t('message.walletConnectionFailed')+ "("+host+":"+port+") #"+failedConnections);
 				});
 				wallet.on('sync_status', async (progress, pending, total) => 
 				{
